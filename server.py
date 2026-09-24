@@ -195,6 +195,9 @@ class Handler(SimpleHTTPRequestHandler):
             mid=path.split('/')[3]; return self.send_json(market_execution.solvency(mid))
         if path=='/api/requirements': return self.send_json(json.loads((ROOT/'data'/'requirements-ledger.json').read_text()))
         if path=='/api/bounty-coverage': return self.send_json(json.loads((ROOT/'data'/'bounty-coverage.json').read_text()))
+        if path=='/api/agent-vaults/mine':
+            who=self.trader(qs=qs); vs=[v for v in agent_vault.list_agent_vaults() if v.get('owner')==who]
+            return self.send_json({'count':len(vs),'vaults':vs})
         if path=='/api/agent-vaults':
             vs=agent_vault.list_agent_vaults(); public=[{'vaultId':v['vaultId'],'agentId':v['agentId'],'name':v['name'],'status':v['status'],'crypto':v['crypto']['suite'],'connectors':list(v['connectors'].keys()),'financialTokens':v.get('financialTokens',{}),'policy':{'dailySpendLimitUSDC':v['policy']['dailySpendLimitUSDC'],'humanApprovalAboveUSDC':v['policy']['humanApprovalAboveUSDC']}} for v in vs]
             return self.send_json({'count':len(public),'vaults':public})
@@ -240,7 +243,12 @@ class Handler(SimpleHTTPRequestHandler):
             if p=='/api/auth/challenge': return self.send_json(auth.challenge(payload.get('wallet')),201)
             if p=='/api/auth/verify': return self.send_json(auth.verify(payload.get('wallet'),payload.get('nonce'),payload.get('signature')),201)
             if p=='/api/auth/agent':
-                owner=self.trader(payload=payload); return self.send_json(auth.issue_agent(owner,payload.get('agentId'),payload.get('scopes')),201)
+                owner=self.trader(payload=payload); agent_id=payload.get('agentId'); v=agent_vault.get_agent_vault(agent_id)
+                if not v or v.get('owner')!=owner: raise ValueError('agent_vault_not_found')
+                allowed={'vault:read','market:trade','pay:send','commerce:purchase','position:transfer'}
+                scopes=payload.get('scopes') or ['vault:read','commerce:purchase']
+                if any(x not in allowed for x in scopes): raise PermissionError('unsupported_agent_scope')
+                return self.send_json(auth.issue_agent(owner,agent_id,scopes),201)
             if p=='/api/money/plan':
                 self.trader(payload=payload)
                 return self.send_json(money_router.purchase_plan(payload.get('amount'),payload.get('walletUSDC',0),payload.get('vaultUSDC',0),payload.get('solBalance',0),payload.get('prestocks') or []))
@@ -253,21 +261,28 @@ class Handler(SimpleHTTPRequestHandler):
                 header=self.headers.get('Authorization',''); tok=header[7:] if header.startswith('Bearer ') else self.headers.get('X-Stocklana-Session','')
                 rec=auth.resolve(tok) if tok else None
                 who=self.trader(payload=payload); amount=float(payload.get('amount') or 0); agent_id=payload.get('agentId')
+                agent_authz=None
                 if rec and rec.get('kind')=='agent':
                     if 'commerce:purchase' not in rec.get('scopes',[]): raise PermissionError('scope_denied')
-                    agent_id=rec.get('subject'); who=rec.get('owner'); av=agent_vault.get_agent_vault(agent_id)
-                    if not av or av.get('owner')!=who: raise ValueError('agent_vault_not_found')
-                    policy_cfg=av.get('policy',{})
-                    if amount>float(policy_cfg.get('singleSpendLimitUSDC',0)): raise ValueError('agent_single_spend_limit_exceeded')
-                    if amount>float(policy_cfg.get('humanApprovalAboveUSDC',0)): return self.send_json({'error':'human_approval_required','agentId':agent_id,'amountUSDC':amount,'approvalAboveUSDC':policy_cfg.get('humanApprovalAboveUSDC')},403)
+                    agent_id=rec.get('subject'); who=rec.get('owner')
                     if payload.get('fundingSource','STOCKLANA_USDC')!='STOCKLANA_USDC': raise ValueError('agent_wallet_signature_requires_human')
+                    host=urllib.parse.urlparse(str(payload.get('merchantUrl') or '')).netloc
+                    agent_authz=agent_vault.authorize_commerce(agent_id,who,host,amount,payload.get('allowSubscriptions',False),False)
+                    if agent_authz.get('requiresHumanApproval'): return self.send_json({'error':'human_approval_required',**agent_authz},403)
+                elif agent_id:
+                    av=agent_vault.get_agent_vault(agent_id)
+                    if not av or av.get('owner')!=who: raise ValueError('agent_vault_not_found')
+                    host=urllib.parse.urlparse(str(payload.get('merchantUrl') or '')).netloc
+                    agent_authz=agent_vault.authorize_commerce(agent_id,who,host,amount,payload.get('allowSubscriptions',False),True)
                 intent=commerce.create_intent(who,payload.get('merchantUrl'),amount,payload.get('fundingSource','WALLET_USDC'),payload.get('merchant'),agent_id,payload.get('approvalAbove'),payload.get('allowSubscriptions',False),payload.get('note',''),payload.get('sourceAsset','USDC'))
                 if intent['fundingSource']=='STOCKLANA_USDC':
                     policy=card_rail.create_policy(who,intent['maxAmountUSDC'],intent['merchantHost'],payload.get('mcc'),payload.get('ttl',1800))
                     issuance=card_rail.issue_virtual(who,policy['id'])
                     intent=commerce.mark_funded(who,intent['id'],'stocklana-vault')
-                    return self.send_json(commerce.attach_card(who,intent['id'],policy,issuance),201)
-                return self.send_json({'intent':intent,'vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'requiresWalletTransfer':True},201)
+                    out=commerce.attach_card(who,intent['id'],policy,issuance)
+                    if agent_id: out['agentCommerce']=agent_vault.record_commerce(agent_id,who,intent['id'],intent['merchantHost'],amount)
+                    return self.send_json(out,201)
+                return self.send_json({'intent':intent,'vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'requiresWalletTransfer':True,'agentAuthorization':agent_authz},201)
             if p=='/api/commerce/conversion':
                 who=self.trader(payload=payload)
                 return self.send_json(commerce.mark_conversion(who,payload.get('intentId'),payload.get('sourceAsset'),payload.get('reference'),payload.get('details') or {}))
@@ -292,6 +307,10 @@ class Handler(SimpleHTTPRequestHandler):
                 self.trader(payload=payload); return self.send_json(solana_finance.jupiter_execute(payload.get('signedTransaction'),payload.get('requestId')))
             if p=='/api/pay/solana-request':
                 self.trader(payload=payload); return self.send_json(solana_finance.solana_pay_request(payload.get('recipient'),payload.get('amount'),payload.get('mint',USDC_MINT),payload.get('label','Stocklana'),payload.get('message','MAQUE payment'),payload.get('memo','')),201)
+            if p=='/api/agent-vaults/policy':
+                owner=self.trader(payload=payload)
+                v=agent_vault.update_commerce_policy(payload.get('agentId'),owner,payload.get('dailySpendLimitUSDC'),payload.get('singleSpendLimitUSDC'),payload.get('humanApprovalAboveUSDC'),payload.get('allowedMerchants'),payload.get('allowSubscriptions',False),payload.get('allowExternalCommerce',True))
+                return self.send_json(v)
             if p=='/api/agent-vaults':
                 owner=self.trader(payload=payload); v=agent_vault.create_agent_vault(payload.get('agentId'),owner,payload.get('name'))
                 accounting_tokens.digest({'type':'AGENT_BUDGET_SET','agentId':v['agentId'],'amount':v['policy']['dailySpendLimitUSDC'],'owner':owner,'source':'agent-vault-provisioning'})
