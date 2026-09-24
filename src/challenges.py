@@ -38,8 +38,12 @@ def create(creator,source_market,side,stake,ttl=86400):
 def get(challenge_id):
     c=_load()['challenges'].get(challenge_id)
     if not c: raise ValueError('challenge_not_found')
-    if c['status']=='WAITING' and c['expiresAt']<int(time.time()):
-        d=_load();d['challenges'][challenge_id]['status']='EXPIRED';_save(d);c=d['challenges'][challenge_id]
+    if c['status'] in {'WAITING','OPEN_FOR_OPPONENT'} and c['expiresAt']<int(time.time()):
+        with LOCK:
+            d=_load()
+            if d['challenges'].get(challenge_id,{}).get('status') in {'WAITING','OPEN_FOR_OPPONENT'}:
+                d['challenges'][challenge_id]['status']='EXPIRED';_save(d)
+            c=d['challenges'][challenge_id]
     return c
 
 def fail_creation(challenge_id,creator,reason):
