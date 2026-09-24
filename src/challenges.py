@@ -86,7 +86,7 @@ def fail_accept(challenge_id,opponent,nonce,reason):
 def cancel(challenge_id,user):
     d=_load();c=d['challenges'].get(challenge_id)
     if not c or c['creator']!=user: raise ValueError('challenge_not_found')
-    if c['status'] not in {'WAITING','OPEN_FOR_OPPONENT'}: raise ValueError('challenge_not_cancellable')
+    if c['status'] not in {'WAITING','OPEN_FOR_OPPONENT','EXPIRED'}: raise ValueError('challenge_not_cancellable')
     c['status']='CANCELLED';c['cancelledAt']=int(time.time());_save(d);return c
 
 def list_challenges(user=None,limit=50):
