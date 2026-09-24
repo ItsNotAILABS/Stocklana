@@ -44,6 +44,7 @@ export async function signSerializedTransaction({provider,transactionBase64}){
   return btoa(s);
 }
 
+
 export function detectSolanaWalletProvider(){
   const p=window.phantom?.solana||window.solana;
   const name=p?.isPhantom?'Phantom':(p?'Solana Wallet':'Not detected');
