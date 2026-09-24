@@ -13,8 +13,11 @@ def _save(d):
 
 def _host(url):
     u=urllib.parse.urlparse(str(url or '').strip())
-    if u.scheme not in {'http','https'} or not u.netloc: raise ValueError('valid_https_merchant_url_required')
-    return u.netloc.lower()
+    host=(u.hostname or '').lower().strip().lstrip('www.')
+    local=host in {'localhost','127.0.0.1','::1'}
+    if not host or (u.scheme!='https' and not (local and u.scheme=='http')): raise ValueError('valid_https_merchant_url_required')
+    if u.username or u.password: raise ValueError('merchant_url_credentials_not_allowed')
+    return host
 
 def create_intent(user, merchant_url, amount_usdc, funding_source='WALLET_USDC', merchant=None, agent_id=None, approval_above=None, allow_subscriptions=False, note='', source_asset='USDC'):
     amount=float(amount_usdc)
