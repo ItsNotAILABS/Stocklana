@@ -36,6 +36,7 @@ def issue_virtual(user,pid):
  if not url or not token:return {'ready':False,'reason':'issuer_credentials_not_configured','policyId':pid,'providerBoundary':'CARD_ISSUER_PROXY_URL'}
  body=json.dumps({'externalUserId':user,'policyId':pid,'amountLimit':p['maxAmountUSDC'],'currency':'USD','uses':1,'expiresAt':p['expiresAt'],'merchant':p.get('merchant'),'mcc':p.get('mcc')}).encode();req=urllib.request.Request(url,data=body,method='POST',headers={'Authorization':'Bearer '+token,'content-type':'application/json','User-Agent':'Stocklana/1.0'})
  with urllib.request.urlopen(req,timeout=15) as r:res=json.loads(r.read().decode())
+ # Never persist PAN/CVV. Only the provider's opaque card/token id.
  opaque=res.get('cardToken') or res.get('id');p['providerCardIdCommitment']=pq_crypto.blake_commit(str(opaque).encode()) if opaque else None;p['providerStatus']=res.get('status','CREATED');_save(d)
  return {'ready':True,'policyId':pid,'providerStatus':p['providerStatus'],'cardToken':opaque,'sensitiveDataStored':False}
 def get_policy(user,pid):
