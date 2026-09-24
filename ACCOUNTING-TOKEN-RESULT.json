@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "assertions": 494,
+  "internalTokenClasses": 8,
+  "token2022Mappings": 8,
+  "coverageRatio": 1.0,
+  "receiptHead": "c31f024f1dd23e2bf024385e437386e7d9d6901ad249c469453153275ea53907dbcbd70788c7637928e7cf8ccf7899341c74c8a2a45076eec04dcb5e0f2a5057",
+  "operations": {
+    "externalDeposits": 101,
+    "agentBudgetAssignments": 100,
+    "fundedCreditDraws": 25,
+    "fundedCreditRepayments": 25,
+    "positionLifecycles": 50,
+    "basketLifecycles": 20,
+    "idempotencyReplayChecks": 1
+  },
+  "invariants": [
+    "balanced_double_entry",
+    "monetary_claims_fully_backed",
+    "funded_credit_no_cash_creation",
+    "agent_budget_not_money",
+    "position_transfer_conservation",
+    "basket_receipt_conservation",
+    "external_event_idempotency"
+  ]
+}

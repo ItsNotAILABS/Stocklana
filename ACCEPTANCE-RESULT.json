@@ -1,0 +1,22 @@
+{
+  "release": "stocklana-v6",
+  "status": "PASS",
+  "assertions": 1287,
+  "requirementsAudited": 44,
+  "requirements": {
+    "executedProven": 33,
+    "codedExternalAuthorizationRequired": 7,
+    "sourceReadyDeploymentRequired": 4
+  },
+  "markets": {
+    "templates": 360,
+    "families": 16,
+    "automaticRuleFamilies": 15,
+    "prestocksAllowlist": 8,
+    "defaultPricing": "fully_collateralized_parimutuel",
+    "houseDirectionalExposure": 0
+  },
+  "workstation": {"views": 8, "navigationPassing": 8, "iso20022Translations": 100},
+  "weekRun": {"agents": 100, "days": 7, "sessions": 700, "failures": 0, "allExercisedMarketsSolvent": true},
+  "security": {"individualHighRisk": "ML-DSA-65+Ed25519", "batchFinality": "ML-DSA-65+Ed25519 every 16 routine events", "journalCipher": "AES-256-GCM", "journalRootWrap": "ML-KEM-768+X25519"}
+}

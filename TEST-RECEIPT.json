@@ -1,0 +1,18 @@
+{
+  "release": "stocklana-v6",
+  "status": "PASS",
+  "evidence": [
+    {"check":"acceptance","result":"PASS","assertions":1287,"templates":360,"families":16,"requirements":44,"weekSessions":700},
+    {"check":"automatic-settlement","result":"PASS","ruleFamilies":15},
+    {"check":"workstation","result":"PASS","navigation":"8/8","iso20022":"100/100"},
+    {"check":"finance-catalog","result":"PASS","templates":360,"transferInvariants":100,"lifecycle":"vault/position/receipt"},
+    {"check":"concurrency","result":"PASS","operations":100,"invariant":"balance conservation"},
+    {"check":"post-quantum-primitives","result":"PASS","receiptSignature":["ML-DSA-65","Ed25519"],"vaultKEM":["ML-KEM-768","X25519"],"cipher":"AES-256-GCM","commitment":"BLAKE2b-512"},
+    {"check":"withdrawal","result":"PASS","lifecycle":"reserve -> PQ authorization -> cancel"},
+    {"check":"http-market-vault","result":"PASS","lifecycle":"authenticated create -> fund -> trade -> transfer -> resolve -> redeem"},
+    {"check":"oracle-policy","result":"PASS"},
+    {"check":"browser-http-certification","result":"PASS","systems":7,"commandFlow":true}
+  ],
+  "weekRegression": {"agents":100,"days":7,"sessions":700,"failures":0,"allExercisedMarketsSolvent":true,"houseDirectionalExposure":0},
+  "externalReceiptPolicy": "No external provider or chain action is counted as executed without its provider response or chain signature."
+}
