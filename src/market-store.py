@@ -161,3 +161,12 @@ def cancel_unmatched(mid,trader):
   p['cancelledYes']=float(p.get('yes',0));p['cancelledNo']=float(p.get('no',0));p['yes']=0.0;p['no']=0.0;p['redeemed']=0.0;p['refundUSDC']=q['totalUSDC']
  m['yesPool']=0.0;m['noPool']=0.0;m['qYes']=0.0;m['qNo']=0.0;m['collateral']=0.0;m['fees']=0.0;m['paidOut']=0.0
  d['markets'][mid]=m;_save(d);return {'market':m,'position':p,'refund':q}
+
+
+@serialized
+def cancel_empty(mid,creator):
+ d=_load();m=d['markets'].get(mid)
+ if not m: raise KeyError('market_not_found')
+ if m.get('creator')!=creator: raise ValueError('market_creator_mismatch')
+ if m.get('status')!='OPEN' or m.get('trades'): raise ValueError('market_not_empty')
+ m['status']='CANCELLED';m['cancelledAt']=int(time.time()*1000);m['cancelReason']='EMPTY_CREATION_ROLLBACK';d['markets'][mid]=m;_save(d);return m
