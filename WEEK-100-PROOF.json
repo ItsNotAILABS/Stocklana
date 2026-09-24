@@ -1,0 +1,830 @@
+{
+  "actions": {
+    "card_reserve_cancel": 20,
+    "growth_attribution": 100,
+    "internal_payments": 20,
+    "jupiter_external_auth_gate": 100,
+    "market_quotes": 100,
+    "market_trades": 30,
+    "offline_payments": 20,
+    "offline_replay_rejections": 20,
+    "onboarding_iso": 100,
+    "payment_requests": 80,
+    "pool_funded_loans": 10,
+    "position_transfers": 10,
+    "solvency_checks": 100,
+    "stress_simulations": 100,
+    "vault_checks": 80
+  },
+  "agents": 100,
+  "allMarketsSolvent": true,
+  "createdAt": 1790134837,
+  "days": 7,
+  "daysDone": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "externalNetworkRule": "No provider/network action counts as executed without provider response plus chain signature/receipt.",
+  "failures": [],
+  "houseDirectionalExposure": 0.0,
+  "markets": [
+    "week100-1790134837-m0",
+    "week100-1790134837-m1",
+    "week100-1790134837-m2",
+    "week100-1790134837-m3",
+    "week100-1790134837-m4",
+    "week100-1790134837-m5",
+    "week100-1790134837-m6",
+    "week100-1790134837-m7"
+  ],
+  "personalities": 100,
+  "personas": [
+    {
+      "agentId": "stocklana-agent-001",
+      "risk": "low",
+      "role": "active_trader",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u001"
+    },
+    {
+      "agentId": "stocklana-agent-002",
+      "risk": "medium",
+      "role": "holder",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u002"
+    },
+    {
+      "agentId": "stocklana-agent-003",
+      "risk": "high",
+      "role": "social_payer",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u003"
+    },
+    {
+      "agentId": "stocklana-agent-004",
+      "risk": "low",
+      "role": "agent_operator",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u004"
+    },
+    {
+      "agentId": "stocklana-agent-005",
+      "risk": "medium",
+      "role": "market_researcher",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u005"
+    },
+    {
+      "agentId": "stocklana-agent-006",
+      "risk": "high",
+      "role": "risk_averse",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u006"
+    },
+    {
+      "agentId": "stocklana-agent-007",
+      "risk": "low",
+      "role": "merchant",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u007"
+    },
+    {
+      "agentId": "stocklana-agent-008",
+      "risk": "medium",
+      "role": "yield_seeker",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u008"
+    },
+    {
+      "agentId": "stocklana-agent-009",
+      "risk": "high",
+      "role": "creator",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u009"
+    },
+    {
+      "agentId": "stocklana-agent-010",
+      "risk": "low",
+      "role": "newcomer",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u010"
+    },
+    {
+      "agentId": "stocklana-agent-011",
+      "risk": "medium",
+      "role": "active_trader",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u011"
+    },
+    {
+      "agentId": "stocklana-agent-012",
+      "risk": "high",
+      "role": "holder",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u012"
+    },
+    {
+      "agentId": "stocklana-agent-013",
+      "risk": "low",
+      "role": "social_payer",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u013"
+    },
+    {
+      "agentId": "stocklana-agent-014",
+      "risk": "medium",
+      "role": "agent_operator",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u014"
+    },
+    {
+      "agentId": "stocklana-agent-015",
+      "risk": "high",
+      "role": "market_researcher",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u015"
+    },
+    {
+      "agentId": "stocklana-agent-016",
+      "risk": "low",
+      "role": "risk_averse",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u016"
+    },
+    {
+      "agentId": "stocklana-agent-017",
+      "risk": "medium",
+      "role": "merchant",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u017"
+    },
+    {
+      "agentId": "stocklana-agent-018",
+      "risk": "high",
+      "role": "yield_seeker",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u018"
+    },
+    {
+      "agentId": "stocklana-agent-019",
+      "risk": "low",
+      "role": "creator",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u019"
+    },
+    {
+      "agentId": "stocklana-agent-020",
+      "risk": "medium",
+      "role": "newcomer",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u020"
+    },
+    {
+      "agentId": "stocklana-agent-021",
+      "risk": "high",
+      "role": "active_trader",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u021"
+    },
+    {
+      "agentId": "stocklana-agent-022",
+      "risk": "low",
+      "role": "holder",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u022"
+    },
+    {
+      "agentId": "stocklana-agent-023",
+      "risk": "medium",
+      "role": "social_payer",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u023"
+    },
+    {
+      "agentId": "stocklana-agent-024",
+      "risk": "high",
+      "role": "agent_operator",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u024"
+    },
+    {
+      "agentId": "stocklana-agent-025",
+      "risk": "low",
+      "role": "market_researcher",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u025"
+    },
+    {
+      "agentId": "stocklana-agent-026",
+      "risk": "medium",
+      "role": "risk_averse",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u026"
+    },
+    {
+      "agentId": "stocklana-agent-027",
+      "risk": "high",
+      "role": "merchant",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u027"
+    },
+    {
+      "agentId": "stocklana-agent-028",
+      "risk": "low",
+      "role": "yield_seeker",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u028"
+    },
+    {
+      "agentId": "stocklana-agent-029",
+      "risk": "medium",
+      "role": "creator",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u029"
+    },
+    {
+      "agentId": "stocklana-agent-030",
+      "risk": "high",
+      "role": "newcomer",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u030"
+    },
+    {
+      "agentId": "stocklana-agent-031",
+      "risk": "low",
+      "role": "active_trader",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u031"
+    },
+    {
+      "agentId": "stocklana-agent-032",
+      "risk": "medium",
+      "role": "holder",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u032"
+    },
+    {
+      "agentId": "stocklana-agent-033",
+      "risk": "high",
+      "role": "social_payer",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u033"
+    },
+    {
+      "agentId": "stocklana-agent-034",
+      "risk": "low",
+      "role": "agent_operator",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u034"
+    },
+    {
+      "agentId": "stocklana-agent-035",
+      "risk": "medium",
+      "role": "market_researcher",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u035"
+    },
+    {
+      "agentId": "stocklana-agent-036",
+      "risk": "high",
+      "role": "risk_averse",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u036"
+    },
+    {
+      "agentId": "stocklana-agent-037",
+      "risk": "low",
+      "role": "merchant",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u037"
+    },
+    {
+      "agentId": "stocklana-agent-038",
+      "risk": "medium",
+      "role": "yield_seeker",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u038"
+    },
+    {
+      "agentId": "stocklana-agent-039",
+      "risk": "high",
+      "role": "creator",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u039"
+    },
+    {
+      "agentId": "stocklana-agent-040",
+      "risk": "low",
+      "role": "newcomer",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u040"
+    },
+    {
+      "agentId": "stocklana-agent-041",
+      "risk": "medium",
+      "role": "active_trader",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u041"
+    },
+    {
+      "agentId": "stocklana-agent-042",
+      "risk": "high",
+      "role": "holder",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u042"
+    },
+    {
+      "agentId": "stocklana-agent-043",
+      "risk": "low",
+      "role": "social_payer",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u043"
+    },
+    {
+      "agentId": "stocklana-agent-044",
+      "risk": "medium",
+      "role": "agent_operator",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u044"
+    },
+    {
+      "agentId": "stocklana-agent-045",
+      "risk": "high",
+      "role": "market_researcher",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u045"
+    },
+    {
+      "agentId": "stocklana-agent-046",
+      "risk": "low",
+      "role": "risk_averse",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u046"
+    },
+    {
+      "agentId": "stocklana-agent-047",
+      "risk": "medium",
+      "role": "merchant",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u047"
+    },
+    {
+      "agentId": "stocklana-agent-048",
+      "risk": "high",
+      "role": "yield_seeker",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u048"
+    },
+    {
+      "agentId": "stocklana-agent-049",
+      "risk": "low",
+      "role": "creator",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u049"
+    },
+    {
+      "agentId": "stocklana-agent-050",
+      "risk": "medium",
+      "role": "newcomer",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u050"
+    },
+    {
+      "agentId": "stocklana-agent-051",
+      "risk": "high",
+      "role": "active_trader",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u051"
+    },
+    {
+      "agentId": "stocklana-agent-052",
+      "risk": "low",
+      "role": "holder",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u052"
+    },
+    {
+      "agentId": "stocklana-agent-053",
+      "risk": "medium",
+      "role": "social_payer",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u053"
+    },
+    {
+      "agentId": "stocklana-agent-054",
+      "risk": "high",
+      "role": "agent_operator",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u054"
+    },
+    {
+      "agentId": "stocklana-agent-055",
+      "risk": "low",
+      "role": "market_researcher",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u055"
+    },
+    {
+      "agentId": "stocklana-agent-056",
+      "risk": "medium",
+      "role": "risk_averse",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u056"
+    },
+    {
+      "agentId": "stocklana-agent-057",
+      "risk": "high",
+      "role": "merchant",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u057"
+    },
+    {
+      "agentId": "stocklana-agent-058",
+      "risk": "low",
+      "role": "yield_seeker",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u058"
+    },
+    {
+      "agentId": "stocklana-agent-059",
+      "risk": "medium",
+      "role": "creator",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u059"
+    },
+    {
+      "agentId": "stocklana-agent-060",
+      "risk": "high",
+      "role": "newcomer",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u060"
+    },
+    {
+      "agentId": "stocklana-agent-061",
+      "risk": "low",
+      "role": "active_trader",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u061"
+    },
+    {
+      "agentId": "stocklana-agent-062",
+      "risk": "medium",
+      "role": "holder",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u062"
+    },
+    {
+      "agentId": "stocklana-agent-063",
+      "risk": "high",
+      "role": "social_payer",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u063"
+    },
+    {
+      "agentId": "stocklana-agent-064",
+      "risk": "low",
+      "role": "agent_operator",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u064"
+    },
+    {
+      "agentId": "stocklana-agent-065",
+      "risk": "medium",
+      "role": "market_researcher",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u065"
+    },
+    {
+      "agentId": "stocklana-agent-066",
+      "risk": "high",
+      "role": "risk_averse",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u066"
+    },
+    {
+      "agentId": "stocklana-agent-067",
+      "risk": "low",
+      "role": "merchant",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u067"
+    },
+    {
+      "agentId": "stocklana-agent-068",
+      "risk": "medium",
+      "role": "yield_seeker",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u068"
+    },
+    {
+      "agentId": "stocklana-agent-069",
+      "risk": "high",
+      "role": "creator",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u069"
+    },
+    {
+      "agentId": "stocklana-agent-070",
+      "risk": "low",
+      "role": "newcomer",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u070"
+    },
+    {
+      "agentId": "stocklana-agent-071",
+      "risk": "medium",
+      "role": "active_trader",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u071"
+    },
+    {
+      "agentId": "stocklana-agent-072",
+      "risk": "high",
+      "role": "holder",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u072"
+    },
+    {
+      "agentId": "stocklana-agent-073",
+      "risk": "low",
+      "role": "social_payer",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u073"
+    },
+    {
+      "agentId": "stocklana-agent-074",
+      "risk": "medium",
+      "role": "agent_operator",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u074"
+    },
+    {
+      "agentId": "stocklana-agent-075",
+      "risk": "high",
+      "role": "market_researcher",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u075"
+    },
+    {
+      "agentId": "stocklana-agent-076",
+      "risk": "low",
+      "role": "risk_averse",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u076"
+    },
+    {
+      "agentId": "stocklana-agent-077",
+      "risk": "medium",
+      "role": "merchant",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u077"
+    },
+    {
+      "agentId": "stocklana-agent-078",
+      "risk": "high",
+      "role": "yield_seeker",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u078"
+    },
+    {
+      "agentId": "stocklana-agent-079",
+      "risk": "low",
+      "role": "creator",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u079"
+    },
+    {
+      "agentId": "stocklana-agent-080",
+      "risk": "medium",
+      "role": "newcomer",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u080"
+    },
+    {
+      "agentId": "stocklana-agent-081",
+      "risk": "high",
+      "role": "active_trader",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u081"
+    },
+    {
+      "agentId": "stocklana-agent-082",
+      "risk": "low",
+      "role": "holder",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u082"
+    },
+    {
+      "agentId": "stocklana-agent-083",
+      "risk": "medium",
+      "role": "social_payer",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u083"
+    },
+    {
+      "agentId": "stocklana-agent-084",
+      "risk": "high",
+      "role": "agent_operator",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u084"
+    },
+    {
+      "agentId": "stocklana-agent-085",
+      "risk": "low",
+      "role": "market_researcher",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u085"
+    },
+    {
+      "agentId": "stocklana-agent-086",
+      "risk": "medium",
+      "role": "risk_averse",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u086"
+    },
+    {
+      "agentId": "stocklana-agent-087",
+      "risk": "high",
+      "role": "merchant",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u087"
+    },
+    {
+      "agentId": "stocklana-agent-088",
+      "risk": "low",
+      "role": "yield_seeker",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u088"
+    },
+    {
+      "agentId": "stocklana-agent-089",
+      "risk": "medium",
+      "role": "creator",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u089"
+    },
+    {
+      "agentId": "stocklana-agent-090",
+      "risk": "high",
+      "role": "newcomer",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u090"
+    },
+    {
+      "agentId": "stocklana-agent-091",
+      "risk": "low",
+      "role": "active_trader",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u091"
+    },
+    {
+      "agentId": "stocklana-agent-092",
+      "risk": "medium",
+      "role": "holder",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u092"
+    },
+    {
+      "agentId": "stocklana-agent-093",
+      "risk": "high",
+      "role": "social_payer",
+      "symbol": "NEURALINK",
+      "user": "week100-1790134837-u093"
+    },
+    {
+      "agentId": "stocklana-agent-094",
+      "risk": "low",
+      "role": "agent_operator",
+      "symbol": "OPENAI",
+      "user": "week100-1790134837-u094"
+    },
+    {
+      "agentId": "stocklana-agent-095",
+      "risk": "medium",
+      "role": "market_researcher",
+      "symbol": "POLYMARKET",
+      "user": "week100-1790134837-u095"
+    },
+    {
+      "agentId": "stocklana-agent-096",
+      "risk": "high",
+      "role": "risk_averse",
+      "symbol": "SPACEX",
+      "user": "week100-1790134837-u096"
+    },
+    {
+      "agentId": "stocklana-agent-097",
+      "risk": "low",
+      "role": "merchant",
+      "symbol": "ANDURIL",
+      "user": "week100-1790134837-u097"
+    },
+    {
+      "agentId": "stocklana-agent-098",
+      "risk": "medium",
+      "role": "yield_seeker",
+      "symbol": "ANTHROPIC",
+      "user": "week100-1790134837-u098"
+    },
+    {
+      "agentId": "stocklana-agent-099",
+      "risk": "high",
+      "role": "creator",
+      "symbol": "FIGUREAI",
+      "user": "week100-1790134837-u099"
+    },
+    {
+      "agentId": "stocklana-agent-100",
+      "risk": "low",
+      "role": "newcomer",
+      "symbol": "KALSHI",
+      "user": "week100-1790134837-u100"
+    }
+  ],
+  "roles": {
+    "active_trader": 10,
+    "agent_operator": 10,
+    "creator": 10,
+    "holder": 10,
+    "market_researcher": 10,
+    "merchant": 10,
+    "newcomer": 10,
+    "risk_averse": 10,
+    "social_payer": 10,
+    "yield_seeker": 10
+  },
+  "runId": "week100-1790134837",
+  "sessions": 700,
+  "sessionsAttempted": 700,
+  "solvency": {
+    "week100-1790134837-m0": {
+      "delta": 0.0,
+      "escrowUSDC": 30.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 30.0,
+      "marketId": "week100-1790134837-m0",
+      "solvent": true
+    },
+    "week100-1790134837-m1": {
+      "delta": 0.0,
+      "escrowUSDC": 15.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 15.0,
+      "marketId": "week100-1790134837-m1",
+      "solvent": true
+    },
+    "week100-1790134837-m2": {
+      "delta": 0.0,
+      "escrowUSDC": 30.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 30.0,
+      "marketId": "week100-1790134837-m2",
+      "solvent": true
+    },
+    "week100-1790134837-m3": {
+      "delta": 0.0,
+      "escrowUSDC": 15.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 15.0,
+      "marketId": "week100-1790134837-m3",
+      "solvent": true
+    },
+    "week100-1790134837-m4": {
+      "delta": 0.0,
+      "escrowUSDC": 20.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 20.0,
+      "marketId": "week100-1790134837-m4",
+      "solvent": true
+    },
+    "week100-1790134837-m5": {
+      "delta": 0.0,
+      "escrowUSDC": 10.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 10.0,
+      "marketId": "week100-1790134837-m5",
+      "solvent": true
+    },
+    "week100-1790134837-m6": {
+      "delta": 0.0,
+      "escrowUSDC": 20.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 20.0,
+      "marketId": "week100-1790134837-m6",
+      "solvent": true
+    },
+    "week100-1790134837-m7": {
+      "delta": 0.0,
+      "escrowUSDC": 10.0,
+      "houseDirectionalExposure": 0.0,
+      "marketCollateralUSDC": 10.0,
+      "marketId": "week100-1790134837-m7",
+      "solvent": true
+    }
+  },
+  "status": "PASS"
+}

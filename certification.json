@@ -1,0 +1,11 @@
+{
+  "release": "stocklana-competition-v6",
+  "status": "LOCAL_PRODUCTION_GATE_PASS",
+  "marketCatalog": {"templates": 360, "families": 16, "automaticRuleFamilies": 15},
+  "workstation": {"views": 8, "navigationVerified": 8, "iso20022Translations": 100},
+  "agentWeek": {"agents": 100, "days": 7, "sessions": 700, "failures": 0},
+  "acceptance": {"assertions": 1287, "status": "PASS"},
+  "finance": {"fullyCollateralizedDefault": true, "houseDirectionalExposure": 0, "segregatedMarketEscrow": true, "transferablePositions": true},
+  "security": {"suite": "Stocklana-Phantasma-PQ", "routineFinality": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 batch anchors", "highRiskFinality": "ML-DSA-65 + Ed25519 individual signature", "journal": "AES-256-GCM with ML-KEM-768 + X25519 wrapped root key"},
+  "externalExecutionGates": ["Solana program deployment", "Jupiter fill", "Pyth credentialed observation", "Meteora DBC transaction", "ClawPump transaction", "external card issuance", "bank/debit settlement", "MNTY chain deployment"]
+}

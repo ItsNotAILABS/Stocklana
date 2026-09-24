@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "wedge": "PROGRAMMABLE_TOKENIZED_EQUITY_OWNERSHIP",
+  "assertions": 14,
+  "categories": {
+    "trading": 2,
+    "investing": 2,
+    "credit_and_yield": 2,
+    "infrastructure": 2,
+    "consumer": 2,
+    "why_solana": 2
+  },
+  "acceptanceAssertions": 1305,
+  "weekSessions": 700,
+  "workstationViews": 8
+}

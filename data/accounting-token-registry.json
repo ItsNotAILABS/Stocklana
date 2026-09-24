@@ -1,0 +1,30 @@
+{
+  "schema": "Stocklana Financial Token Grammar V2",
+  "principle": "No monetary receipt is created without external settlement inventory, segregated collateral, or a funded receivable source.",
+  "internal": [
+    "SL-CASH",
+    "SL-ESCROW",
+    "SL-COLL",
+    "SL-FEE",
+    "SL-CREDIT",
+    "SL-AGENT",
+    "SL-POS",
+    "SL-BASKET"
+  ],
+  "token2022": {
+    "tokenProgram": "Token-2022",
+    "publiclyComposable": [
+      "SL-ESCROW",
+      "SL-COLL",
+      "SL-CREDIT",
+      "SL-AGENT",
+      "SL-POS",
+      "SL-BASKET"
+    ],
+    "keptInternal": [
+      "SL-CASH",
+      "SL-FEE"
+    ]
+  },
+  "default": "TOKEN_2022"
+}
