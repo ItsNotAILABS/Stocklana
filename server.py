@@ -30,6 +30,7 @@ accounting_tokens=loadmod('accounting_tokens','accounting_tokens.py')
 commerce=loadmod('commerce','commerce.py')
 money_router=loadmod('money_router','money_router.py')
 prestock_object=loadmod('prestock_object','prestock_object.py')
+challenges=loadmod('challenges','challenges.py')
 
 SNAPSHOT=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
 USDC_MINT=os.getenv('STOCKLANA_USDC_MINT','EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
@@ -153,6 +154,13 @@ class Handler(SimpleHTTPRequestHandler):
         if path=='/api/config': return self.send_json({'network':'solana-mainnet','vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'programId':PROGRAM_ID or None,'programDeployed':bool(PROGRAM_ID),'rpcConfigured':bool(SOLANA_RPC),'rpcUrl':SOLANA_RPC})
         if path=='/api/health': return self.send_json({'ok':True,'service':'stocklana','mode':'market-clearing-vault','marketLifecycle':['create','quote','trade','transfer-position','resolve','redeem'],'finance':['vault','internal-transfer','receipts','onramp-routing'],'crypto':pq_crypto.public_metadata()})
         if path=='/api/systems': return self.send_json({'count':9,'systems':[{'id':'markets','name':'PreStocks Market Factory','status':'active'},{'id':'clearing','name':'PARRALAX-derived Clearing Layer','status':'active'},{'id':'vault','name':'Stocklana Vault','status':'active'},{'id':'accounting','name':'Double-entry Financial Token Digest','status':'active'},{'id':'token-profiles','name':'V2 Token-2022 Financial Receipts','status':'wallet-signature-ready'},{'id':'solana','name':'Solana Wallet Rail','status':'client-ready'},{'id':'launcher','name':'Launch Router','status':'active'},{'id':'oracle','name':'Settlement Oracle','status':'adapter-ready'},{'id':'proof','name':'Phantasma PQ Receipts','status':'active'}]})
+        if path=='/api/challenges':
+            mine=(qs.get('mine') or ['0'])[0]=='1'
+            who=self.trader(qs=qs) if mine else None
+            return self.send_json({'capabilities':challenges.capabilities(),'challenges':challenges.list_challenges(who,(qs.get('limit') or ['50'])[0])})
+        if path.startswith('/api/challenges/'):
+            cid=path.rsplit('/',1)[-1]; ch=challenges.get(cid); m=next((x for x in market_store.list_markets() if x.get('id')==ch.get('marketId')),None)
+            return self.send_json({'challenge':ch,'market':m,'solvency':market_execution.solvency(ch['marketId']) if m and m.get('status') in {'OPEN','RESOLVED'} else None})
         if path=='/api/games':
             stake=float((qs.get('stake') or ['10'])[0]); limit=int((qs.get('limit') or ['24'])[0])
             games=featured_games(limit,max(1,stake))
@@ -256,6 +264,33 @@ class Handler(SimpleHTTPRequestHandler):
                 scopes=payload.get('scopes') or ['vault:read','commerce:purchase']
                 if any(x not in allowed for x in scopes): raise PermissionError('unsupported_agent_scope')
                 return self.send_json(auth.issue_agent(owner,agent_id,scopes),201)
+            if p=='/api/challenges':
+                who=self.trader(payload=payload); source_id=payload.get('sourceMarketId')
+                source=next((x for x in market_store.list_markets() if x.get('id')==source_id),None)
+                if not source: raise ValueError('source_market_not_found')
+                prepared=challenges.create(who,source,payload.get('side'),payload.get('stake'),payload.get('ttl',86400))
+                market=market_store.create_market(prepared['market'])
+                try:
+                    trade=market_execution.vault_trade(who,market['id'],prepared['challenge']['creatorSide'],prepared['challenge']['stakeUSDC'],'challenge-vault')
+                except Exception:
+                    try: market_store.cancel_unmatched(market['id'],who)
+                    except Exception: pass
+                    raise
+                ch=challenges.mark_creator_funded(prepared['challenge']['id'],who,trade.get('trade'))
+                return self.send_json({'challenge':ch,'market':trade.get('market'),'quote':trade.get('quote')},201)
+            if p.startswith('/api/challenges/') and p.endswith('/accept'):
+                cid=p.split('/')[3]; who=self.trader(payload=payload); ch=challenges.get(cid)
+                if ch.get('status')!='OPEN_FOR_OPPONENT': raise ValueError('challenge_not_open')
+                trade=market_execution.vault_trade(who,ch['marketId'],ch['opponentSide'],ch['stakeUSDC'],'challenge-vault')
+                ch=challenges.accept(cid,who,trade.get('trade'))
+                return self.send_json({'challenge':ch,'market':trade.get('market'),'quote':trade.get('quote')},201)
+            if p.startswith('/api/challenges/') and p.endswith('/cancel'):
+                cid=p.split('/')[3]; who=self.trader(payload=payload); ch=challenges.get(cid)
+                if ch.get('creator')!=who: raise ValueError('challenge_not_found')
+                refund=None
+                if ch.get('status')=='OPEN_FOR_OPPONENT': refund=market_execution.refund_unmatched(who,ch['marketId'])
+                ch=challenges.cancel(cid,who)
+                return self.send_json({'challenge':ch,'refund':refund})
             if p=='/api/money/plan':
                 self.trader(payload=payload)
                 return self.send_json(money_router.purchase_plan(payload.get('amount'),payload.get('walletUSDC',0),payload.get('vaultUSDC',0),payload.get('solBalance',0),payload.get('prestocks') or []))
