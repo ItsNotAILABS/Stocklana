@@ -87,3 +87,13 @@
 .wallet-holding-actions{display:flex;gap:7px;margin-top:9px}.wallet-holding-actions button{border:1px solid #253247;background:#0c121a;color:white;border-radius:10px;padding:7px 9px;font-size:9px}
 @media(max-width:1100px){.game-deck{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.play-hero{grid-template-columns:1fr}.game-deck{grid-template-columns:1fr}.game-filter-row .build-game{margin-left:0}.stake-pills{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+
+/* Owner-controlled agent commerce */
+.agent-commerce-setup{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:16px;border:1px solid #243246;border-radius:26px;padding:18px;margin:16px 0;background:radial-gradient(circle at 0 0,rgba(124,255,198,.10),transparent 34%),linear-gradient(155deg,#0d1418,#090d13)}
+.agent-commerce-copy h3{font-size:27px;letter-spacing:-.8px;margin:8px 0}.agent-commerce-copy p{color:var(--muted);line-height:1.6}
+.agent-policy-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.agent-policy-form label{display:grid;gap:6px;font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}.agent-policy-form input{width:100%;border:1px solid #263448;background:#090d13;color:#fff;border-radius:12px;padding:11px}.agent-policy-form .span-2{grid-column:1/-1}.agent-policy-form .toggle-line{display:flex;flex-direction:row;align-items:center;text-transform:none;letter-spacing:0;font-size:11px}.agent-policy-form .toggle-line input{width:auto}
+.agent-policy-actions{display:flex;gap:8px;flex-wrap:wrap}.agent-capability-result{border-radius:14px;min-height:0}.agent-capability-result code{display:block;word-break:break-all;background:#070b10;border:1px solid #1d2c3d;padding:10px;border-radius:12px;color:#b8d2ff}.agent-capability-result small{display:block;color:var(--muted);margin-top:7px}
+.my-agent-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.my-agent-card{border:1px solid #223045;border-radius:18px;padding:14px;background:#0b1118}.my-agent-card h3{margin:7px 0}.my-agent-card small{display:block;color:var(--muted)}.my-agent-card .merchant-list{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}.my-agent-card .merchant-list span{font-size:8px;border:1px solid #2a384b;border-radius:999px;padding:5px 7px}.my-agent-actions{display:flex;gap:7px;margin-top:10px}.my-agent-actions button{flex:1;border:1px solid #2b394d;background:#0d141d;color:white;border-radius:10px;padding:8px;font-size:9px}
+@media(max-width:950px){.agent-commerce-setup{grid-template-columns:1fr}.agent-policy-form{grid-template-columns:1fr 1fr}.my-agent-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.agent-policy-form,.my-agent-grid{grid-template-columns:1fr}}
