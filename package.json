@@ -1,0 +1,16 @@
+{
+  "name": "stocklana-markets",
+  "version": "0.9.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python3 server.py --host 0.0.0.0 --port 5173",
+    "dev:local": "python3 server.py --host 127.0.0.1 --port 5173",
+    "dev:static": "python3 -m http.server 4173 --bind 0.0.0.0",
+    "verify": "python3 scripts/verify_http.py --root . --port 5173",
+    "verify:track": "python3 scripts/test_track_fit.py",
+    "verify:acceptance": "python3 scripts/test_acceptance.py",
+    "verify:accounting": "python3 scripts/test_accounting_tokens.py",
+    "verify:accounting-http": "python3 scripts/test_accounting_http.py"
+  }
+}
