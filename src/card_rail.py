@@ -18,15 +18,20 @@ def create_policy(user,amount,merchant=None,mcc=None,ttl=900):
 def capture(user,pid,amount,provider_receipt=None):
  d=_load();p=d['policies'].get(pid)
  if not p or p['user']!=user:raise ValueError('card_policy_not_found')
+ amount=float(amount);receipt_commit=pq_crypto.blake_commit(str(provider_receipt).encode()) if provider_receipt else None
+ if p.get('status')=='CAPTURED':
+  if abs(float(p.get('capturedUSDC',0))-amount)<=1e-9 and p.get('providerReceiptCommitment')==receipt_commit:return {**p,'duplicate':True}
+  raise ValueError('card_policy_already_captured')
  if p['status']!='AUTHORIZED_RESERVED' or p['expiresAt']<int(time.time()) or p['usesRemaining']!=1:raise ValueError('card_policy_not_usable')
- amount=float(amount)
+ if amount<=0:raise ValueError('invalid_amount')
  if amount>p['maxAmountUSDC']+1e-9:raise ValueError('amount_exceeds_policy')
  finance_store.settle_locked(user,p['fundingLock'],'stocklana:card-clearing',amount,'USDC');remaining=p['maxAmountUSDC']-amount
  if remaining>1e-9:finance_store.release_locked(user,p['fundingLock'],'USDC')
- p.update({'status':'CAPTURED','capturedUSDC':amount,'usesRemaining':0,'capturedAt':int(time.time()),'providerReceiptCommitment':pq_crypto.blake_commit(str(provider_receipt).encode()) if provider_receipt else None});_save(d);return p
+ p.update({'status':'CAPTURED','capturedUSDC':amount,'usesRemaining':0,'capturedAt':int(time.time()),'providerReceiptCommitment':receipt_commit});_save(d);return p
 def cancel(user,pid):
  d=_load();p=d['policies'].get(pid)
  if not p or p['user']!=user:raise ValueError('card_policy_not_found')
+ if p.get('status')=='CANCELLED':return {**p,'duplicate':True}
  if p['status']!='AUTHORIZED_RESERVED':raise ValueError('card_policy_not_reservable')
  finance_store.release_locked(user,p['fundingLock'],'USDC');p['status']='CANCELLED';p['usesRemaining']=0;p['cancelledAt']=int(time.time());_save(d);return p
 def issue_virtual(user,pid):
