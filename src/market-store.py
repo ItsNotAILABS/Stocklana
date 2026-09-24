@@ -138,3 +138,26 @@ def all_positions(trader):
   if p.get('trader')==trader:
    m=d['markets'].get(p['marketId'],{});out.append({**p,'question':m.get('question'),'symbol':m.get('symbol'),'status':m.get('status'),'outcome':m.get('outcome')})
  return out
+
+
+def unmatched_refund_quote(mid,trader):
+ d=_load();m=d['markets'].get(mid)
+ if not m: raise KeyError('market_not_found')
+ m=_migrate(m)
+ if m['status']!='OPEN': raise ValueError('market_not_open')
+ trades=m.get('trades') or []
+ if len(trades)!=1 or trades[0].get('trader')!=trader: raise ValueError('market_not_unmatched_single_party')
+ if float(m.get('yesPool',0))>1e-9 and float(m.get('noPool',0))>1e-9: raise ValueError('market_has_counterparty')
+ t=trades[0]
+ return {'marketId':mid,'trader':trader,'collateralUSDC':float(t.get('collateral',0)),'feeUSDC':float(t.get('fee',0)),'totalUSDC':float(t.get('total',0))}
+
+@serialized
+def cancel_unmatched(mid,trader):
+ q=unmatched_refund_quote(mid,trader);d=_load();m=d['markets'][mid]
+ m['status']='CANCELLED';m['cancelledAt']=int(time.time()*1000);m['cancelReason']='UNMATCHED_HEAD_TO_HEAD'
+ for t in m.get('trades',[]): t['status']='REFUNDED'
+ k=f'{mid}:{trader}';p=d['positions'].get(k)
+ if p:
+  p['cancelledYes']=float(p.get('yes',0));p['cancelledNo']=float(p.get('no',0));p['yes']=0.0;p['no']=0.0;p['redeemed']=0.0;p['refundUSDC']=q['totalUSDC']
+ m['yesPool']=0.0;m['noPool']=0.0;m['qYes']=0.0;m['qNo']=0.0;m['collateral']=0.0;m['fees']=0.0;m['paidOut']=0.0
+ d['markets'][mid]=m;_save(d);return {'market':m,'position':p,'refund':q}
