@@ -302,6 +302,7 @@ class Handler(SimpleHTTPRequestHandler):
                 policy=card_rail.create_policy(who,intent['maxAmountUSDC'],intent['merchantHost'],payload.get('mcc'),max(60,int(intent['expiresAt']-int(time.time()))))
                 issuance=card_rail.issue_virtual(who,policy['id'])
                 out=commerce.attach_card(who,intent['id'],policy,issuance); out['chainProof']=proof
+                if intent.get('agentId'): out['agentCommerce']=agent_vault.record_commerce(intent['agentId'],who,intent['id'],intent['merchantHost'],intent['maxAmountUSDC'])
                 return self.send_json(out,201)
             if p=='/api/commerce/open':
                 who=self.trader(payload=payload); return self.send_json(commerce.mark_opened(who,payload.get('intentId')))
