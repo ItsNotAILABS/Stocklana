@@ -46,3 +46,19 @@ def solvency(mid):
  ms=[m for m in market.list_markets() if m['id']==mid]
  if not ms:raise ValueError('market_not_found')
  m=ms[0];esc=float(finance.account(escrow_account(mid))['balances'].get('USDC',0));coll=float(m.get('collateral',0));paid=float(m.get('paidOut',0));required=max(0.0,coll-paid);return {'marketId':mid,'escrowUSDC':esc,'marketCollateralUSDC':coll,'paidOutUSDC':paid,'outstandingLiabilityUSDC':required,'delta':esc-required,'solvent':esc+1e-9>=required,'houseDirectionalExposure':0.0}
+
+
+def refund_unmatched(user,mid):
+ q=market.unmatched_refund_quote(mid,user);esc=escrow_account(mid)
+ if q['collateralUSDC']>0: finance.transfer(esc,user,q['collateralUSDC'],'USDC',f'unmatched market refund {mid}')
+ if q['feeUSDC']>0: finance.transfer(FEE_ACCOUNT,user,q['feeUSDC'],'USDC',f'unmatched market fee refund {mid}')
+ try:
+  out=market.cancel_unmatched(mid,user)
+ except Exception:
+  if q['collateralUSDC']>0: finance.transfer(user,esc,q['collateralUSDC'],'USDC',f'unmatched refund rollback {mid}')
+  if q['feeUSDC']>0: finance.transfer(user,FEE_ACCOUNT,q['feeUSDC'],'USDC',f'unmatched fee rollback {mid}')
+  raise
+ try:
+  acct.digest({'type':'MARKET_REFUND','user':user,'marketId':mid,'amount':q['collateralUSDC'],'feeRefund':q['feeUSDC']})
+ except Exception as e: out['accountingWarning']=str(e)
+ out['vault']=finance.account(user);return out
