@@ -32,7 +32,7 @@ function renderAssets(){
  $('#assetCount').textContent=assets.length; $('#ticker').innerHTML=assets.map(a=>{const p=premium(a);return `<div class="tick ${p>=0?'pos':'neg'}"><b>${a.symbol}</b>${p>=0?'+':''}${p.toFixed(1)}% premium</div>`}).join('');
  $('#assetGrid').innerHTML=assets.map(a=>{const p=premium(a);return `<article class="asset-card" data-asset-card="${a.symbol}"><div class="asset-head"><img class="asset-logo" src="${a.image||''}" alt=""/><span class="premium ${p>=0?'pos':'neg'}">${p>=0?'+':''}${p.toFixed(1)}%</span></div><h3>${a.name.replace(' PreStocks','')}</h3><span class="sym">${a.symbol}</span><div class="price">${money(a.tokenPrice)}</div><div class="valuation">Implied ${money(a.impliedValuation)}</div><div class="asset-actions"><button data-quick-buy="${a.symbol}">Buy</button><button data-quick-auto="${a.symbol}">Auto</button><button data-asset="${a.symbol}">More</button></div></article>`}).join('');
  $('#assetPicker').innerHTML=assets.map(a=>`<button class="pick ${a.symbol===selected?'active':''}" data-pick="${a.symbol}">${a.symbol}</button>`).join('');
- refreshSwapTargets(); $('[data-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.asset)); $('[data-quick-buy]').forEach(b=>b.onclick=()=>buyUnderlying(assets.find(a=>a.symbol===b.dataset.quickBuy))); $$('[data-quick-auto]').forEach(b=>b.onclick=()=>scheduleRecurring(assets.find(a=>a.symbol===b.dataset.quickAuto))); $$('[data-pick]').forEach(b=>b.onclick=()=>{selected=b.dataset.pick;renderAssets();buildFields()});
+ refreshSwapTargets(); document.querySelectorAll('[data-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.asset)); document.querySelectorAll('[data-quick-buy]').forEach(b=>b.onclick=()=>buyUnderlying(assets.find(a=>a.symbol===b.dataset.quickBuy))); $$('[data-quick-auto]').forEach(b=>b.onclick=()=>scheduleRecurring(assets.find(a=>a.symbol===b.dataset.quickAuto))); $$('[data-pick]').forEach(b=>b.onclick=()=>{selected=b.dataset.pick;renderAssets();buildFields()});
 }
 function refreshSwapTargets(){
  const to=$('#swapTo');if(!to)return;
@@ -81,8 +81,8 @@ async function loadGames(){
  const deck=$('#gameDeck');if(deck)deck.innerHTML='<div class="empty-card">Reading real pools + payoff previews…</div>';
  try{const d=await fetch(`/api/games?stake=${encodeURIComponent(gameStake)}&limit=24`,{cache:'no-store'}).then(r=>r.json());games=d.games||[];renderGameDeck()}catch(e){if(deck)deck.innerHTML='<div class="empty-card">Game shelf unavailable.</div>'}
 }
-$('[data-game-stake]').forEach(b=>b.addEventListener('click',()=>{gameStake=Number(b.dataset.gameStake||10);$('[data-game-stake]').forEach(x=>x.classList.toggle('active',x===b));loadGames()}));
-$('[data-game-filter]').forEach(b=>b.addEventListener('click',()=>{gameFilter=b.dataset.gameFilter||'all';$('[data-game-filter]').forEach(x=>x.classList.toggle('active',x===b));renderGameDeck()}));
+document.querySelectorAll('[data-game-stake]').forEach(b=>b.addEventListener('click',()=>{gameStake=Number(b.dataset.gameStake||10);document.querySelectorAll('[data-game-stake]').forEach(x=>x.classList.toggle('active',x===b));loadGames()}));
+document.querySelectorAll('[data-game-filter]').forEach(b=>b.addEventListener('click',()=>{gameFilter=b.dataset.gameFilter||'all';document.querySelectorAll('[data-game-filter]').forEach(x=>x.classList.toggle('active',x===b));renderGameDeck()}));
 async function loadMarkets(){try{const r=await fetch('/api/markets',{cache:'no-store'});markets=await r.json();renderMarketFeed();renderDesk()}catch(e){console.warn(e)}}
 function renderDesk(){const el=$('#portfolioState');if(!markets.length){el.className='empty-card';el.innerHTML='<span>◎</span><h3>No markets yet</h3>';return}const mine=markets.filter(m=>m.creator===trader()||m.trades?.some(t=>t.trader===trader()));el.className='market-board';el.innerHTML=(mine.length?mine:markets.slice(0,8)).map(m=>{const y=Math.round((m.yesProbability??.5)*100);return `<article class="market-card" data-mid="${m.id}"><span class="status-pill">${m.status}</span><h3>${m.question}</h3><div class="prob-row"><div class="prob yes"><small>YES</small><b>${y}¢</b></div><div class="prob no"><small>NO</small><b>${100-y}¢</b></div></div><small>${m.symbol} · ${money(m.volume||0)} volume · ${m.trades?.length||0} trades</small>${m.status==='OPEN'?`<div class="trade-row"><input type="number" min="1" value="10" class="shares"/><button class="primary buy" data-side="YES">Buy YES</button><button class="ghost buy" data-side="NO">Buy NO</button></div>`:`<div class="market-actions"><b>Resolved ${m.outcome}</b><button class="primary redeem">Redeem</button></div>`}</article>`}).join('');el.querySelectorAll('.market-card').forEach(card=>{const mid=card.dataset.mid;card.querySelectorAll('.buy').forEach(b=>b.onclick=()=>trade(mid,b.dataset.side,Number(card.querySelector('.shares').value)));card.querySelector('.redeem')?.addEventListener('click',()=>redeem(mid))})}
 async function redeem(mid){const r=await fetch(`/api/markets/${mid}/redeem`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({trader:trader()})}),j=await r.json();if(!r.ok)return toast(j.error||'Redeem failed');toast(`Redeemed ${money(j.payout)} to vault`);await loadVault()}
@@ -201,28 +201,108 @@ function renderCommerceResult(out){
  const ready=!!issuance.ready;
  el.innerHTML=`<div class="${ready?'commerce-success':'commerce-warning'}"><b>${ready?'Purchase rail ready':'Purchase policy reserved'}</b><p>${ready?'The one-time merchant-bound payment rail is ready.':'The Stocklana policy is real, but this deployment still needs the external card issuer connector before it can be used at ordinary web checkout.'}</p>${ready&&issuance.hostedRevealUrl?`<a class="primary" href="${issuance.hostedRevealUrl}" target="_blank" rel="noopener">Open secure card</a>`:''} ${ready&&issuance.walletPassUrl?`<a class="ghost" href="${issuance.walletPassUrl}" target="_blank" rel="noopener">Add to wallet</a>`:''} <a class="ghost" href="${intent.merchantUrl}" target="_blank" rel="noopener">Open merchant</a></div>`;
 }
+async function postJson(path,payload){
+ const r=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload||{})});
+ const j=await r.json();if(!r.ok)throw new Error(j.error||j.detail||'request_failed');return j;
+}
+async function createCommerceIntent({merchantUrl,amount,fundingSource,agentId,sourceAsset,note}){
+ return await postJson('/api/commerce/intents',{merchantUrl,amount,fundingSource,agentId,sourceAsset,allowSubscriptions:false,approvalAbove:amount,note:note||'Stocklana web purchase'})
+}
+async function fundCommerceFromWallet(intentId,amount){
+ if(!config.vaultAddress)throw new Error('stocklana_vault_not_configured');
+ if(Number(lastWalletPortfolio?.usdc||0)+1e-9<amount)throw new Error('wallet_usdc_below_purchase_amount');
+ toast(`Approve ${money(amount)} USDC in Phantom`);
+ const signature=await sendSplToken({provider:wallet.provider,to:config.vaultAddress,mint:config.usdcMint,amount,decimals:6,rpc:config.rpcUrl});
+ return await postJson('/api/commerce/fund-wallet',{intentId,signature,wallet:wallet.publicKey})
+}
+async function convertPrestockForPurchase(intentId,symbol,amount){
+ const h=(lastWalletPortfolio?.prestocks||[]).find(x=>x.symbol===symbol);
+ if(!h)throw new Error('selected_prestock_not_in_wallet');
+ if(Number(h.estimatedValueUSDC||0)+1e-9<amount)throw new Error('prestock_value_below_purchase_amount');
+ const estimate=Math.min(Number(h.amount||0),(amount/Math.max(Number(h.tokenPrice||0),1e-12))*1.03);
+ const ok=confirm(`Use ${symbol} for this purchase? Stocklana will ask Phantom to sell about ${estimate.toLocaleString(undefined,{maximumFractionDigits:6})} ${symbol} into USDC, then reserve ${money(amount)} for this merchant. The exact swap is shown by the wallet before signing.`);
+ if(!ok)throw new Error('purchase_cancelled');
+ const atomic=Math.max(1,Math.floor(estimate*(10**Number(h.decimals||0))));
+ toast(`Building ${symbol} → USDC route`);
+ const order=await postJson('/api/prestocks/order',{mint:h.mint,side:'SELL',tokenAmountAtomic:atomic});
+ if(!order.ready)throw new Error(order.reason||'Jupiter connector not configured');
+ toast(`Approve ${symbol} conversion in Phantom`);
+ const signedTransaction=await signSerializedTransaction({provider:wallet.provider,transactionBase64:order.transaction});
+ const executed=await postJson('/api/prestocks/execute',{signedTransaction,requestId:order.requestId});
+ const ref=executed.signature||executed.txid||executed.status||'jupiter-executed';
+ await postJson('/api/commerce/conversion',{intentId,sourceAsset:symbol,reference:ref,details:{rail:'JUPITER_SWAP_V2',estimatedTokens:estimate}});
+ await loadWalletCenter();
+ if(Number(lastWalletPortfolio?.usdc||0)+1e-9<amount)throw new Error('conversion_confirmed_but_wallet_usdc_is_still_below_purchase_amount');
+ return ref
+}
+async function convertSolForPurchase(intentId,amount){
+ const available=Number(lastWalletPortfolio?.sol||0);
+ const solAmount=Number(prompt(`SOL to convert before this ${money(amount)} purchase. You have ${available.toLocaleString(undefined,{maximumFractionDigits:5})} SOL.`,'0.1')||0);
+ if(solAmount<=0||solAmount>available)throw new Error('invalid_sol_amount');
+ const inputMint='So11111111111111111111111111111111111111112';
+ toast('Building SOL → USDC route');
+ const order=await postJson('/api/swap/order',{inputMint,outputMint:config.usdcMint,amountAtomic:Math.floor(solAmount*1e9)});
+ if(!order.ready)throw new Error(order.reason||'Jupiter connector not configured');
+ toast('Approve SOL conversion in Phantom');
+ const signedTransaction=await signSerializedTransaction({provider:wallet.provider,transactionBase64:order.transaction});
+ const executed=await postJson('/api/swap/execute',{signedTransaction,requestId:order.requestId});
+ const ref=executed.signature||executed.txid||executed.status||'jupiter-executed';
+ await postJson('/api/commerce/conversion',{intentId,sourceAsset:'SOL',reference:ref,details:{rail:'JUPITER_SWAP_V2',solInput:solAmount}});
+ await loadWalletCenter();
+ if(Number(lastWalletPortfolio?.usdc||0)+1e-9<amount)throw new Error('conversion_confirmed_but_wallet_usdc_is_still_below_purchase_amount');
+ return ref
+}
+async function consolidateSplitFunding(amount){
+ const vaultBalance=Number(vault?.balances?.USDC||0), walletBalance=Number(lastWalletPortfolio?.usdc||0);
+ const walletPart=Math.max(0,amount-vaultBalance);
+ if(walletPart<=0)return;
+ if(walletBalance+1e-9<walletPart)throw new Error('combined_usdc_below_purchase_amount');
+ if(!config.vaultAddress)throw new Error('stocklana_vault_not_configured');
+ toast(`Move ${money(walletPart)} from Phantom into Stocklana`);
+ const signature=await sendSplToken({provider:wallet.provider,to:config.vaultAddress,mint:config.usdcMint,amount:walletPart,decimals:6,rpc:config.rpcUrl});
+ await postJson('/api/vault/confirm-deposit',{signature,amount:walletPart,wallet:wallet.publicKey});
+ await Promise.all([loadVault(),loadWalletCenter()]);
+}
 async function createCommercePurchase(){
  if(!wallet?.provider||!sessionToken){toast('Connect Phantom first');return}
- const merchantUrl=$('#commerceUrl')?.value?.trim(),amount=Number($('#commerceAmount')?.value||0),fundingSource=$('#commerceFunding')?.value||'WALLET_USDC',agentId=$('#commerceAgent')?.value?.trim()||null;
+ const merchantUrl=$('#commerceUrl')?.value?.trim(),amount=Number($('#commerceAmount')?.value||0),agentId=$('#commerceAgent')?.value?.trim()||null;
  if(!merchantUrl||amount<=0){toast('Add a merchant URL and maximum spend');return}
+ let chosen=$('#commerceFunding')?.value||'SMART';
+ if(chosen==='SMART')chosen=selectedFundingRoute||((Number(lastWalletPortfolio?.usdc||0)>=amount)?'WALLET_USDC':(Number(vault?.balances?.USDC||0)>=amount)?'STOCKLANA_USDC':'');
+ if(!chosen)throw toast('Choose a funding route');
  try{
-   const r=await fetch('/api/commerce/intents',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({merchantUrl,amount,fundingSource,agentId,allowSubscriptions:false,approvalAbove:amount,note:'Stocklana web purchase'})});
-   let out=await r.json();if(!r.ok)throw new Error(out.error||'purchase_intent_failed');
-   renderCommerceResult(out);
-   if(out.requiresWalletTransfer){
-     if(!config.vaultAddress)throw new Error('stocklana_vault_not_configured');
-     toast(`Approve ${money(amount)} USDC in Phantom`);
-     const signature=await sendSplToken({provider:wallet.provider,to:config.vaultAddress,mint:config.usdcMint,amount,decimals:6,rpc:config.rpcUrl});
-     const fr=await fetch('/api/commerce/fund-wallet',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({intentId:out.intent.id,signature,wallet:wallet.publicKey})});
-     out=await fr.json();if(!fr.ok)throw new Error(out.error||'purchase_funding_failed');renderCommerceResult(out);
+   let out;
+   if(chosen==='STOCKLANA_USDC'){
+     out=await createCommerceIntent({merchantUrl,amount,fundingSource:'STOCKLANA_USDC',agentId,sourceAsset:'USDC'});
+   }else if(chosen==='SPLIT_USDC'){
+     await consolidateSplitFunding(amount);
+     out=await createCommerceIntent({merchantUrl,amount,fundingSource:'STOCKLANA_USDC',agentId,sourceAsset:'USDC',note:'Consolidated Phantom + Stocklana USDC purchase'});
+   }else if(chosen==='PRESTOCK_TO_USDC'){
+     const symbol=$('#commercePrestock')?.value;
+     if(!symbol)throw new Error('choose_a_prestock_holding');
+     out=await createCommerceIntent({merchantUrl,amount,fundingSource:'WALLET_USDC',agentId,sourceAsset:symbol,note:`Converted from ${symbol} for merchant purchase`});
+     await convertPrestockForPurchase(out.intent.id,symbol,amount);
+     out=await fundCommerceFromWallet(out.intent.id,amount);
+   }else if(chosen==='SOL_TO_USDC'){
+     out=await createCommerceIntent({merchantUrl,amount,fundingSource:'WALLET_USDC',agentId,sourceAsset:'SOL',note:'Converted from SOL for merchant purchase'});
+     await convertSolForPurchase(out.intent.id,amount);
+     out=await fundCommerceFromWallet(out.intent.id,amount);
+   }else{
+     out=await createCommerceIntent({merchantUrl,amount,fundingSource:'WALLET_USDC',agentId,sourceAsset:'USDC'});
+     if(out.requiresWalletTransfer)out=await fundCommerceFromWallet(out.intent.id,amount);
    }
-   toast((out.issuance||{}).ready?'Safe purchase ready':'Purchase policy created');await Promise.all([loadCommerce(),loadVault(),loadWalletCenter()]);
- }catch(e){toast(String(e.message||e))}
+   renderCommerceResult(out);
+   toast((out.issuance||{}).ready?'Safe purchase ready':'Purchase policy created');
+   await Promise.all([loadCommerce(),loadVault(),loadWalletCenter(),loadFundingPlan()]);
+ }catch(e){if(String(e.message||e)!=='purchase_cancelled')toast(String(e.message||e))}
 }
 $('#swapExecuteBtn')?.addEventListener('click',executeWalletSwap);
 $('#walletSwapBtn')?.addEventListener('click',()=>$('#swapAmount')?.focus());
 $('#walletShopBtn')?.addEventListener('click',()=>navigate('commerce'));
 $('#commerceCreateBtn')?.addEventListener('click',createCommercePurchase);
+$('#commerceAmount')?.addEventListener('change',()=>{selectedFundingRoute=null;loadFundingPlan()});
+$('#commerceFunding')?.addEventListener('change',e=>{selectedFundingRoute=e.target.value==='SMART'?null:e.target.value;loadFundingPlan()});
+$('#commercePrestock')?.addEventListener('change',e=>{if(e.target.value){selectedFundingRoute='PRESTOCK_TO_USDC';$('#commerceFunding').value='PRESTOCK_TO_USDC'}loadFundingPlan()});
 $('#commerceUrl')?.addEventListener('input',e=>{try{$('#commerceMerchantRule').textContent=new URL(e.target.value).hostname||'Locked to URL'}catch{$('#commerceMerchantRule').textContent='Locked to URL'}});
 $('#walletConnectCenterBtn')?.addEventListener('click',async()=>{try{await connectPrimaryWallet()}catch{}});
 $('#walletRefreshBtn')?.addEventListener('click',loadWalletCenter);
