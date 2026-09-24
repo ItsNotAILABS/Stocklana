@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#07090d" />
   <meta name="description" content="Stocklana — programmable tokenized-equity ownership on Solana: trade, automate, collateralize, compose and spend." />
-  <title>Stocklana V2 — Financial Web App</title>
+  <title>Stocklana — Programmable Tokenized Equities</title>
   <link rel="stylesheet" href="./src/styles.css" />
 </head>
 <body>
   <canvas id="ambient" aria-hidden="true"></canvas>
   <div class="shell">
     <aside class="desktop-rail" aria-label="Stocklana V2 navigation">
-      <div class="rail-brand"><div class="brand-mark">S</div><div><b>Stocklana</b><small>V2 WEB</small></div></div>
+      <div class="rail-brand"><div class="brand-mark">S</div><div><b>Stocklana</b><small>V2</small></div></div>
       <button class="active" data-nav="home">⌂ Home</button>
       <button data-nav="markets">◫ Invest</button>
       <button data-nav="lab">◇ Markets</button>
@@ -31,7 +31,7 @@
     <header class="topbar">
       <div class="brand" aria-label="Stocklana home">
         <div class="brand-mark">S</div>
-        <div><strong>Stocklana</strong><span>FINANCIAL WEB OS</span></div>
+        <div><strong>Stocklana</strong><span>TOKENIZED EQUITY OS</span></div>
       </div>
       <div class="desktop-status"><span class="live">● LIVE</span><span>TRADE · AUTOMATE · BORROW · SPEND</span></div><button class="wallet" id="walletBtn">Connect wallet</button>
     </header>
@@ -40,84 +40,51 @@
 
 
       <section class="view active" id="view-home">
-        <section class="command-hero">
-          <div class="command-copy">
-            <span class="signal-pill"><i></i> STOCKLANA V2 · LIVE FINANCIAL OS</span>
-            <h1>Your money shouldn't<br/><em>stop working.</em></h1>
-            <p>Own tokenized equities, automate them, play payoff games, borrow, send, spend, launch assets, or give an AI a safe budget to act for you.</p>
-            <div class="hero-cta-row"><button class="primary pulse" data-action="buy">Start with $10</button><button class="glass" data-action="play">Enter live games</button><button class="glass" data-action="agent">Give an AI a job</button></div>
+        <div class="v2-home-head">
+          <div><span class="v2-pill">STOCKLANA V2 · SOLANA</span><h1>Your equities can<br/><em>do more.</em></h1><p>Buy tokenized companies 24/7, put them on autopilot, use supported assets for credit, play simple market ideas, send money, spend from your account, or hand a budget to an AI.</p></div>
+          <div class="home-account-card">
+            <div class="home-account-top"><span>Stocklana account</span><span id="homeAccountState" class="status neutral">NOT CONNECTED</span></div>
+            <b id="homeNetValue">$0.00</b><small>Available + positions</small>
+            <div class="home-account-actions"><button class="primary" data-action="add-money">Add money</button><button class="ghost" data-action="send">Send</button></div>
           </div>
-          <div class="portfolio-orbit" aria-label="Stocklana account visualization">
-            <div class="orbit-glow"></div>
-            <div class="orbit-core"><span>STOCKLANA VALUE</span><b id="homeNetValue">$0.00</b><small>available + invested + active positions</small></div>
-            <button class="orbit-node node-equity" data-action="buy"><span>Equities</span><b>24/7</b></button>
-            <button class="orbit-node node-money" data-action="send"><span>Money</span><b>Instant</b></button>
-            <button class="orbit-node node-agent" data-action="agent"><span>Agent</span><b>Guarded</b></button>
-            <button class="orbit-node node-game" data-action="play"><span>Games</span><b>Payoffs</b></button>
-            <div class="orbit-ring ring-a"></div><div class="orbit-ring ring-b"></div>
+        </div>
+
+        <div class="section-head compact"><div><span class="kicker">START HERE</span><h2>What do you want to do?</h2></div><span class="helper">Every action uses the same V2 account underneath.</span></div>
+        <div class="action-grid" id="v2ActionGrid">
+          <button class="action-card featured" data-action="buy"><span class="action-icon">↗</span><div><b>Buy an equity</b><small>24/7 tokenized-equity access</small></div><i>Start</i></button>
+          <button class="action-card" data-action="auto"><span class="action-icon">⟳</span><div><b>Auto-invest</b><small>Recurring buys, baskets & robo</small></div><i>Set up</i></button>
+          <button class="action-card" data-action="borrow"><span class="action-icon">↯</span><div><b>Borrow</b><small>Use supported assets as collateral</small></div><i>Explore</i></button>
+          <button class="action-card" data-action="play"><span class="action-icon">◇</span><div><b>Play a market</b><small>Simple payoff games backed by real assets</small></div><i>Discover</i></button>
+          <button class="action-card" data-action="send"><span class="action-icon">→</span><div><b>Send money</b><small>@handle, QR or wallet</small></div><i>Pay</i></button>
+          <button class="action-card" data-action="spend"><span class="action-icon">▰</span><div><b>Spend</b><small>One-time card policy & MAQUE</small></div><i>Use</i></button>
+          <button class="action-card" data-action="agent"><span class="action-icon">◈</span><div><b>Give an AI a budget</b><small>Governed Agent Vault</small></div><i>Assign</i></button>
+          <button class="action-card" data-action="launch"><span class="action-icon">✦</span><div><b>Launch</b><small>ETH + Solana token/liquidity rails</small></div><i>Create</i></button>
+        </div>
+
+        <div class="home-grid">
+          <section class="home-panel home-discover">
+            <div class="panel-head"><div><span class="kicker">DISCOVER</span><h2>Equities you can use</h2></div><button class="text-btn" data-nav="markets">See all →</button></div>
+            <div id="homeAssets" class="home-assets"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+          </section>
+          <section class="home-panel">
+            <div class="panel-head"><div><span class="kicker">V2 ACCOUNT</span><h2>One balance. Many uses.</h2></div></div>
+            <div class="money-map">
+              <button data-nav="vault"><span>Spendable</span><b id="homeCash">$0.00</b><small>Send · spend · withdraw</small></button>
+              <button data-nav="portfolio"><span>Positions</span><b id="homePositions">0</b><small>Equities + markets + baskets</small></button>
+              <button data-nav="credit"><span>Credit</span><b>Ready</b><small>Collateral routes</small></button>
+              <button data-nav="agents"><span>Agent</span><b>100 vaults</b><small>Policy-scoped automation</small></button>
+            </div>
+          </section>
+        </div>
+
+        <section class="home-panel use-cases">
+          <div class="panel-head"><div><span class="kicker">WHY V2</span><h2>Not another brokerage account.</h2></div><span class="helper">The equity stays useful after you buy it.</span></div>
+          <div class="use-strip">
+            <div><span>01</span><b>Own</b><small>Buy the real tokenized asset.</small></div>
+            <div><span>02</span><b>Program</b><small>Automate, basket, or build a payoff.</small></div>
+            <div><span>03</span><b>Use</b><small>Collateralize, send, spend, delegate.</small></div>
+            <div><span>04</span><b>Prove</b><small>On-chain + PQ receipts + accounting.</small></div>
           </div>
-        </section>
-
-        <section class="quick-dock" aria-label="Primary actions">
-          <button data-action="buy"><span class="dock-glyph">↗</span><b>Buy</b><small>Equities 24/7</small></button>
-          <button data-action="auto"><span class="dock-glyph">⟳</span><b>Automate</b><small>Recurring + robo</small></button>
-          <button data-action="play"><span class="dock-glyph">◆</span><b>Play</b><small>Real payoff games</small></button>
-          <button data-action="borrow"><span class="dock-glyph">↯</span><b>Borrow</b><small>Use collateral</small></button>
-          <button data-action="send"><span class="dock-glyph">→</span><b>Send</b><small>@handle · QR</small></button>
-          <button data-action="spend"><span class="dock-glyph">▰</span><b>Spend</b><small>Card + offline</small></button>
-          <button data-action="agent"><span class="dock-glyph">◈</span><b>Agent</b><small>Safe purchases</small></button>
-          <button data-action="launch"><span class="dock-glyph">✦</span><b>Build</b><small>Launch assets</small></button>
-        </section>
-
-        <section class="experience-grid">
-          <article class="experience-card invest-experience">
-            <div class="experience-top"><span class="eyeline">OWN</span><span class="live-dot">LIVE 24/7</span></div>
-            <h2>Buy a company.<br/>Then keep using it.</h2>
-            <div id="homeAssets" class="showcase-assets"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
-            <button class="card-link" data-nav="markets">Explore equities <span>→</span></button>
-          </article>
-
-          <article class="experience-card arena-experience">
-            <div class="experience-top"><span class="eyeline">PLAY</span><span class="arena-live"><i></i> 318 playing</span></div>
-            <h2>Take a side.<br/>See the payoff.</h2>
-            <div class="arena-match">
-              <div class="arena-question">OpenAI beats Anthropic this month?</div>
-              <div class="arena-sides"><button data-action="play"><span>YES</span><b>61¢</b><small>1.64× payoff</small></button><button data-action="play"><span>NO</span><b>39¢</b><small>2.56× payoff</small></button></div>
-              <div class="arena-footer"><span><b>$84.2K</b> in the pool</span><span>Settles from live market data</span></div>
-            </div>
-            <div class="player-stack"><span>AM</span><span>JR</span><span>KS</span><span>+315</span><small>friends + traders playing now</small></div>
-            <button class="card-link" data-action="play">Enter Market Arena <span>→</span></button>
-          </article>
-
-          <article class="experience-card agent-commerce-experience">
-            <div class="experience-top"><span class="eyeline">AGENT COMMERCE</span><span class="safe-badge">POLICY LOCKED</span></div>
-            <h2>Let your AI buy it.<br/>Not your whole wallet.</h2>
-            <div class="agent-task-preview">
-              <div class="agent-avatar">A</div>
-              <div class="agent-bubble"><b>Find the best 4K monitor under $450.</b><span>Amazon · Best Buy · B&H only</span></div>
-            </div>
-            <div class="purchase-policy">
-              <div><span>MAX</span><b>$450</b></div><div><span>CARD</span><b>One-time</b></div><div><span>SUBSCRIPTIONS</span><b>Blocked</b></div><div><span>APPROVAL</span><b>Over $400</b></div>
-            </div>
-            <div class="commerce-progress"><span class="done">1</span><i></i><span class="done">2</span><i></i><span>3</span><small>Find → Ask → Buy safely</small></div>
-            <button class="card-link" data-action="agent">Create purchase guard <span>→</span></button>
-          </article>
-
-          <article class="experience-card money-experience">
-            <div class="experience-top"><span class="eyeline">MONEY</span><span class="maque-badge">MAQUE</span></div>
-            <h2>Money that moves<br/>like a message.</h2>
-            <div class="balance-visual"><span>Spendable</span><b id="homeCash">$0.00</b><small>send · card · QR · offline</small></div>
-            <div class="money-actions"><button data-action="send"><span>→</span> Send</button><button data-action="spend"><span>▰</span> Spend</button><button data-action="send"><span>⌁</span> Request</button></div>
-            <button class="card-link" data-nav="vault">Open Money <span>→</span></button>
-          </article>
-        </section>
-
-        <section class="portfolio-ribbon">
-          <div><span>POSITIONS</span><b id="homePositions">0</b><small>equities · baskets · games</small></div>
-          <div><span>CREDIT</span><b>Ready</b><small>supported collateral routes</small></div>
-          <div><span>AGENT VAULTS</span><b>100</b><small>scoped financial identities</small></div>
-          <div><span>SECURITY</span><b>PQ</b><small>Phantasma protected</small></div>
-          <button data-nav="infrastructure">Inspect system →</button>
         </section>
       </section>
 
@@ -332,30 +299,8 @@
       </section>
 
       <section class="view" id="view-agents">
-        <section class="agent-hero-stage">
-          <div><span class="signal-pill"><i></i> AGENT COMMERCE</span><h1>Give your AI a job.<br/><em>Keep the keys.</em></h1><p>Your agent gets a scoped financial identity, a budget, approved merchants, purchase rules, and one-time payment authority — not unrestricted access to your account.</p></div>
-          <div class="agent-ring"><div class="agent-ring-core">AI</div><span class="agent-cap cap-1">$250/day</span><span class="agent-cap cap-2">No subscriptions</span><span class="agent-cap cap-3">3 merchants</span><span class="agent-cap cap-4">Ask over $100</span></div>
-        </section>
-
-        <div class="section-head compact"><div><span class="kicker">START A JOB</span><h2>What should your agent do?</h2></div></div>
-        <div class="agent-job-grid">
-          <button class="agent-job"><span>🛒</span><b>Buy something</b><small>Research, compare, ask if needed, then pay safely.</small><i>Internet purchase</i></button>
-          <button class="agent-job"><span>📈</span><b>Invest for me</b><small>Use a fixed recurring budget and approved assets.</small><i>Portfolio job</i></button>
-          <button class="agent-job"><span>👀</span><b>Watch my money</b><small>Monitor positions, prices, bills, and unusual activity.</small><i>Sentinel job</i></button>
-          <button class="agent-job"><span>⚙</span><b>Custom rule</b><small>Define exactly what it can buy, spend, trade, or send.</small><i>Build policy</i></button>
-        </div>
-
-        <section class="agent-purchase-builder">
-          <div class="purchase-builder-copy"><span class="kicker">SAFE INTERNET PURCHASE</span><h2>“Buy this for me.”</h2><p>The agent shops with a one-time payment capability generated from your policy — not your card number and not your whole wallet.</p></div>
-          <div class="purchase-console">
-            <div class="purchase-command"><span>JOB</span><b>Find Sony WH-1000XM6 headphones</b><small>Best total price · new only · deliver this week</small></div>
-            <div class="purchase-guard-grid"><label><span>Max spend</span><b>$450</b></label><label><span>Merchants</span><b>Amazon · Best Buy</b></label><label><span>Approval</span><b>Ask above $400</b></label><label><span>Payment</span><b>One-time virtual card</b></label></div>
-            <div class="purchase-timeline"><div class="complete"><span>✓</span><b>Search</b><small>Compare trusted offers</small></div><i></i><div class="complete"><span>✓</span><b>Policy</b><small>Check price + merchant</small></div><i></i><div><span>3</span><b>Pay</b><small>Create single-use authority</small></div><i></i><div><span>4</span><b>Receipt</b><small>Reconcile + prove</small></div></div>
-            <button class="primary wide" id="agentPurchaseBtn">Create guarded purchase job</button>
-          </div>
-        </section>
-
-        <div class="section-head"><div><span class="kicker">NETWORK</span><h2>100 governed financial actors</h2></div><button class="mini" id="agentRefresh">Refresh proof</button></div>
+        <div class="section-head"><div><span class="kicker">AGENT NETWORK</span><h2>100 governed financial actors</h2></div><button class="mini" id="agentRefresh">Refresh proof</button></div>
+        <p class="section-copy">Every agent owns a scoped Agent Vault, spend policy, connector set, reconciliation state and Phantasma PQ identity. The seven-day regression run exercises the same market/payment modules used by the app.</p>
         <div class="metric-row agent-metrics" id="agentWeekMetrics"><div><b>100</b><span>Agents</span></div><div><b>700</b><span>Sessions</span></div><div><b>0</b><span>Unexpected failures</span></div></div>
         <div class="asset-grid" id="agentGrid"></div>
       </section>
