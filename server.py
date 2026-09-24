@@ -28,6 +28,7 @@ kamino=loadmod('kamino_adapter','kamino_adapter.py')
 xstocks=loadmod('xstocks_adapter','xstocks_adapter.py')
 accounting_tokens=loadmod('accounting_tokens','accounting_tokens.py')
 commerce=loadmod('commerce','commerce.py')
+money_router=loadmod('money_router','money_router.py')
 
 SNAPSHOT=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
 USDC_MINT=os.getenv('STOCKLANA_USDC_MINT','EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
@@ -139,6 +140,7 @@ class Handler(SimpleHTTPRequestHandler):
         if path=='/api/solana-finance': return self.send_json(solana_finance.capabilities())
         if path=='/api/wallet/routes': return self.send_json(solana_finance.wallet_routes(market_store.PRESTOCK_MINTS))
         if path=='/api/commerce': return self.send_json({**commerce.capabilities(),'card':card_rail.capabilities(),'vaultAddress':VAULT_ADDRESS or None})
+        if path=='/api/money/plan': return self.send_json({'method':'POST','endpoint':'/api/money/plan','policy':'explicit-user-choice-no-auto-sale'})
         if path=='/api/commerce/intents':
             try: who=self.trader(qs=qs); return self.send_json({'intents':commerce.list_intents(who)})
             except Exception: return self.send_json({'intents':[]})
@@ -212,6 +214,9 @@ class Handler(SimpleHTTPRequestHandler):
             if p=='/api/auth/verify': return self.send_json(auth.verify(payload.get('wallet'),payload.get('nonce'),payload.get('signature')),201)
             if p=='/api/auth/agent':
                 owner=self.trader(payload=payload); return self.send_json(auth.issue_agent(owner,payload.get('agentId'),payload.get('scopes')),201)
+            if p=='/api/money/plan':
+                self.trader(payload=payload)
+                return self.send_json(money_router.purchase_plan(payload.get('amount'),payload.get('walletUSDC',0),payload.get('vaultUSDC',0),payload.get('solBalance',0),payload.get('prestocks') or []))
             if p=='/api/swap/order':
                 who=self.trader(payload=payload)
                 return self.send_json(solana_finance.wallet_swap_order(payload.get('inputMint'),payload.get('outputMint'),payload.get('amountAtomic'),who,market_store.PRESTOCK_MINTS))
@@ -229,13 +234,16 @@ class Handler(SimpleHTTPRequestHandler):
                     if amount>float(policy_cfg.get('singleSpendLimitUSDC',0)): raise ValueError('agent_single_spend_limit_exceeded')
                     if amount>float(policy_cfg.get('humanApprovalAboveUSDC',0)): return self.send_json({'error':'human_approval_required','agentId':agent_id,'amountUSDC':amount,'approvalAboveUSDC':policy_cfg.get('humanApprovalAboveUSDC')},403)
                     if payload.get('fundingSource','STOCKLANA_USDC')!='STOCKLANA_USDC': raise ValueError('agent_wallet_signature_requires_human')
-                intent=commerce.create_intent(who,payload.get('merchantUrl'),amount,payload.get('fundingSource','WALLET_USDC'),payload.get('merchant'),agent_id,payload.get('approvalAbove'),payload.get('allowSubscriptions',False),payload.get('note',''))
+                intent=commerce.create_intent(who,payload.get('merchantUrl'),amount,payload.get('fundingSource','WALLET_USDC'),payload.get('merchant'),agent_id,payload.get('approvalAbove'),payload.get('allowSubscriptions',False),payload.get('note',''),payload.get('sourceAsset','USDC'))
                 if intent['fundingSource']=='STOCKLANA_USDC':
                     policy=card_rail.create_policy(who,intent['maxAmountUSDC'],intent['merchantHost'],payload.get('mcc'),payload.get('ttl',1800))
                     issuance=card_rail.issue_virtual(who,policy['id'])
                     intent=commerce.mark_funded(who,intent['id'],'stocklana-vault')
                     return self.send_json(commerce.attach_card(who,intent['id'],policy,issuance),201)
                 return self.send_json({'intent':intent,'vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'requiresWalletTransfer':True},201)
+            if p=='/api/commerce/conversion':
+                who=self.trader(payload=payload)
+                return self.send_json(commerce.mark_conversion(who,payload.get('intentId'),payload.get('sourceAsset'),payload.get('reference'),payload.get('details') or {}))
             if p=='/api/commerce/fund-wallet':
                 who=self.trader(payload=payload); intent=commerce.get_intent(who,payload.get('intentId'))
                 if intent.get('fundingSource')!='WALLET_USDC': raise ValueError('intent_not_wallet_funded')
