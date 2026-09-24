@@ -97,7 +97,7 @@ function openChallengeCreate(marketId){
  const box=$('#challengeDialogContent');
  box.innerHTML=`<div class="duel-invite-head"><div><span class="kicker">CREATE HEAD-TO-HEAD</span><h2>${g.symbol} duel</h2><p>${g.question}</p></div><span class="status">INVITE ONLY</span></div><div class="duel-config"><label>Your side<select id="duelCreateSide"><option value="YES">YES</option><option value="NO">NO</option></select></label><label>Stake each (USDC)<input id="duelCreateStake" type="number" min="1" step="1" value="${gameStake}"></label></div><p class="section-copy">Stocklana creates a dedicated two-person market. Your stake is escrowed first; the invite cannot be claimed twice. If nobody joins, you can cancel and the unmatched collateral + fee are returned.</p><button class="primary wide" id="duelCreateConfirm">Lock my side & create invite</button><div id="duelCreateResult"></div>`;
  $('#challengeDialog').showModal();
- $('#duelCreateConfirm').onclick=async()=>{const stake=Number($('#duelCreateStake').value||0),side=$('#duelCreateSide').value;if(stake<=0)return toast('Enter a stake');try{const out=await postJson('/api/challenges',{sourceMarketId:marketId,side,stake,ttl:86400});const link=challengeLink(out.challenge.id);$('#duelCreateResult').innerHTML=`<div class="duel-share"><span class="kicker">INVITE CREATED</span><code>${link}</code><button class="ghost" id="duelCopyInvite">Copy invite</button></div>`;$('#duelCopyInvite').onclick=async()=>{await navigator.clipboard?.writeText(link);toast('Challenge link copied')};toast('Your side is funded and locked');await Promise.all([loadVault(),loadMyChallenges()])}catch(e){toast(String(e.message||e))}}
+ $('#duelCreateConfirm').onclick=async()=>{const stake=Number($('#duelCreateStake').value||0),side=$('#duelCreateSide').value;if(stake<=0)return toast('Enter a stake');try{const feeBps=Number(g.feeBps||100);await ensureVaultUSDC(stake*(1+feeBps/10000),'your duel stake');const out=await postJson('/api/challenges',{sourceMarketId:marketId,side,stake,ttl:86400});const link=challengeLink(out.challenge.id);$('#duelCreateResult').innerHTML=`<div class="duel-share"><span class="kicker">INVITE CREATED</span><code>${link}</code><button class="ghost" id="duelCopyInvite">Copy invite</button></div>`;$('#duelCopyInvite').onclick=async()=>{await navigator.clipboard?.writeText(link);toast('Challenge link copied')};toast('Your side is funded and locked');await Promise.all([loadVault(),loadMyChallenges()])}catch(e){toast(String(e.message||e))}}
 }
 async function openChallengeInvite(rawId){
  const id=challengeIdFromInput(rawId);if(!id)return toast('Paste a challenge code or link');
@@ -108,7 +108,7 @@ async function openChallengeInvite(rawId){
    const link=challengeLink(ch.id);
    box.innerHTML=`<div class="duel-invite-head"><div><span class="kicker">HEAD-TO-HEAD INVITE</span><h2>${ch.symbol} · ${money(ch.stakeUSDC)} each</h2><p>${ch.question}</p></div><span class="status ${ch.status==='MATCHED'?'live':'neutral'}">${String(ch.status).replaceAll('_',' ')}</span></div>${challengeStatusMarkup(ch,market)}<div class="route"><div class="route-top"><span>You</span><b>${isCreator?ch.creatorSide:(canAccept?ch.opponentSide:'—')}</b></div><p>Creator ${short(ch.creator)} locked <b>${ch.creatorSide}</b>. ${ch.opponent?'Opponent '+short(ch.opponent)+' locked '+ch.opponentSide:'The invite reserves the opposite side for one opponent.'}</p></div><div class="duel-share"><span class="kicker">INVITE</span><code>${link}</code><button class="ghost" id="duelCopyCurrent">Copy invite</button></div><div class="market-actions">${canAccept?'<button class="primary" id="duelAcceptBtn">Accept opposite side</button>':''}${isCreator&&['OPEN_FOR_OPPONENT','EXPIRED'].includes(ch.status)?'<button class="ghost" id="duelCancelBtn">Cancel & refund</button>':''}</div>`;
    $('#duelCopyCurrent').onclick=async()=>{await navigator.clipboard?.writeText(link);toast('Challenge link copied')};
-   $('#duelAcceptBtn')?.addEventListener('click',async()=>{if(!sessionToken)return toast('Connect Phantom first');try{const joined=await postJson('/api/challenges/'+encodeURIComponent(ch.id)+'/accept',{});toast('Challenge matched — both sides are funded');await Promise.all([loadVault(),loadMyChallenges(),loadGames()]);openChallengeInvite(ch.id)}catch(e){toast(String(e.message||e))}});
+   $('#duelAcceptBtn')?.addEventListener('click',async()=>{if(!sessionToken)return toast('Connect Phantom first');try{const feeBps=Number(market?.feeBps||100);await ensureVaultUSDC(Number(ch.stakeUSDC)*(1+feeBps/10000),'this head-to-head');const joined=await postJson('/api/challenges/'+encodeURIComponent(ch.id)+'/accept',{});toast('Challenge matched — both sides are funded');await Promise.all([loadVault(),loadMyChallenges(),loadGames()]);openChallengeInvite(ch.id)}catch(e){toast(String(e.message||e))}});
    $('#duelCancelBtn')?.addEventListener('click',async()=>{try{await postJson('/api/challenges/'+encodeURIComponent(ch.id)+'/cancel',{});toast('Unmatched stake refunded');await Promise.all([loadVault(),loadMyChallenges()]);$('#challengeDialog').close()}catch(e){toast(String(e.message||e))}});
  }catch(e){box.innerHTML=`<div class="empty-card">Could not open this challenge. ${String(e.message||e)}</div>`}
 }
@@ -300,6 +300,20 @@ function renderCommerceResult(out){
 async function postJson(path,payload){
  const r=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload||{})});
  const j=await r.json();if(!r.ok)throw new Error(j.error||j.detail||'request_failed');return j;
+}
+async function ensureVaultUSDC(required,label='this action'){
+ if(!wallet?.provider||!sessionToken)throw new Error('wallet_not_connected');
+ await loadVault();
+ const have=Number(vault?.balances?.USDC||0),need=Math.max(0,Number(required)-have);
+ if(need<=1e-9)return {deposited:0,available:have};
+ if(!config.vaultAddress)throw new Error('stocklana_vault_not_configured');
+ await loadWalletCenter();
+ if(Number(lastWalletPortfolio?.usdc||0)+1e-9<need)throw new Error('not_enough_usdc_in_wallet_or_stocklana');
+ toast(`Approve ${money(need)} USDC from Phantom for ${label}`);
+ const signature=await sendSplToken({provider:wallet.provider,to:config.vaultAddress,mint:config.usdcMint,amount:need,decimals:6,rpc:config.rpcUrl});
+ await postJson('/api/vault/confirm-deposit',{signature,amount:need,wallet:wallet.publicKey});
+ await Promise.all([loadVault(),loadWalletCenter()]);
+ return {deposited:need,available:Number(vault?.balances?.USDC||0),signature}
 }
 async function createCommerceIntent({merchantUrl,amount,fundingSource,agentId,sourceAsset,note}){
  return await postJson('/api/commerce/intents',{merchantUrl,amount,fundingSource,agentId,sourceAsset,allowSubscriptions:false,approvalAbove:amount,note:note||'Stocklana web purchase'})
