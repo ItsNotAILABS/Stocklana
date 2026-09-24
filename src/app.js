@@ -35,10 +35,13 @@ function renderAssets(){
  refreshSwapTargets(); document.querySelectorAll('[data-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.asset)); document.querySelectorAll('[data-quick-buy]').forEach(b=>b.onclick=()=>buyUnderlying(assets.find(a=>a.symbol===b.dataset.quickBuy))); $$('[data-quick-auto]').forEach(b=>b.onclick=()=>scheduleRecurring(assets.find(a=>a.symbol===b.dataset.quickAuto))); $$('[data-pick]').forEach(b=>b.onclick=()=>{selected=b.dataset.pick;renderAssets();buildFields()});
 }
 function refreshSwapTargets(){
- const to=$('#swapTo');if(!to)return;
- const current=to.value||'USDC';
- to.innerHTML='<option value="USDC">USDC</option>'+assets.map(a=>`<option value="${a.contract_address}">${a.symbol} · PreStock</option>`).join('');
- if([...to.options].some(o=>o.value===current))to.value=current;
+ const from=$('#swapFrom'),to=$('#swapTo');if(!from||!to)return;
+ const curFrom=from.value||'SOL',curTo=to.value||'USDC';
+ const held=lastWalletPortfolio?.prestocks||[];
+ from.innerHTML='<option value="SOL">SOL</option><option value="USDC">USDC</option>'+held.map(h=>`<option value="${h.mint}">${h.symbol} · ${Number(h.amount||0).toLocaleString(undefined,{maximumFractionDigits:6})}</option>`).join('');
+ to.innerHTML='<option value="USDC">USDC</option><option value="SOL">SOL</option>'+assets.map(a=>`<option value="${a.contract_address}">${a.symbol} · PreStock</option>`).join('');
+ if([...from.options].some(o=>o.value===curFrom))from.value=curFrom;
+ if([...to.options].some(o=>o.value===curTo))to.value=curTo;
 }
 function renderMarketFeed(){
  $('#marketCount').textContent=markets.length; const open=markets.filter(m=>m.status==='OPEN');
@@ -130,7 +133,7 @@ async function loadWalletCenter(){
       readWalletPortfolio({owner:wallet.publicKey,rpc:config.rpcUrl||'https://api.mainnet-beta.solana.com',usdcMint:config.usdcMint,prestocks:assets}),
       sessionToken?fetch('/api/vault?trader='+encodeURIComponent(trader())).then(r=>r.json()).catch(()=>null):Promise.resolve(null)
     ]);
-    lastWalletPortfolio=portfolio;refreshCommercePrestocks();
+    lastWalletPortfolio=portfolio;refreshCommercePrestocks();refreshSwapTargets();
     $('#walletSolBalance').textContent=Number(portfolio.sol).toLocaleString(undefined,{maximumFractionDigits:4});
     $('#walletUsdcBalance').textContent=money(portfolio.usdc);
     $('#walletPrestockCount').textContent=String(portfolio.prestocks.length);
@@ -170,20 +173,25 @@ async async function loadFundingPlan(){
 }
 async function executeWalletSwap(){
  if(!wallet?.provider||!sessionToken){toast('Connect Phantom first');return}
- const from=$('#swapFrom')?.value||'SOL', target=$('#swapTo')?.value||config.usdcMint, amount=Number($('#swapAmount')?.value||0);
+ const from=$('#swapFrom')?.value||'SOL', target=$('#swapTo')?.value||'USDC', amount=Number($('#swapAmount')?.value||0);
  if(amount<=0){toast('Enter an amount to convert');return}
- const inputMint=from==='SOL'?'So11111111111111111111111111111111111111112':config.usdcMint;
- const outputMint=target==='USDC'?config.usdcMint:target;
- const decimals=from==='SOL'?9:6, amountAtomic=Math.round(amount*10**decimals);
+ const SOL='So11111111111111111111111111111111111111112';
+ const inputMint=from==='SOL'?SOL:from==='USDC'?config.usdcMint:from;
+ const outputMint=target==='SOL'?SOL:target==='USDC'?config.usdcMint:target;
+ if(inputMint===outputMint){toast('Choose two different assets');return}
+ const held=(lastWalletPortfolio?.prestocks||[]).find(h=>h.mint===inputMint);
+ const decimals=from==='SOL'?9:from==='USDC'?6:Number(held?.decimals??6);
+ if(held&&amount>Number(held.amount||0)+1e-12){toast('Amount exceeds this PreStock balance');return}
+ const amountAtomic=Math.max(1,Math.floor(amount*10**decimals));
  try{
    toast('Building the best Solana route');
-   const r=await fetch('/api/swap/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({inputMint,outputMint,amountAtomic})});
-   const o=await r.json();if(!r.ok)throw new Error(o.error||'swap_route_failed');if(!o.ready)throw new Error(o.reason||'Jupiter connector not configured');
+   const o=await postJson('/api/swap/order',{inputMint,outputMint,amountAtomic});
+   if(!o.ready)throw new Error(o.reason||'Jupiter connector not configured');
    toast('Approve the conversion in Phantom');
    const signedTransaction=await signSerializedTransaction({provider:wallet.provider,transactionBase64:o.transaction});
-   const er=await fetch('/api/swap/execute',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({signedTransaction,requestId:o.requestId})});
-   const ej=await er.json();if(!er.ok)throw new Error(ej.error||'swap_execution_failed');
-   toast(`Converted on Solana · ${short(ej.signature||ej.txid||ej.status)}`);await loadWalletCenter();
+   const ej=await postJson('/api/swap/execute',{signedTransaction,requestId:o.requestId});
+   toast(`Converted on Solana · ${short(ej.signature||ej.txid||ej.status)}`);
+   await loadWalletCenter();
  }catch(e){toast(String(e.message||e))}
 }
 async function loadCommerce(){
