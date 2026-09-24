@@ -26,6 +26,26 @@ Stocklana now has a typed financial accounting layer underneath markets, Agent V
 
 V2 is the product default. Internal accounting remains the source of truth while Token-2022 carries programmable public claims. See `docs/V2-FINANCIAL-SUBSTRATE.md`.
 
+
+## Wallet-native money + internet commerce
+
+Stocklana treats a connected Phantom wallet as a real funding source, not just login state.
+
+- Read SOL, USDC and eligible PreStocks balances directly from the connected Solana account.
+- Convert SOL ↔ USDC and SOL/USDC → eligible PreStocks through wallet-signed Jupiter routes.
+- Move wallet USDC into the Stocklana account with on-chain deposit verification and replay-safe crediting.
+- Use the same money for PreStocks, payoff games, collateral, MAQUE payments and Agent Vault budgets.
+- Create merchant-bound, one-use purchase intents for ordinary websites.
+- Fund an internet purchase from Phantom USDC or existing Stocklana USDC.
+- Keep subscriptions blocked by default and bind one-time policies to merchant, amount and expiry.
+- Allow scoped agents with `commerce:purchase` authority to buy within their Agent Vault single-spend limit; purchases above the configured human-approval threshold stop for approval.
+- Keep wallet private keys in Phantom. Stocklana prepares transactions and policies; the wallet signs locally.
+- External ordinary-card checkout uses `CARD_ISSUER_PROXY_URL` / `CARD_ISSUER_PROXY_TOKEN`. Stocklana stores only opaque provider identifiers and optional hosted reveal / wallet-pass handoff URLs, never PAN/CVV.
+
+The PreStocks eligibility lane remains strict: no non-PreStocks pre-IPO mint is admitted by the wallet conversion route.
+
+Run `python3 scripts/test_wallet_commerce.py` for the dedicated wallet/commerce regression gate.
+
 ## Product surface
 
 ### 360-instrument market factory
