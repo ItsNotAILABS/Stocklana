@@ -1,0 +1,45 @@
+name: Materialize Stocklana source
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: ${{ !contains(github.event.head_commit.message, 'Materialize canonical Stocklana source tree') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Rebuild canonical source from bootstrap parts
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d _bootstrap ]; then
+            echo "No _bootstrap directory present; source is already materialized."
+            exit 0
+          fi
+          cat _bootstrap/part*.txt > /tmp/stocklana_bootstrap.py
+          python3 /tmp/stocklana_bootstrap.py
+          rm -rf _bootstrap
+
+      - name: Commit materialized source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "ItsNotAI LABS"
+          git config user.email "MedinaSITECH@outlook.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No source changes to commit."
+            exit 0
+          fi
+          git commit -m "Materialize canonical Stocklana source tree"
+          git push
