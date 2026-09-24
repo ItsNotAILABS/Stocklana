@@ -1,0 +1,596 @@
+{
+  "version": "v9-accounting-token-substrate",
+  "statusVocabulary": [
+    "EXECUTED_PROVEN",
+    "CODED_EXTERNAL_AUTH_REQUIRED",
+    "SOURCE_READY_DEPLOYMENT_REQUIRED"
+  ],
+  "requirements": [
+    {
+      "id": "R01",
+      "intent": "Laptop trading workstation",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "index.html",
+        "src/styles.css",
+        "src/app.js"
+      ],
+      "proof": [
+        "scripts/test_workstation.py"
+      ]
+    },
+    {
+      "id": "R02",
+      "intent": "Responsive phone experience preserved",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "index.html",
+        "src/styles.css"
+      ],
+      "proof": [
+        "scripts/test_workstation.py"
+      ]
+    },
+    {
+      "id": "R03",
+      "intent": "Every navigation tab resolves to a real view",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "index.html",
+        "src/app.js"
+      ],
+      "proof": [
+        "scripts/test_workstation.py: 8/8"
+      ]
+    },
+    {
+      "id": "R04",
+      "intent": "PreStocks-only eligibility for private-company underlyings",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/market-store.py",
+        "programs/stocklana-market/src/lib.rs"
+      ],
+      "proof": [
+        "scripts/test_acceptance.py"
+      ]
+    },
+    {
+      "id": "R05",
+      "intent": "Large reinvented instrument universe",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/market-catalog.py"
+      ],
+      "proof": [
+        "360 unique templates across 16 families"
+      ]
+    },
+    {
+      "id": "R06",
+      "intent": "Automatic settlement for every market family",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/settlement-engine.py",
+        "src/keeper.py"
+      ],
+      "proof": [
+        "scripts/test_settlement.py: 15 evaluator rule families",
+        "scripts/test_acceptance.py: all 360 evaluate"
+      ]
+    },
+    {
+      "id": "R07",
+      "intent": "No Stocklana directional side / fully collateralized default",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/market-store.py",
+        "src/market_execution.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json: allMarketsSolvent + houseDirectionalExposure=0"
+      ]
+    },
+    {
+      "id": "R08",
+      "intent": "Segregated per-market escrow and fee account",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/market_execution.py",
+        "src/finance-store.py"
+      ],
+      "proof": [
+        "/api/markets/:id/solvency",
+        "scripts/test_api.py"
+      ]
+    },
+    {
+      "id": "R09",
+      "intent": "Transferable YES/NO positions",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/market-store.py",
+        "src/market_execution.py",
+        "programs/stocklana-market/src/lib.rs"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json",
+        "scripts/test_api.py"
+      ]
+    },
+    {
+      "id": "R10",
+      "intent": "Embedded direct access to real PreStocks token market",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "src/solana_finance.py",
+        "src/solana-client.js",
+        "src/app.js"
+      ],
+      "proof": [
+        "Jupiter Swap V2 order/execute endpoints; requires JUPITER_API_KEY + user wallet signature"
+      ]
+    },
+    {
+      "id": "R11",
+      "intent": "Solana USDC chain-backed market funding verification",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "server.py: verify_usdc_deposit + trade-chain"
+      ],
+      "proof": [
+        "validates success, USDC mint, vault, sender, amount, replay reference"
+      ]
+    },
+    {
+      "id": "R12",
+      "intent": "Deployable on-chain Stocklana prediction market",
+      "status": "SOURCE_READY_DEPLOYMENT_REQUIRED",
+      "code": [
+        "programs/stocklana-market/src/lib.rs",
+        "src/stocklana-program-client.js"
+      ],
+      "proof": [
+        "PreStocks allowlist, USDC vault, fees, transfer, resolution proof commitment, redemption; local runtime lacks Solana/Rust deploy toolchain and signer"
+      ]
+    },
+    {
+      "id": "R13",
+      "intent": "Resolution tied to Phantasma observation proof",
+      "status": "SOURCE_READY_DEPLOYMENT_REQUIRED",
+      "code": [
+        "src/keeper.py",
+        "programs/stocklana-market/src/lib.rs",
+        "src/stocklana-program-client.js"
+      ],
+      "proof": [
+        "on-chain resolution_commitment field + resolver builder"
+      ]
+    },
+    {
+      "id": "R14",
+      "intent": "Pyth market-data/oracle adapter",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "src/settlement-engine.py"
+      ],
+      "proof": [
+        "PYTH_API_KEY-gated Hermes fetch; PreStocks remains authority for private implied valuation"
+      ]
+    },
+    {
+      "id": "R15",
+      "intent": "CASH/TRADING/RESERVE vault",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/finance-store.py",
+        "index.html",
+        "src/app.js"
+      ],
+      "proof": [
+        "scripts/test_api.py"
+      ]
+    },
+    {
+      "id": "R16",
+      "intent": "Internal user-to-user transfers",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/finance-store.py",
+        "server.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json"
+      ]
+    },
+    {
+      "id": "R17",
+      "intent": "Withdrawal reserve -> chain proof -> settlement lifecycle",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/finance-store.py",
+        "server.py"
+      ],
+      "proof": [
+        "scripts/test_withdrawal.py"
+      ]
+    },
+    {
+      "id": "R18",
+      "intent": "MAQUE @handle payments",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/payment_fabric.py",
+        "server.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json"
+      ]
+    },
+    {
+      "id": "R19",
+      "intent": "QR/NFC/payment request transport",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/payment_fabric.py"
+      ],
+      "proof": [
+        "payment request constructor"
+      ]
+    },
+    {
+      "id": "R20",
+      "intent": "Offline payments with replay protection",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/payment_fabric.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json: 20 offline + 20 replay rejects",
+        "PROOF-100 lineage"
+      ]
+    },
+    {
+      "id": "R21",
+      "intent": "Solana Pay merchant/payment requests",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/solana_finance.py",
+        "server.py"
+      ],
+      "proof": [
+        "/api/pay/solana-request builds tracked SPL-token request"
+      ]
+    },
+    {
+      "id": "R22",
+      "intent": "ISO 20022 banking-language bridge",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/iso20022_bridge.py"
+      ],
+      "proof": [
+        "scripts/test_workstation.py: 100/100 pain/pacs/remt translations"
+      ]
+    },
+    {
+      "id": "R23",
+      "intent": "Debit/bank/on-ramp routing",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "server.py:/api/funding/onramp",
+        "src/payment_fabric.py"
+      ],
+      "proof": [
+        "provider URL required; no fake settlement"
+      ]
+    },
+    {
+      "id": "R24",
+      "intent": "One-time virtual card controls backed by reserved funds",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/card_rail.py",
+        "src/finance-store.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json: card reserve/cancel workload"
+      ]
+    },
+    {
+      "id": "R25",
+      "intent": "Actual external virtual-card issuance connector",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "src/card_rail.py: issue_virtual"
+      ],
+      "proof": [
+        "CARD_ISSUER_PROXY_URL/TOKEN required; PAN/CVV never stored"
+      ]
+    },
+    {
+      "id": "R26",
+      "intent": "100 AI Agent Vaults",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/agent_vault.py"
+      ],
+      "proof": [
+        "data/agent-vaults.json: 100 vaults",
+        "WEEK-100-PROOF.json"
+      ]
+    },
+    {
+      "id": "R27",
+      "intent": "Scoped AI financial capabilities",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/auth.py",
+        "src/agent_vault.py"
+      ],
+      "proof": [
+        "agent bearer capability tokens store only BLAKE2b commitments"
+      ]
+    },
+    {
+      "id": "R28",
+      "intent": "Wallet-signed human financial sessions",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/auth.py",
+        "src/app.js",
+        "server.py"
+      ],
+      "proof": [
+        "caller-supplied trader disabled outside STOCKLANA_DEV_AUTH"
+      ]
+    },
+    {
+      "id": "R29",
+      "intent": "Phantasma post-quantum security",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/pq_crypto.py",
+        "src/finance-store.py"
+      ],
+      "proof": [
+        "ML-DSA-65+Ed25519; ML-KEM-768+X25519; AES-256-GCM; BLAKE2b-512"
+      ]
+    },
+    {
+      "id": "R30",
+      "intent": "High-throughput PQ finance receipts",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/finance-store.py"
+      ],
+      "proof": [
+        "hash-linked events + PQ batch anchors every 16 + individual signatures on high-risk actions + PQ-wrapped journal DEK"
+      ]
+    },
+    {
+      "id": "R31",
+      "intent": "Lending/collateral without money creation",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/lending.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json: pool-funded loans"
+      ]
+    },
+    {
+      "id": "R32",
+      "intent": "Structured products and baskets",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/market-catalog.py"
+      ],
+      "proof": [
+        "basket thresholds, leader markets, joint outcomes, zones, margin duels"
+      ]
+    },
+    {
+      "id": "R33",
+      "intent": "Payoff/liquidity/basket simulation tools",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/simulations.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json: 100 stress simulations"
+      ]
+    },
+    {
+      "id": "R34",
+      "intent": "Growth/referral monetization experiments",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/growth.py"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json: 100 attribution events"
+      ]
+    },
+    {
+      "id": "R35",
+      "intent": "At least two surfaces in every bounty-requested category",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "data/bounty-coverage.json",
+        "index.html"
+      ],
+      "proof": [
+        "scripts/test_acceptance.py"
+      ]
+    },
+    {
+      "id": "R36",
+      "intent": "Meteora Dynamic Bonding Curve integration",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "src/meteora-dbc.js"
+      ],
+      "proof": [
+        "SDK v1.5.11 config/pool/quote/buy; stock quote mint; DAMM v2 migration config; wallet/RPC required"
+      ]
+    },
+    {
+      "id": "R37",
+      "intent": "Optional Clawpump bounty compatibility",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "src/clawpump.py",
+        "server.py"
+      ],
+      "proof": [
+        "pump pairs, self-funded preflight/proof, Robinhood/Pons, Uniswap; CLAWPUMP_API_KEY required"
+      ]
+    },
+    {
+      "id": "R38",
+      "intent": "Native Stocklana launch path and fee model",
+      "status": "SOURCE_READY_DEPLOYMENT_REQUIRED",
+      "code": [
+        "contracts/MNTY.sol",
+        "scripts/launch/create_mnty_solana.mjs"
+      ],
+      "proof": [
+        "fixed supply, Solana Token-2022 mint authority revocation; deployment signer/provider required"
+      ]
+    },
+    {
+      "id": "R39",
+      "intent": "MNTY on Ethereum and Solana",
+      "status": "SOURCE_READY_DEPLOYMENT_REQUIRED",
+      "code": [
+        "contracts/MNTY.sol",
+        "scripts/launch/create_mnty_solana.mjs"
+      ],
+      "proof": [
+        "source ready; no fabricated mainnet deployment transaction"
+      ]
+    },
+    {
+      "id": "R40",
+      "intent": "100 personalities run for seven days",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "scripts/week100_checkpoint.py",
+        "data/agent-personas.json"
+      ],
+      "proof": [
+        "WEEK-100-PROOF.json: 700/700 sessions, zero failures"
+      ]
+    },
+    {
+      "id": "R41",
+      "intent": "Judge-grade proofroom and reconstructible ledger",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "SUBMISSION.md",
+        "JOURNAL.md",
+        "LEDGER.md",
+        "public/ledger.csv",
+        "server.py:/api/proofroom"
+      ],
+      "proof": [
+        "release artifacts"
+      ]
+    },
+    {
+      "id": "R42",
+      "intent": "Software company extends beyond stock trading",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "MAQUE.md",
+        "src/payment_fabric.py",
+        "src/agent_vault.py",
+        "src/card_rail.py",
+        "src/iso20022_bridge.py",
+        "src/growth.py"
+      ],
+      "proof": [
+        "payments, agent finance, banking interop, launch, credit, automation"
+      ]
+    },
+    {
+      "id": "R43",
+      "intent": "AI-native by default",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/agent_vault.py",
+        "src/auth.py",
+        "server.py"
+      ],
+      "proof": [
+        "100 agent identities/vaults and scoped execution capabilities"
+      ]
+    },
+    {
+      "id": "R44",
+      "intent": "Monetization without taking market direction",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/market-store.py",
+        "src/growth.py",
+        "src/solana_finance.py",
+        "src/meteora-dbc.js"
+      ],
+      "proof": [
+        "market feeBps, referral attribution, Jupiter integrator-fee config, DBC creator/partner fee configuration"
+      ]
+    },
+    {
+      "id": "R45",
+      "intent": "Internal double-entry accounting and typed financial-token grammar",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/accounting_tokens.py",
+        "data/accounting-token-registry.json"
+      ],
+      "proof": [
+        "ACCOUNTING-TOKEN-RESULT.json",
+        "494 accounting assertions",
+        "1.0x monetary claim coverage"
+      ]
+    },
+    {
+      "id": "R46",
+      "intent": "V1 compatibility-first Solana financial receipts",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "src/token-v1.js",
+        "docs/V1-V2-FINANCIAL-SUBSTRATE.md"
+      ],
+      "proof": [
+        "classic SPL mint transaction builder; wallet/deployment signature required"
+      ]
+    },
+    {
+      "id": "R47",
+      "intent": "V2 programmable Token-2022 financial receipts",
+      "status": "CODED_EXTERNAL_AUTH_REQUIRED",
+      "code": [
+        "src/token2022-accounting.js",
+        "docs/V1-V2-FINANCIAL-SUBSTRATE.md"
+      ],
+      "proof": [
+        "Token-2022 mint transaction builder with selective NonTransferable/TransferHook/MetadataPointer profiles; wallet/deployment signature required"
+      ]
+    },
+    {
+      "id": "R48",
+      "intent": "AI-readable financial digest distinct from cash balance",
+      "status": "EXECUTED_PROVEN",
+      "code": [
+        "src/accounting_tokens.py",
+        "server.py",
+        "src/agent_vault.py"
+      ],
+      "proof": [
+        "StocklanaFinancialDigest/v2; agent budget marked non-money; positions/collateral/baskets separated"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "accounts": {
+    "ASSET:USDC:VAULT": "500.000000",
+    "EQUITY:PROTOCOL:FEES": "-0.200000",
+    "LIABILITY:MARKET:mkt_0688716e7eb6:ESCROW": "-15.000000",
+    "LIABILITY:USER:alice:CASH": "-479.800000",
+    "LIABILITY:USER:bob:CASH": "-5.000000",
+    "MEMO:POSITION:CONTROL": "-15.000000",
+    "MEMO:POSITION:mkt_0688716e7eb6:YES:alice": "15.000000",
+    "MEMO:POSITION:mkt_0688716e7eb6:YES:bob": "0.000000"
+  },
+  "externalInventory": {
+    "SOL": "0.000000",
+    "USDC": "500.000000"
+  },
+  "journal": [
+    {
+      "at": 1790229823402,
+      "commitment": "a800a039acaeab6f05fb7629650a5d448a43a8961e3d330d6c894603d189b119c6f8e2665ad8858b69c980074d41a4bc24e65db166ccd92589e1e27a48848d75",
+      "entries": [
+        {
+          "account": "ASSET:USDC:VAULT",
+          "credit": "0.000000",
+          "debit": "500.000000"
+        },
+        {
+          "account": "LIABILITY:USER:alice:CASH",
+          "credit": "500.000000",
+          "debit": "0.000000"
+        }
+      ],
+      "event": "DEPOSIT_USDC",
+      "metadata": {
+        "amount": 500,
+        "eventId": "dev-credit:rcpt_3f725e49ba157dca1cfb",
+        "reference": null,
+        "type": "DEPOSIT_USDC",
+        "user": "alice"
+      },
+      "prev": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "sequence": 1
+    },
+    {
+      "at": 1790229823469,
+      "commitment": "c29e7c9f57cd9420a8fb7a9aef9e620f0ca3bf3c448cdcee4fb14e0d7f69884fcda566ceb17316e98d1a00dce7de5d5e3440f2864530ec164d0e1ca7bb7d3e25",
+      "entries": [
+        {
+          "account": "LIABILITY:USER:alice:CASH",
+          "credit": "0.000000",
+          "debit": "20.000000"
+        },
+        {
+          "account": "LIABILITY:MARKET:mkt_0688716e7eb6:ESCROW",
+          "credit": "20.000000",
+          "debit": "0.000000"
+        }
+      ],
+      "event": "MARKET_LOCK",
+      "metadata": {
+        "amount": 20.0,
+        "marketId": "mkt_0688716e7eb6",
+        "side": "YES",
+        "type": "MARKET_LOCK",
+        "units": 20,
+        "user": "alice"
+      },
+      "prev": "a800a039acaeab6f05fb7629650a5d448a43a8961e3d330d6c894603d189b119c6f8e2665ad8858b69c980074d41a4bc24e65db166ccd92589e1e27a48848d75",
+      "sequence": 2
+    },
+    {
+      "at": 1790229823469,
+      "commitment": "c65501f0007feea8fe7f787931aef75dbc3774a720ef3e514a670083f8f0b533157c75d1c611fbc55216815d6bbad086a839ec386c84ef367dc8a1e3809ccb69",
+      "entries": [
+        {
+          "account": "LIABILITY:USER:alice:CASH",
+          "credit": "0.000000",
+          "debit": "0.200000"
+        },
+        {
+          "account": "EQUITY:PROTOCOL:FEES",
+          "credit": "0.200000",
+          "debit": "0.000000"
+        }
+      ],
+      "event": "FEE_PAYMENT",
+      "metadata": {
+        "amount": 0.2,
+        "marketId": "mkt_0688716e7eb6",
+        "type": "FEE_PAYMENT",
+        "user": "alice"
+      },
+      "prev": "c29e7c9f57cd9420a8fb7a9aef9e620f0ca3bf3c448cdcee4fb14e0d7f69884fcda566ceb17316e98d1a00dce7de5d5e3440f2864530ec164d0e1ca7bb7d3e25",
+      "sequence": 3
+    },
+    {
+      "at": 1790229823469,
+      "commitment": "b350b610135a7f78b78851270a735616e41d1094ef49bd1465d686402bc8366774172eb127f3fb49a1cafb908101ce263df2c2933a70e42b2136d80b3780b72b",
+      "entries": [
+        {
+          "account": "MEMO:POSITION:mkt_0688716e7eb6:YES:alice",
+          "credit": "0.000000",
+          "debit": "20.000000"
+        },
+        {
+          "account": "MEMO:POSITION:CONTROL",
+          "credit": "20.000000",
+          "debit": "0.000000"
+        }
+      ],
+      "event": "POSITION_MINT",
+      "metadata": {
+        "holder": "alice",
+        "marketId": "mkt_0688716e7eb6",
+        "side": "YES",
+        "type": "POSITION_MINT",
+        "units": 20
+      },
+      "prev": "c65501f0007feea8fe7f787931aef75dbc3774a720ef3e514a670083f8f0b533157c75d1c611fbc55216815d6bbad086a839ec386c84ef367dc8a1e3809ccb69",
+      "sequence": 4
+    },
+    {
+      "at": 1790229823473,
+      "commitment": "03ce465c921dae7c88f8c715d7845baabee952f4010ab121fe6d0af31e4b977bf667d8fa274b3465851b5910e45869eac7bef89e32b72f81403de3c5bb54a096",
+      "entries": [
+        {
+          "account": "MEMO:POSITION:mkt_0688716e7eb6:YES:bob",
+          "credit": "0.000000",
+          "debit": "5.000000"
+        },
+        {
+          "account": "MEMO:POSITION:mkt_0688716e7eb6:YES:alice",
+          "credit": "5.000000",
+          "debit": "0.000000"
+        }
+      ],
+      "event": "POSITION_TRANSFER",
+      "metadata": {
+        "marketId": "mkt_0688716e7eb6",
+        "recipient": "bob",
+        "sender": "alice",
+        "side": "YES",
+        "type": "POSITION_TRANSFER",
+        "units": 5
+      },
+      "prev": "b350b610135a7f78b78851270a735616e41d1094ef49bd1465d686402bc8366774172eb127f3fb49a1cafb908101ce263df2c2933a70e42b2136d80b3780b72b",
+      "sequence": 5
+    },
+    {
+      "at": 1790229823478,
+      "commitment": "422bad7c0d91d0b171c41b5a6a41bff3769dbedc119c705dff8c3bb36392d6bbd11463243890cfa6bee0bef602de8d95c004ffd028e565520aa022711ceb5177",
+      "entries": [
+        {
+          "account": "LIABILITY:MARKET:mkt_0688716e7eb6:ESCROW",
+          "credit": "0.000000",
+          "debit": "5.000000"
+        },
+        {
+          "account": "LIABILITY:USER:bob:CASH",
+          "credit": "5.000000",
+          "debit": "0.000000"
+        }
+      ],
+      "event": "MARKET_PAYOUT",
+      "metadata": {
+        "amount": 5.0,
+        "marketId": "mkt_0688716e7eb6",
+        "type": "MARKET_PAYOUT",
+        "user": "bob"
+      },
+      "prev": "03ce465c921dae7c88f8c715d7845baabee952f4010ab121fe6d0af31e4b977bf667d8fa274b3465851b5910e45869eac7bef89e32b72f81403de3c5bb54a096",
+      "sequence": 6
+    },
+    {
+      "at": 1790229823479,
+      "commitment": "fb3377ce65f6e1d3c90e6c8682541b6e447404e0d07e2aa5372f609b2f45826df89210f38092a4711c6ba8c203b948fd487afb88c1f45864f6b1e620bbc90c48",
+      "entries": [
+        {
+          "account": "MEMO:POSITION:CONTROL",
+          "credit": "0.000000",
+          "debit": "5.000000"
+        },
+        {
+          "account": "MEMO:POSITION:mkt_0688716e7eb6:YES:bob",
+          "credit": "5.000000",
+          "debit": "0.000000"
+        }
+      ],
+      "event": "POSITION_BURN",
+      "metadata": {
+        "holder": "bob",
+        "marketId": "mkt_0688716e7eb6",
+        "side": "YES",
+        "type": "POSITION_BURN",
+        "units": 5.0
+      },
+      "prev": "422bad7c0d91d0b171c41b5a6a41bff3769dbedc119c705dff8c3bb36392d6bbd11463243890cfa6bee0bef602de8d95c004ffd028e565520aa022711ceb5177",
+      "sequence": 7
+    }
+  ],
+  "processedEvents": {
+    "dev-credit:rcpt_3f725e49ba157dca1cfb": {
+      "commitment": "a800a039acaeab6f05fb7629650a5d448a43a8961e3d330d6c894603d189b119c6f8e2665ad8858b69c980074d41a4bc24e65db166ccd92589e1e27a48848d75",
+      "sequence": 1,
+      "type": "DEPOSIT_USDC"
+    }
+  },
+  "receiptHead": "fb3377ce65f6e1d3c90e6c8682541b6e447404e0d07e2aa5372f609b2f45826df89210f38092a4711c6ba8c203b948fd487afb88c1f45864f6b1e620bbc90c48",
+  "sequence": 7,
+  "tokenBalances": {
+    "SL-AGENT": {},
+    "SL-BASKET": {},
+    "SL-CASH": {
+      "alice": "479.800000",
+      "bob": "5.000000"
+    },
+    "SL-COLL": {},
+    "SL-CREDIT": {},
+    "SL-ESCROW": {
+      "mkt_0688716e7eb6:POOL": "15.000000"
+    },
+    "SL-FEE": {
+      "TREASURY": "0.200000"
+    },
+    "SL-POS": {
+      "mkt_0688716e7eb6:YES:alice": "15.000000",
+      "mkt_0688716e7eb6:YES:bob": "0.000000"
+    }
+  },
+  "version": 2
+}

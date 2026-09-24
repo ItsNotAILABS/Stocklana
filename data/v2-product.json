@@ -1,0 +1,35 @@
+{
+  "version": "2.0",
+  "defaultTokenStandard": "TOKEN_2022",
+  "primaryJobs": [
+    "BUY",
+    "AUTO_INVEST",
+    "BORROW",
+    "PLAY_MARKET",
+    "SEND",
+    "SPEND",
+    "AGENT",
+    "LAUNCH"
+  ],
+  "navigation": [
+    "home",
+    "markets",
+    "lab",
+    "vault",
+    "credit",
+    "agents",
+    "launch",
+    "infrastructure",
+    "portfolio",
+    "coverage"
+  ],
+  "principles": [
+    "action_first",
+    "one_account_fabric",
+    "no_fake_balances",
+    "wallet_signed_external_execution",
+    "machine_readable_finance",
+    "progressive_disclosure"
+  ],
+  "v1Status": "legacy_compatibility_adapter_only"
+}

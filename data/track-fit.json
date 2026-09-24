@@ -1,0 +1,29 @@
+{
+  "wedge": "Programmable tokenized-equity ownership: acquire, automate, collateralize, compose, transfer and spend from one Solana-native account fabric.",
+  "trading": [
+    "Jupiter Swap V2 PreStock-to-USDC and USDC-to-PreStock execution",
+    "360 fully collateralized programmable markets derived from tokenized-equity observations"
+  ],
+  "investing": [
+    "Recurring tokenized-equity buy plans",
+    "Weighted baskets plus policy-scoped robo portfolios"
+  ],
+  "credit_and_yield": [
+    "Tokenized-equity collateral transaction path for Kamino reserves when the asset is supported",
+    "Pool-funded Stocklana credit plus corporate-action/dividend event ingestion"
+  ],
+  "infrastructure": [
+    "PreStocks and Pyth observation/settlement plane with solvency analytics",
+    "V1 classic SPL compatibility receipts + V2 Token-2022 programmable financial claims backed by double-entry accounting",
+    "Corporate-action registry, wallet authentication, Phantasma PQ receipts and ISO 20022 reconciliation"
+  ],
+  "consumer": [
+    "Mobile/laptop portfolio workstation with social/copy signals",
+    "MAQUE, Solana Pay and one-use card policies for spending from portfolio value"
+  ],
+  "why_solana": [
+    "V1 classic SPL receipts maximize present-day Jupiter/Meteora/Kamino compatibility",
+    "V2 Token-2022 receipts add metadata, non-transferability and transfer hooks to financial claims without custom token standards",
+    "Low-cost fast settlement lets one account move between investing, DeFi, agent automation and payments without brokerage silos"
+  ]
+}

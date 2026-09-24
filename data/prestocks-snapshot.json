@@ -1,0 +1,10 @@
+[
+{"name":"Anduril PreStocks","symbol":"ANDURIL","contract_address":"PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB","markPrice":153.94648367,"markValuation":136196308976,"tokenPrice":157.72755883,"impliedValuation":139541422604},
+{"name":"Anthropic PreStocks","symbol":"ANTHROPIC","contract_address":"Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw","markPrice":1050.44176843,"markValuation":1720983186253,"tokenPrice":1052.12506369,"impliedValuation":1723741000088},
+{"name":"Figure AI PreStocks","symbol":"FIGUREAI","contract_address":"PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd","markPrice":181.8939899,"markValuation":39657798034,"tokenPrice":181.91997802,"impliedValuation":39663464145},
+{"name":"Kalshi PreStocks","symbol":"KALSHI","contract_address":"PreLWGkkeqG1s4HEfFZSy9moCrJ7btsHuUtfcCeoRua","markPrice":893.11947124,"markValuation":32484588776,"tokenPrice":860.81568097,"impliedValuation":31309633603},
+{"name":"Neuralink PreStocks","symbol":"NEURALINK","contract_address":"PrekqLJvJ3qVdXmBGDiexvwUTF4rLFDa6HWS4HJbw9S","markPrice":336.79705453,"markValuation":64158171576,"tokenPrice":424.54027376,"impliedValuation":80872820466},
+{"name":"OpenAI PreStocks","symbol":"OPENAI","contract_address":"PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF","markPrice":995.56955666,"markValuation":1233441287355,"tokenPrice":1127.221603,"impliedValuation":1396548996348},
+{"name":"Polymarket PreStocks","symbol":"POLYMARKET","contract_address":"Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP","markPrice":144.29858563,"markValuation":14231558175,"tokenPrice":142.15989838,"impliedValuation":14020628512},
+{"name":"SpaceX PreStocks","symbol":"SPACEX","contract_address":"PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh","markPrice":152.62406151,"markValuation":2001071028648,"tokenPrice":116.46045229,"impliedValuation":1526925930061}
+]
