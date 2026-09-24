@@ -218,8 +218,18 @@ class Handler(SimpleHTTPRequestHandler):
             if p=='/api/swap/execute':
                 self.trader(payload=payload); return self.send_json(solana_finance.jupiter_execute(payload.get('signedTransaction'),payload.get('requestId')))
             if p=='/api/commerce/intents':
-                who=self.trader(payload=payload)
-                intent=commerce.create_intent(who,payload.get('merchantUrl'),payload.get('amount'),payload.get('fundingSource','WALLET_USDC'),payload.get('merchant'),payload.get('agentId'),payload.get('approvalAbove'),payload.get('allowSubscriptions',False),payload.get('note',''))
+                header=self.headers.get('Authorization',''); tok=header[7:] if header.startswith('Bearer ') else self.headers.get('X-Stocklana-Session','')
+                rec=auth.resolve(tok) if tok else None
+                who=self.trader(payload=payload); amount=float(payload.get('amount') or 0); agent_id=payload.get('agentId')
+                if rec and rec.get('kind')=='agent':
+                    if 'commerce:purchase' not in rec.get('scopes',[]): raise PermissionError('scope_denied')
+                    agent_id=rec.get('subject'); who=rec.get('owner'); av=agent_vault.get_agent_vault(agent_id)
+                    if not av or av.get('owner')!=who: raise ValueError('agent_vault_not_found')
+                    policy_cfg=av.get('policy',{})
+                    if amount>float(policy_cfg.get('singleSpendLimitUSDC',0)): raise ValueError('agent_single_spend_limit_exceeded')
+                    if amount>float(policy_cfg.get('humanApprovalAboveUSDC',0)): return self.send_json({'error':'human_approval_required','agentId':agent_id,'amountUSDC':amount,'approvalAboveUSDC':policy_cfg.get('humanApprovalAboveUSDC')},403)
+                    if payload.get('fundingSource','STOCKLANA_USDC')!='STOCKLANA_USDC': raise ValueError('agent_wallet_signature_requires_human')
+                intent=commerce.create_intent(who,payload.get('merchantUrl'),amount,payload.get('fundingSource','WALLET_USDC'),payload.get('merchant'),agent_id,payload.get('approvalAbove'),payload.get('allowSubscriptions',False),payload.get('note',''))
                 if intent['fundingSource']=='STOCKLANA_USDC':
                     policy=card_rail.create_policy(who,intent['maxAmountUSDC'],intent['merchantHost'],payload.get('mcc'),payload.get('ttl',1800))
                     issuance=card_rail.issue_virtual(who,policy['id'])
@@ -362,6 +372,7 @@ class Handler(SimpleHTTPRequestHandler):
             if p=='/api/command': return self.send_json({'ok':True,'accepted':True,'command':payload})
             return self.send_json({'error':'not_found'},404)
         except KeyError as e: return self.send_json({'error':str(e)},404)
+        except PermissionError as e: return self.send_json({'error':str(e)},403)
         except ValueError as e: return self.send_json({'error':str(e)},400)
         except Exception as e: return self.send_json({'error':'server_error','detail':str(e)},500)
     def send_json(self,obj,status=200):
