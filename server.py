@@ -27,6 +27,7 @@ equity_os=loadmod('equity_os','equity_os.py')
 kamino=loadmod('kamino_adapter','kamino_adapter.py')
 xstocks=loadmod('xstocks_adapter','xstocks_adapter.py')
 accounting_tokens=loadmod('accounting_tokens','accounting_tokens.py')
+commerce=loadmod('commerce','commerce.py')
 
 SNAPSHOT=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
 USDC_MINT=os.getenv('STOCKLANA_USDC_MINT','EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
@@ -136,6 +137,11 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_json(payload)
         if path=='/api/maque': return self.send_json({**payment_fabric.capabilities(),'solana':solana_finance.capabilities()})
         if path=='/api/solana-finance': return self.send_json(solana_finance.capabilities())
+        if path=='/api/wallet/routes': return self.send_json(solana_finance.wallet_routes(market_store.PRESTOCK_MINTS))
+        if path=='/api/commerce': return self.send_json({**commerce.capabilities(),'card':card_rail.capabilities(),'vaultAddress':VAULT_ADDRESS or None})
+        if path=='/api/commerce/intents':
+            try: who=self.trader(qs=qs); return self.send_json({'intents':commerce.list_intents(who)})
+            except Exception: return self.send_json({'intents':[]})
         if path=='/api/iso20022': return self.send_json(iso20022.capabilities())
         if path=='/api/card-rail': return self.send_json(card_rail.capabilities())
         if path=='/api/lending': return self.send_json(lending.capabilities())
@@ -206,6 +212,32 @@ class Handler(SimpleHTTPRequestHandler):
             if p=='/api/auth/verify': return self.send_json(auth.verify(payload.get('wallet'),payload.get('nonce'),payload.get('signature')),201)
             if p=='/api/auth/agent':
                 owner=self.trader(payload=payload); return self.send_json(auth.issue_agent(owner,payload.get('agentId'),payload.get('scopes')),201)
+            if p=='/api/swap/order':
+                who=self.trader(payload=payload)
+                return self.send_json(solana_finance.wallet_swap_order(payload.get('inputMint'),payload.get('outputMint'),payload.get('amountAtomic'),who,market_store.PRESTOCK_MINTS))
+            if p=='/api/swap/execute':
+                self.trader(payload=payload); return self.send_json(solana_finance.jupiter_execute(payload.get('signedTransaction'),payload.get('requestId')))
+            if p=='/api/commerce/intents':
+                who=self.trader(payload=payload)
+                intent=commerce.create_intent(who,payload.get('merchantUrl'),payload.get('amount'),payload.get('fundingSource','WALLET_USDC'),payload.get('merchant'),payload.get('agentId'),payload.get('approvalAbove'),payload.get('allowSubscriptions',False),payload.get('note',''))
+                if intent['fundingSource']=='STOCKLANA_USDC':
+                    policy=card_rail.create_policy(who,intent['maxAmountUSDC'],intent['merchantHost'],payload.get('mcc'),payload.get('ttl',1800))
+                    issuance=card_rail.issue_virtual(who,policy['id'])
+                    intent=commerce.mark_funded(who,intent['id'],'stocklana-vault')
+                    return self.send_json(commerce.attach_card(who,intent['id'],policy,issuance),201)
+                return self.send_json({'intent':intent,'vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'requiresWalletTransfer':True},201)
+            if p=='/api/commerce/fund-wallet':
+                who=self.trader(payload=payload); intent=commerce.get_intent(who,payload.get('intentId'))
+                if intent.get('fundingSource')!='WALLET_USDC': raise ValueError('intent_not_wallet_funded')
+                proof=self.verify_usdc_deposit(payload.get('signature'),intent['maxAmountUSDC'],payload.get('wallet') or who)
+                finance_store.credit_once(who,proof['verifiedAmount'],'USDC','commerce-wallet-funding',payload.get('signature'))
+                commerce.mark_funded(who,intent['id'],payload.get('signature'))
+                policy=card_rail.create_policy(who,intent['maxAmountUSDC'],intent['merchantHost'],payload.get('mcc'),max(60,int(intent['expiresAt']-int(time.time()))))
+                issuance=card_rail.issue_virtual(who,policy['id'])
+                out=commerce.attach_card(who,intent['id'],policy,issuance); out['chainProof']=proof
+                return self.send_json(out,201)
+            if p=='/api/commerce/open':
+                who=self.trader(payload=payload); return self.send_json(commerce.mark_opened(who,payload.get('intentId')))
             if p=='/api/prestocks/order':
                 who=self.trader(payload=payload); mint=payload.get('mint'); side=payload.get('side','BUY').upper()
                 if mint not in market_store.PRESTOCK_MINTS: raise ValueError('underlying_not_prestocks_eligible')
