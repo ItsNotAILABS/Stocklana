@@ -15,7 +15,7 @@
       <div class="rail-brand"><div class="brand-mark">S</div><div><b>Stocklana</b><small>V2</small></div></div>
       <button class="active" data-nav="home">⌂ Home</button>
       <button data-nav="markets">◫ Invest</button>
-      <button data-nav="lab">◇ Markets</button>
+      <button data-nav="play">◇ Play</button>
       <button data-nav="wallet">◉ Wallet</button>
       <button data-nav="commerce">▱ Shop</button>
       <button data-nav="vault">▣ Money</button>
@@ -24,6 +24,7 @@
       <button data-nav="launch">↗ Launch</button>
       <button data-nav="infrastructure">⌘ System</button>
       <div class="rail-spacer"></div>
+      <button class="subtle-rail" data-nav="lab">＋ Build a market</button>
       <button class="subtle-rail" data-nav="portfolio">◎ My activity</button>
       <button class="subtle-rail" data-nav="coverage">✓ Proof</button>
       <div class="rail-proof"><b>V2 ACCOUNT FABRIC</b><br/>Token-2022 · Phantasma PQ<br/><br/><b>SETTLEMENT</b><br/>Solana · PreStocks · Pyth<br/><br/><b>CLEARING</b><br/>PARRALAX · ISO 20022</div>
@@ -105,6 +106,39 @@
         <div class="market-feed" id="marketFeed" aria-live="polite"></div>
         <div class="section-head compact"><div><span class="kicker">UNDERLYINGS</span><h2>PreStocks assets</h2></div></div>
         <div class="asset-grid" id="assetGrid" aria-live="polite"></div>
+      </section>
+
+      <section class="view" id="view-play">
+        <div class="play-hero">
+          <div>
+            <span class="kicker">PRESTOCKS ARCADE</span>
+            <h2>Put your private-company thesis to work.</h2>
+            <p>Fast, fully collateralized payoff games built from the same eligible PreStocks. Pick a side, see the real pool, know the maximum loss, and settle from the market engine already inside Stocklana.</p>
+          </div>
+          <div class="play-stake">
+            <span>Quick stake</span>
+            <div class="stake-pills">
+              <button data-game-stake="5">$5</button>
+              <button class="active" data-game-stake="10">$10</button>
+              <button data-game-stake="25">$25</button>
+              <button data-game-stake="50">$50</button>
+            </div>
+            <small>Changing stake recalculates the payoff preview from the current collateral pools.</small>
+          </div>
+        </div>
+        <div class="game-filter-row">
+          <button class="active" data-game-filter="all">All games</button>
+          <button data-game-filter="gain_game">Gain</button>
+          <button data-game-filter="downside_shield">Shield</button>
+          <button data-game-filter="margin_duel">Duels</button>
+          <button data-game-filter="green_majority">Basket</button>
+          <button data-game-filter="leader">Leader</button>
+          <button data-game-filter="price_zone">Zones</button>
+          <button class="build-game" data-nav="lab">Build your own +</button>
+        </div>
+        <div id="gameDeck" class="game-deck" aria-live="polite">
+          <div class="empty-card">Loading live Stocklana games…</div>
+        </div>
       </section>
 
       <section class="view" id="view-lab">
@@ -263,9 +297,11 @@
             <label>Product / checkout URL<input id="commerceUrl" type="url" placeholder="https://merchant.com/product" /></label>
             <div class="convert-grid">
               <label>Max spend (USDC)<input id="commerceAmount" type="number" min="0.01" step="0.01" value="50" /></label>
-              <label>Pay from<select id="commerceFunding"><option value="WALLET_USDC">Phantom USDC</option><option value="STOCKLANA_USDC">Stocklana balance</option></select></label>
+              <label>Pay from<select id="commerceFunding"><option value="SMART">Smart money router</option><option value="WALLET_USDC">Phantom USDC</option><option value="STOCKLANA_USDC">Stocklana balance</option><option value="SPLIT_USDC">Split Phantom + Stocklana</option><option value="PRESTOCK_TO_USDC">A PreStock holding</option><option value="SOL_TO_USDC">SOL (convert first)</option></select></label>
+              <label>PreStock source<select id="commercePrestock"><option value="">Choose a holding</option></select></label>
               <label>Agent (optional)<input id="commerceAgent" placeholder="stocklana-agent-001" /></label>
             </div>
+            <div id="commerceFundingPlan" class="funding-plan"><small>Connect Phantom and enter an amount to see live funding routes.</small></div>
             <div class="commerce-policy-grid">
               <article><span>MERCHANT</span><b id="commerceMerchantRule">Locked to URL</b><small>Cannot spend somewhere else.</small></article>
               <article><span>SUBSCRIPTIONS</span><b>Blocked</b><small>One purchase unless you explicitly change policy.</small></article>
@@ -387,7 +423,7 @@
     <nav class="bottom-nav" aria-label="Primary">
       <button class="active" data-nav="home"><span>⌂</span>Home</button>
       <button data-nav="markets"><span>◫</span>Invest</button>
-      <button data-nav="lab"><span>◇</span>Markets</button>
+      <button data-nav="play"><span>◇</span>Play</button>
       <button data-nav="commerce"><span>▱</span>Shop</button>
       <button data-nav="agents"><span>◈</span>Agent</button>
     </nav>
