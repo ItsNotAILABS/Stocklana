@@ -17,6 +17,7 @@
       <button data-nav="markets">◫ Invest</button>
       <button data-nav="lab">◇ Markets</button>
       <button data-nav="wallet">◉ Wallet</button>
+      <button data-nav="commerce">▱ Shop</button>
       <button data-nav="vault">▣ Money</button>
       <button data-nav="credit">↯ Credit</button>
       <button data-nav="agents">◈ Agent</button>
@@ -56,7 +57,7 @@
           <button class="action-card" data-action="borrow"><span class="action-icon">↯</span><div><b>Borrow</b><small>Use supported assets as collateral</small></div><i>Explore</i></button>
           <button class="action-card" data-action="play"><span class="action-icon">◇</span><div><b>Play a market</b><small>Simple payoff games backed by real assets</small></div><i>Discover</i></button>
           <button class="action-card" data-action="send"><span class="action-icon">→</span><div><b>Send money</b><small>@handle, QR or wallet</small></div><i>Pay</i></button>
-          <button class="action-card" data-action="spend"><span class="action-icon">▰</span><div><b>Spend</b><small>One-time card policy & MAQUE</small></div><i>Use</i></button>
+          <button class="action-card" data-action="spend"><span class="action-icon">▰</span><div><b>Buy anything</b><small>Use wallet or Stocklana money outside the app</small></div><i>Shop</i></button>
           <button class="action-card" data-action="agent"><span class="action-icon">◈</span><div><b>Give an AI a budget</b><small>Governed Agent Vault</small></div><i>Assign</i></button>
           <button class="action-card" data-action="launch"><span class="action-icon">✦</span><div><b>Launch</b><small>ETH + Solana token/liquidity rails</small></div><i>Create</i></button>
         </div>
@@ -212,10 +213,24 @@
           <div class="wallet-quick-actions">
             <button class="primary" id="walletBuyPrestockBtn">Buy PreStock</button>
             <button class="ghost" id="walletDepositCenterBtn">Move USDC into Stocklana</button>
+            <button class="ghost" id="walletSwapBtn">Convert</button>
+            <button class="ghost" id="walletShopBtn">Buy something</button>
             <button class="ghost" id="walletSendCenterBtn">Send</button>
             <button class="ghost" id="walletExplorerBtn">View on Solana</button>
           </div>
         </div>
+
+        
+        <section class="wallet-convert-card">
+          <div class="panel-head"><div><span class="kicker">CONVERT IN PLACE</span><h2>Turn what you have into what you want.</h2></div><span class="status live">WALLET-SIGNED</span></div>
+          <div class="convert-grid">
+            <label>From<select id="swapFrom"><option value="SOL">SOL</option><option value="USDC">USDC</option></select></label>
+            <label>Amount<input id="swapAmount" type="number" min="0" step="any" placeholder="25" /></label>
+            <label>To<select id="swapTo"><option value="USDC">USDC</option></select></label>
+            <button class="primary" id="swapExecuteBtn">Preview & convert</button>
+          </div>
+          <small class="helper">SOL ↔ USDC and SOL/USDC → eligible PreStocks route through the existing Jupiter execution rail. Your Phantom signs the transaction.</small>
+        </section>
 
         <div class="wallet-columns">
           <section class="home-panel">
@@ -229,6 +244,47 @@
               <button data-wallet-route="lab"><span>02</span><div><b>Enter payoff games</b><small>Fund collateral from the same connected wallet.</small></div><i>→</i></button>
               <button data-wallet-route="credit"><span>03</span><div><b>Use collateral</b><small>Keep wallet signing local while Stocklana builds the route.</small></div><i>→</i></button>
               <button data-wallet-route="agents"><span>04</span><div><b>Fund an agent safely</b><small>Delegate bounded purchasing power, never your private key.</small></div><i>→</i></button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+
+      <section class="view" id="view-commerce">
+        <div class="section-head">
+          <div><span class="kicker">STOCKLANA COMMERCE</span><h2>Use Solana money anywhere the web already sells things.</h2></div>
+          <span class="status live">SAFE PURCHASE MODE</span>
+        </div>
+        <p class="section-copy">Paste a product or checkout URL, set the maximum spend, choose Phantom USDC or your Stocklana balance, and Stocklana creates a merchant-bound one-time purchase rail. Agents can use the same rail without ever receiving your wallet key.</p>
+
+        <div class="commerce-layout">
+          <section class="commerce-builder">
+            <div class="commerce-step"><span>01</span><div><b>Where are you buying?</b><small>Stocklana locks the purchase to this merchant.</small></div></div>
+            <label>Product / checkout URL<input id="commerceUrl" type="url" placeholder="https://merchant.com/product" /></label>
+            <div class="convert-grid">
+              <label>Max spend (USDC)<input id="commerceAmount" type="number" min="0.01" step="0.01" value="50" /></label>
+              <label>Pay from<select id="commerceFunding"><option value="WALLET_USDC">Phantom USDC</option><option value="STOCKLANA_USDC">Stocklana balance</option></select></label>
+              <label>Agent (optional)<input id="commerceAgent" placeholder="stocklana-agent-001" /></label>
+            </div>
+            <div class="commerce-policy-grid">
+              <article><span>MERCHANT</span><b id="commerceMerchantRule">Locked to URL</b><small>Cannot spend somewhere else.</small></article>
+              <article><span>SUBSCRIPTIONS</span><b>Blocked</b><small>One purchase unless you explicitly change policy.</small></article>
+              <article><span>PRIVATE KEY</span><b>Never shared</b><small>Wallet signs locally; agents receive scoped authority only.</small></article>
+            </div>
+            <button class="primary wide" id="commerceCreateBtn">Create safe purchase</button>
+            <div id="commerceResult" class="commerce-result"></div>
+          </section>
+
+          <section class="commerce-side">
+            <div class="agent-commerce-card">
+              <span class="kicker">AGENT COMMERCE</span>
+              <h3>“Find it under $300 and buy it.”</h3>
+              <p>Agent Vault policy controls merchant, amount, approval threshold and whether an external purchase may proceed. Wallet-backed purchases still require the human wallet signature.</p>
+              <div class="policy-rail"><span>FIND</span><i>→</i><span>POLICY</span><i>→</i><span>PAY</span><i>→</i><span>RECEIPT</span></div>
+            </div>
+            <div class="home-panel">
+              <div class="panel-head"><div><span class="kicker">RECENT PURCHASE INTENTS</span><h2>Commerce activity</h2></div></div>
+              <div id="commerceHistory"><div class="empty-card">No purchase intents yet.</div></div>
             </div>
           </section>
         </div>
@@ -332,7 +388,7 @@
       <button class="active" data-nav="home"><span>⌂</span>Home</button>
       <button data-nav="markets"><span>◫</span>Invest</button>
       <button data-nav="lab"><span>◇</span>Markets</button>
-      <button data-nav="vault"><span>▣</span>Money</button>
+      <button data-nav="commerce"><span>▱</span>Shop</button>
       <button data-nav="agents"><span>◈</span>Agent</button>
     </nav>
   </div>
