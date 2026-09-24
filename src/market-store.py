@@ -25,8 +25,21 @@ def _save(d):
 def _prob(m):
  y=float(m.get('yesPool',m.get('qYes',0))); n=float(m.get('noPool',m.get('qNo',0))); total=y+n
  return 0.5 if total<=1e-12 else y/total
+def _family(m):
+ rt=(m.get('rule') or {}).get('type')
+ if m.get('family'): return m['family']
+ if rt=='return_threshold': return 'gain_game' if float((m.get('rule') or {}).get('thresholdPct',0))>=0 else 'downside_shield'
+ return {
+  'relative_margin':'margin_duel','green_count':'green_majority','universe_leader':'leader',
+  'basket_leader':'leader','price_zone':'price_zone','valuation_zone':'value_zone',
+  'valuation_threshold':'valuation','price_threshold':'price','premium_band':'premium',
+  'premium_sign':'discount','absolute_return':'move','relative_return':'relative',
+  'valuation_ratio':'spread','joint_positive':'joint','basket_return_threshold':'basket'
+ }.get(rt,'market')
+
 def _migrate(m):
  m.setdefault('pricingMode','PARIMUTUEL')
+ m.setdefault('family',_family(m)); m.setdefault('label',m.get('question','Market'))
  m.setdefault('yesPool',float(m.get('qYes',0))); m.setdefault('noPool',float(m.get('qNo',0)))
  m['qYes']=m['yesPool']; m['qNo']=m['noPool']; m.setdefault('collateral',m['yesPool']+m['noPool']); m.setdefault('paidOut',0.0); m.setdefault('fees',0.0)
  return m
@@ -44,7 +57,7 @@ def create_market(payload):
  for k in ('underlyingMint','symbol','question','resolveAt'):
   if not payload.get(k): raise ValueError(f'missing_{k}')
  if payload['underlyingMint'] not in PRESTOCK_MINTS: raise ValueError('underlying_not_prestocks_eligible')
- m={'id':mid,'underlyingMint':payload['underlyingMint'],'symbol':payload['symbol'],'question':payload['question'],'rule':payload.get('rule',{}),
+ m={'id':mid,'underlyingMint':payload['underlyingMint'],'symbol':payload['symbol'],'question':payload['question'],'rule':payload.get('rule',{}),'family':payload.get('family') or _family(payload),'label':payload.get('label') or payload['question'],
     'resolveAt':payload['resolveAt'],'collateralMint':payload.get('collateralMint','USDC'),'pricingMode':payload.get('pricingMode','PARIMUTUEL'),
     'feeBps':int(payload.get('feeBps',100)),'yesPool':0.0,'noPool':0.0,'qYes':0.0,'qNo':0.0,'collateral':0.0,'paidOut':0.0,'fees':0.0,
     'status':'OPEN','outcome':None,'volume':0.0,'trades':[],'createdAt':int(time.time()*1000),'creator':payload.get('creator') or 'stocklana'}
