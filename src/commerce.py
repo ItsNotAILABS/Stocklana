@@ -16,7 +16,7 @@ def _host(url):
     if u.scheme not in {'http','https'} or not u.netloc: raise ValueError('valid_https_merchant_url_required')
     return u.netloc.lower()
 
-def create_intent(user, merchant_url, amount_usdc, funding_source='WALLET_USDC', merchant=None, agent_id=None, approval_above=None, allow_subscriptions=False, note=''):
+def create_intent(user, merchant_url, amount_usdc, funding_source='WALLET_USDC', merchant=None, agent_id=None, approval_above=None, allow_subscriptions=False, note='', source_asset='USDC'):
     amount=float(amount_usdc)
     if amount<=0: raise ValueError('invalid_amount')
     if funding_source not in {'WALLET_USDC','STOCKLANA_USDC'}: raise ValueError('unsupported_funding_source')
@@ -24,7 +24,7 @@ def create_intent(user, merchant_url, amount_usdc, funding_source='WALLET_USDC',
     iid='buy_'+uuid.uuid4().hex[:18]; now=int(time.time())
     obj={
         'id':iid,'user':user,'merchantUrl':merchant_url,'merchantHost':host,
-        'merchant':merchant or host,'maxAmountUSDC':amount,'fundingSource':funding_source,
+        'merchant':merchant or host,'maxAmountUSDC':amount,'fundingSource':funding_source,'sourceAsset':str(source_asset or 'USDC').upper(),
         'agentId':agent_id or None,'approvalAboveUSDC':float(approval_above) if approval_above not in (None,'') else amount,
         'allowSubscriptions':bool(allow_subscriptions),'note':str(note or '')[:240],
         'status':'AWAITING_FUNDS' if funding_source=='WALLET_USDC' else 'READY_TO_RESERVE',
@@ -36,6 +36,15 @@ def get_intent(user, intent_id):
     obj=_load()['intents'].get(intent_id)
     if not obj or obj.get('user')!=user: raise ValueError('purchase_intent_not_found')
     return obj
+
+def mark_conversion(user,intent_id,source_asset,reference,details=None):
+    d=_load(); obj=d['intents'].get(intent_id)
+    if not obj or obj.get('user')!=user: raise ValueError('purchase_intent_not_found')
+    obj['sourceAsset']=str(source_asset or obj.get('sourceAsset') or 'USDC').upper()
+    obj['conversionReference']=reference
+    obj['conversionDetails']=details or {}
+    obj['convertedAt']=int(time.time())
+    _save(d); return obj
 
 def mark_funded(user,intent_id,reference):
     d=_load(); obj=d['intents'].get(intent_id)
@@ -66,7 +75,7 @@ def list_intents(user,limit=30):
 def capabilities():
     return {
       'name':'Stocklana Commerce',
-      'fundingSources':['WALLET_USDC','STOCKLANA_USDC'],
+      'fundingSources':['WALLET_USDC','STOCKLANA_USDC','SPLIT_USDC','SOL_TO_USDC','PRESTOCK_TO_USDC'],
       'merchantBoundSingleUsePolicies':True,
       'agentPurchaseIntents':True,
       'subscriptionDefault':'BLOCKED',
