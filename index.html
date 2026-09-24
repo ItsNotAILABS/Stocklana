@@ -16,6 +16,7 @@
       <button class="active" data-nav="home">⌂ Home</button>
       <button data-nav="markets">◫ Invest</button>
       <button data-nav="lab">◇ Markets</button>
+      <button data-nav="wallet">◉ Wallet</button>
       <button data-nav="vault">▣ Money</button>
       <button data-nav="credit">↯ Credit</button>
       <button data-nav="agents">◈ Agent</button>
@@ -220,6 +221,51 @@
         </div>
       </section>
 
+
+
+      <section class="view" id="view-wallet">
+        <div class="section-head">
+          <div><span class="kicker">CONNECTED WALLET</span><h2>Your Phantom lives inside Stocklana.</h2></div>
+          <div class="wallet-toolbar"><button class="mini" id="walletRefreshBtn">↻ Refresh</button><button class="mini" id="walletCopyBtn">Copy address</button></div>
+        </div>
+        <p class="section-copy">Stocklana reads your connected Solana wallet directly. Your keys stay in Phantom; balances, PreStocks holdings and wallet actions are surfaced here so the wallet feels native to the app.</p>
+
+        <div class="wallet-shell-card">
+          <div class="wallet-identity-block">
+            <div class="wallet-provider-mark">P</div>
+            <div><span id="walletProviderLabel">Phantom / Solana</span><b id="walletAddressFull">Not connected</b><small id="walletSessionState">Connect to activate your Stocklana wallet workspace.</small></div>
+            <button class="primary" id="walletConnectCenterBtn">Connect Phantom</button>
+          </div>
+          <div class="wallet-balance-grid">
+            <article><span>SOL</span><b id="walletSolBalance">—</b><small>Native network balance</small></article>
+            <article><span>USDC</span><b id="walletUsdcBalance">—</b><small>Ready for PreStocks + markets</small></article>
+            <article><span>PreStocks held</span><b id="walletPrestockCount">—</b><small>Eligible pre-IPO assets detected</small></article>
+            <article><span>Stocklana vault</span><b id="walletVaultBalance">—</b><small>Internal spend / collateral balance</small></article>
+          </div>
+          <div class="wallet-quick-actions">
+            <button class="primary" id="walletBuyPrestockBtn">Buy PreStock</button>
+            <button class="ghost" id="walletDepositCenterBtn">Move USDC into Stocklana</button>
+            <button class="ghost" id="walletSendCenterBtn">Send</button>
+            <button class="ghost" id="walletExplorerBtn">View on Solana</button>
+          </div>
+        </div>
+
+        <div class="wallet-columns">
+          <section class="home-panel">
+            <div class="panel-head"><div><span class="kicker">PRESTOCKS IN YOUR WALLET</span><h2>Holdings</h2></div><span class="helper">Read directly from Solana token accounts.</span></div>
+            <div id="walletPrestockHoldings" class="wallet-holdings"><div class="empty-card">Connect Phantom to read holdings.</div></div>
+          </section>
+          <section class="home-panel">
+            <div class="panel-head"><div><span class="kicker">WALLET → STOCKLANA</span><h2>Use what you already own</h2></div></div>
+            <div class="wallet-flow-list">
+              <button data-wallet-route="markets"><span>01</span><div><b>Trade PreStocks</b><small>Use wallet USDC through the existing Jupiter execution rail.</small></div><i>→</i></button>
+              <button data-wallet-route="lab"><span>02</span><div><b>Enter payoff games</b><small>Fund collateral from the same connected wallet.</small></div><i>→</i></button>
+              <button data-wallet-route="credit"><span>03</span><div><b>Use collateral</b><small>Keep wallet signing local while Stocklana builds the route.</small></div><i>→</i></button>
+              <button data-wallet-route="agents"><span>04</span><div><b>Fund an agent safely</b><small>Delegate bounded purchasing power, never your private key.</small></div><i>→</i></button>
+            </div>
+          </section>
+        </div>
+      </section>
 
       <section class="view" id="view-vault">
         <div class="section-head"><div><span class="kicker">STOCKLANA VAULT</span><h2>Money stays useful inside the market</h2></div></div>
