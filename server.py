@@ -52,12 +52,35 @@ def normalized_live_assets():
 
 def ensure_seed_markets():
     existing={m['id'] for m in market_store.list_markets()}
-    for i,t in enumerate(market_catalog.templates(SNAPSHOT)[:96]):
+    catalog=market_catalog.templates(SNAPSHOT)
+    for i,t in enumerate(catalog[:96]):
         mid=f'seed_{i+1:03d}'
         if mid in existing: continue
         try:
             market_store.create_market({**t,'id':mid,'resolveAt':'2027-06-30','liquidity':1000,'creator':'stocklana.market.factory','feeBps':100})
         except Exception: pass
+    # Keep a playable shelf of easy-to-understand games live even when the
+    # legacy 96-market seed is dominated by valuation/price ladders.
+    featured=('gain_game','downside_shield','margin_duel','green_majority','leader','price_zone')
+    for family in featured:
+        picks=[x for x in catalog if x.get('family')==family][:4]
+        for j,t in enumerate(picks,1):
+            mid=f'game_{family}_{j:02d}'
+            if mid in existing: continue
+            try:
+                market_store.create_market({**t,'id':mid,'resolveAt':'2027-06-30','liquidity':0,'creator':'stocklana.game.factory','feeBps':100})
+            except Exception: pass
+
+def featured_games(limit=24,stake=10):
+    families={'gain_game','downside_shield','margin_duel','green_majority','leader','price_zone'}
+    rows=[]
+    for m in market_store.list_markets():
+        if m.get('status')!='OPEN' or m.get('family') not in families: continue
+        yes=simulations.parimutuel_payoff(m.get('yesPool',0),m.get('noPool',0),'YES',stake,m.get('feeBps',100))
+        no=simulations.parimutuel_payoff(m.get('yesPool',0),m.get('noPool',0),'NO',stake,m.get('feeBps',100))
+        rows.append({**m,'game':{'family':m.get('family'),'stakePreviewUSDC':stake,'yes':yes,'no':no}})
+    rows.sort(key=lambda x:(0 if str(x.get('id','')).startswith('game_') else 1,-float(x.get('volume',0))))
+    return rows[:int(limit)]
 
 class Handler(SimpleHTTPRequestHandler):
     def translate_path(self,path):
@@ -129,6 +152,10 @@ class Handler(SimpleHTTPRequestHandler):
         if path=='/api/config': return self.send_json({'network':'solana-mainnet','vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'programId':PROGRAM_ID or None,'programDeployed':bool(PROGRAM_ID),'rpcConfigured':bool(SOLANA_RPC),'rpcUrl':SOLANA_RPC})
         if path=='/api/health': return self.send_json({'ok':True,'service':'stocklana','mode':'market-clearing-vault','marketLifecycle':['create','quote','trade','transfer-position','resolve','redeem'],'finance':['vault','internal-transfer','receipts','onramp-routing'],'crypto':pq_crypto.public_metadata()})
         if path=='/api/systems': return self.send_json({'count':9,'systems':[{'id':'markets','name':'PreStocks Market Factory','status':'active'},{'id':'clearing','name':'PARRALAX-derived Clearing Layer','status':'active'},{'id':'vault','name':'Stocklana Vault','status':'active'},{'id':'accounting','name':'Double-entry Financial Token Digest','status':'active'},{'id':'token-profiles','name':'V2 Token-2022 Financial Receipts','status':'wallet-signature-ready'},{'id':'solana','name':'Solana Wallet Rail','status':'client-ready'},{'id':'launcher','name':'Launch Router','status':'active'},{'id':'oracle','name':'Settlement Oracle','status':'adapter-ready'},{'id':'proof','name':'Phantasma PQ Receipts','status':'active'}]})
+        if path=='/api/games':
+            stake=float((qs.get('stake') or ['10'])[0]); limit=int((qs.get('limit') or ['24'])[0])
+            games=featured_games(limit,max(1,stake))
+            return self.send_json({'count':len(games),'stakePreviewUSDC':max(1,stake),'games':games})
         if path=='/api/v2/home':
             live=normalized_live_assets(); ms=market_store.list_markets();
             payload={'version':'2.0','network':'solana-mainnet','actions':['BUY','AUTO_INVEST','BORROW','PLAY_MARKET','SEND','SPEND','AGENT','LAUNCH'],'equities':live[:8],'marketCount':len(ms),'agentVaultCount':len(agent_vault.list_agent_vaults()),'financialTokenStandard':'TOKEN_2022','accounting':accounting_tokens.snapshot().get('invariants',{})}
