@@ -331,7 +331,7 @@ class Handler(SimpleHTTPRequestHandler):
                     issuance=card_rail.issue_virtual(who,policy['id'])
                     intent=commerce.mark_funded(who,intent['id'],'stocklana-vault')
                     out=commerce.attach_card(who,intent['id'],policy,issuance)
-                    if agent_id: out['agentCommerce']=agent_vault.record_commerce(agent_id,who,intent['id'],intent['merchantHost'],amount)
+                    if agent_id: out['agentCommerce']=agent_vault.reserve_commerce(agent_id,who,intent['id'],intent['merchantHost'],amount,True if not (rec and rec.get('kind')=='agent') else False)
                     return self.send_json(out,201)
                 return self.send_json({'intent':intent,'vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'requiresWalletTransfer':True,'agentAuthorization':agent_authz},201)
             if p=='/api/commerce/conversion':
@@ -346,8 +346,41 @@ class Handler(SimpleHTTPRequestHandler):
                 policy=card_rail.create_policy(who,intent['maxAmountUSDC'],intent['merchantHost'],payload.get('mcc'),max(60,int(intent['expiresAt']-int(time.time()))))
                 issuance=card_rail.issue_virtual(who,policy['id'])
                 out=commerce.attach_card(who,intent['id'],policy,issuance); out['chainProof']=proof
-                if intent.get('agentId'): out['agentCommerce']=agent_vault.record_commerce(intent['agentId'],who,intent['id'],intent['merchantHost'],intent['maxAmountUSDC'])
+                if intent.get('agentId'): out['agentCommerce']=agent_vault.reserve_commerce(intent['agentId'],who,intent['id'],intent['merchantHost'],intent['maxAmountUSDC'],True)
                 return self.send_json(out,201)
+            if p=='/api/commerce/cancel':
+                who=self.trader(payload=payload); intent=commerce.get_intent(who,payload.get('intentId')); policy=None
+                if intent.get('cardPolicyId'): policy=card_rail.cancel(who,intent['cardPolicyId'])
+                out=commerce.mark_cancelled(who,intent['id'],policy,payload.get('reason','USER_CANCELLED'))
+                if intent.get('agentId'): out['agentCommerceRelease']=agent_vault.release_commerce(intent['agentId'],who,intent['id'],out.get('cancelReason'))
+                out['accountingReceipt']=finance_store.record_system_event('commerce_cancel',who,{'intentId':intent['id'],'policyId':intent.get('cardPolicyId'),'reason':out.get('cancelReason')})
+                return self.send_json(out)
+            if p=='/api/commerce/provider/capture':
+                expected=os.getenv('CARD_ISSUER_WEBHOOK_TOKEN',''); supplied=self.headers.get('X-Stocklana-Card-Webhook','')
+                if not expected: return self.send_json({'error':'card_webhook_not_configured'},503)
+                if not secrets.compare_digest(supplied,expected): return self.send_json({'error':'card_webhook_unauthorized'},401)
+                intent=commerce.get_intent_by_id(payload.get('intentId'))
+                if not intent.get('cardPolicyId'): raise ValueError('purchase_policy_missing')
+                policy=card_rail.capture(intent['user'],intent['cardPolicyId'],payload.get('amount'),payload.get('providerReceipt') or payload.get('providerEventId'))
+                out=commerce.mark_captured(intent['user'],intent['id'],policy,payload.get('providerEventId'))
+                if intent.get('agentId'):
+                    try: out['agentCommerce']=agent_vault.record_commerce(intent['agentId'],intent['user'],intent['id'],intent['merchantHost'],policy.get('capturedUSDC'))
+                    except Exception as e:
+                        out['agentCommerceReconciliationRequired']=True
+                        out['agentCommerceError']=str(e)
+                        finance_store.record_system_event('agent_commerce_reconciliation_required',intent['user'],{'intentId':intent['id'],'agentId':intent.get('agentId'),'error':str(e)})
+                out['accountingReceipt']=finance_store.record_system_event('commerce_capture',intent['user'],{'intentId':intent['id'],'policyId':intent['cardPolicyId'],'capturedUSDC':policy.get('capturedUSDC'),'providerReceiptCommitment':policy.get('providerReceiptCommitment')})
+                return self.send_json(out)
+            if p=='/api/commerce/provider/void':
+                expected=os.getenv('CARD_ISSUER_WEBHOOK_TOKEN',''); supplied=self.headers.get('X-Stocklana-Card-Webhook','')
+                if not expected: return self.send_json({'error':'card_webhook_not_configured'},503)
+                if not secrets.compare_digest(supplied,expected): return self.send_json({'error':'card_webhook_unauthorized'},401)
+                intent=commerce.get_intent_by_id(payload.get('intentId')); policy=None
+                if intent.get('cardPolicyId'): policy=card_rail.cancel(intent['user'],intent['cardPolicyId'])
+                out=commerce.mark_cancelled(intent['user'],intent['id'],policy,payload.get('reason','PROVIDER_VOID'))
+                if intent.get('agentId'): out['agentCommerceRelease']=agent_vault.release_commerce(intent['agentId'],intent['user'],intent['id'],out.get('cancelReason'))
+                out['accountingReceipt']=finance_store.record_system_event('commerce_void',intent['user'],{'intentId':intent['id'],'policyId':intent.get('cardPolicyId'),'reason':out.get('cancelReason')})
+                return self.send_json(out)
             if p=='/api/commerce/open':
                 who=self.trader(payload=payload); return self.send_json(commerce.mark_opened(who,payload.get('intentId')))
             if p=='/api/prestocks/order':
@@ -385,7 +418,7 @@ class Handler(SimpleHTTPRequestHandler):
             if p=='/api/pay/cashout': return self.send_json(payment_fabric.cashout_intent(self.trader(payload=payload),payload.get('amount'),payload.get('destinationType'),payload.get('destinationRef')),201)
             if p=='/api/card/policy': return self.send_json(card_rail.create_policy(self.trader(payload=payload),payload.get('amount'),payload.get('merchant'),payload.get('mcc'),payload.get('ttl',900)),201)
             if p=='/api/card/issue': return self.send_json(card_rail.issue_virtual(self.trader(payload=payload),payload.get('policyId')))
-            if p=='/api/card/capture': return self.send_json(card_rail.capture(self.trader(payload=payload),payload.get('policyId'),payload.get('amount'),payload.get('providerReceipt')))
+            if p=='/api/card/capture': return self.send_json({'error':'provider_capture_only_use_commerce_webhook'},403)
             if p=='/api/card/cancel': return self.send_json(card_rail.cancel(self.trader(payload=payload),payload.get('policyId')))
             if p=='/api/lending/fund': return self.send_json(lending.fund_pool(self.trader(payload=payload),payload.get('amount')))
             if p=='/api/lending/quote': return self.send_json(lending.quote(payload.get('collateral'),payload.get('borrow'),payload.get('aprBps',900),payload.get('days',30)))
