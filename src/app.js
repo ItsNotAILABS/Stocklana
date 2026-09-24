@@ -193,7 +193,7 @@ function refreshCommercePrestocks(){
 function startSpendFromPrestock(symbol){
  navigate('commerce');setTimeout(()=>{const f=$('#commerceFunding'),p=$('#commercePrestock');if(f)f.value='PRESTOCK_TO_USDC';refreshCommercePrestocks();if(p)p.value=symbol;loadFundingPlan();$('#commerceUrl')?.focus()},60)
 }
-async async function loadFundingPlan(){
+async function loadFundingPlan(){
  const box=$('#commerceFundingPlan');if(!box)return;
  if(!sessionToken||!wallet?.publicKey||!lastWalletPortfolio){box.innerHTML='<small>Connect Phantom and enter an amount to see live funding routes.</small>';return}
  const amount=Number($('#commerceAmount')?.value||0);if(amount<=0){box.innerHTML='<small>Enter a purchase amount.</small>';return}
