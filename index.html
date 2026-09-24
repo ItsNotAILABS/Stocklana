@@ -393,6 +393,26 @@
       <section class="view" id="view-agents">
         <div class="section-head"><div><span class="kicker">AGENT NETWORK</span><h2>100 governed financial actors</h2></div><button class="mini" id="agentRefresh">Refresh proof</button></div>
         <p class="section-copy">Every agent owns a scoped Agent Vault, spend policy, connector set, reconciliation state and Phantasma PQ identity. The seven-day regression run exercises the same market/payment modules used by the app.</p>
+        <div class="agent-commerce-setup" id="agentCommerceSetup">
+          <div class="agent-commerce-copy">
+            <span class="kicker">BUILD YOUR SHOPPING AGENT</span>
+            <h3>Give an AI purchasing power without giving it your wallet.</h3>
+            <p>Create an owner-linked Agent Vault, restrict it to merchants you choose, cap each purchase and each day, then issue a one-time-view capability token for the agent runtime.</p>
+          </div>
+          <div class="agent-policy-form">
+            <label>Agent ID<input id="agentCreateId" placeholder="my-shopping-agent" maxlength="64"></label>
+            <label>Name<input id="agentCreateName" placeholder="Procurement Agent" maxlength="80"></label>
+            <label>Daily budget<input id="agentDailyLimit" type="number" min="1" step="1" value="300"></label>
+            <label>Per purchase<input id="agentSingleLimit" type="number" min="1" step="1" value="100"></label>
+            <label>Ask me above<input id="agentApprovalLimit" type="number" min="0" step="1" value="75"></label>
+            <label class="span-2">Allowed merchants<input id="agentMerchants" placeholder="amazon.com, bestbuy.com"></label>
+            <label class="toggle-line span-2"><input id="agentSubscriptions" type="checkbox"> Allow subscriptions (off by default)</label>
+            <div class="agent-policy-actions span-2"><button class="primary" id="agentCreateBtn">Create shopping agent</button><button class="ghost" id="agentCapabilityBtn" disabled>Issue commerce capability</button><button class="ghost" id="agentUseShopBtn" disabled>Use in Shop</button></div>
+            <div id="agentCapabilityResult" class="agent-capability-result span-2"></div>
+          </div>
+        </div>
+        <div class="section-head compact"><div><span class="kicker">YOUR AGENTS</span><h2>Owner-linked runtimes</h2></div></div>
+        <div id="myAgentGrid" class="my-agent-grid"><div class="empty-card">Connect Phantom to load your agents.</div></div>
         <div class="metric-row agent-metrics" id="agentWeekMetrics"><div><b>100</b><span>Agents</span></div><div><b>700</b><span>Sessions</span></div><div><b>0</b><span>Unexpected failures</span></div></div>
         <div class="asset-grid" id="agentGrid"></div>
       </section>
