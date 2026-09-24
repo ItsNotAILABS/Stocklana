@@ -1,0 +1,427 @@
+{
+  "accounts": {
+    "alice": {
+      "balances": {
+        "SOL": 0.0,
+        "USDC": 959.5999999999999
+      },
+      "createdAt": 1790229684957,
+      "locked": {},
+      "subaccounts": {
+        "CASH": {
+          "USDC": 959.5999999999999
+        },
+        "RESERVE": {
+          "USDC": 0.0
+        },
+        "TRADING": {
+          "USDC": 0.0
+        }
+      },
+      "user": "alice"
+    },
+    "bob": {
+      "balances": {
+        "SOL": 0.0,
+        "USDC": 10.0
+      },
+      "createdAt": 1790229685149,
+      "locked": {},
+      "subaccounts": {
+        "CASH": {
+          "USDC": 10.0
+        },
+        "RESERVE": {
+          "USDC": 0.0
+        },
+        "TRADING": {
+          "USDC": 0.0
+        }
+      },
+      "user": "bob"
+    },
+    "stocklana:fees": {
+      "balances": {
+        "SOL": 0.0,
+        "USDC": 0.4
+      },
+      "createdAt": 1790229685136,
+      "locked": {},
+      "subaccounts": {
+        "CASH": {
+          "USDC": 0.4
+        },
+        "RESERVE": {
+          "USDC": 0.0
+        },
+        "TRADING": {
+          "USDC": 0.0
+        }
+      },
+      "user": "stocklana:fees"
+    },
+    "stocklana:market:mkt_0688716e7eb6:escrow": {
+      "balances": {
+        "SOL": 0.0,
+        "USDC": 15.0
+      },
+      "createdAt": 1790229823425,
+      "locked": {},
+      "subaccounts": {
+        "CASH": {
+          "USDC": 15.0
+        },
+        "RESERVE": {
+          "USDC": 0.0
+        },
+        "TRADING": {
+          "USDC": 0.0
+        }
+      },
+      "user": "stocklana:market:mkt_0688716e7eb6:escrow"
+    },
+    "stocklana:market:mkt_d40824ca574d:escrow": {
+      "balances": {
+        "SOL": 0.0,
+        "USDC": 15.0
+      },
+      "createdAt": 1790229685086,
+      "locked": {},
+      "subaccounts": {
+        "CASH": {
+          "USDC": 15.0
+        },
+        "RESERVE": {
+          "USDC": 0.0
+        },
+        "TRADING": {
+          "USDC": 0.0
+        }
+      },
+      "user": "stocklana:market:mkt_d40824ca574d:escrow"
+    }
+  },
+  "depositRefs": {},
+  "encryptedJournal": [
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF8xMjM4ZjQ1MjBkZmUxNTQzYWJiYg==",
+      "ciphertext": "VjTskj5xizCy5ZthQIiAYX33AyFKOgB85QvDT0wF6VeYeAzi9dpBSeKy79Lgj+R6sGTpZSNtxGcX76N9rUqHabUCs4ZG8iGYx2aRcP1ji9IHPhkxYtU=",
+      "commitment": "21bb2a637ccea47022c5bdc8c60768ae3c4bf745e4ab44aecad18be86166c7a1f1bc2e3059627f9f18c64742bd89b579bda438faeb3e1e6b4a1c35262e7f8c0a",
+      "nonce": "YaISV7YFO+IlZmWM",
+      "receiptId": "rcpt_1238f4520dfe1543abbb",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF9hOGFjYzFkM2NiNDAxM2I2YTMyYQ==",
+      "ciphertext": "8EtjBdZUef32N/NdDbuVJZSJXiufcVzk9VCYcWt7UTJgWhS/yNJbGkOHt9cAh+1eddVResNY+1ZEez2SWb/QSXAD7QJ3BX7g3la5KGLEzTi2Rd8R6naDDi6UbQvtY0WanFzicKRPc3gL9kF6xfhLxoy8O+60ZNvE80DbbRB0NNxaHKKm4j7Qq3vBvTZYpkbRZCDfpDthMjcS8lK3yzLP8SqKJc5/Q3gS+BPQO22ttIDRa7Ll72uiNGj7FJ4xgeq/ztFeVjB0E+ynomAm3Ftxm30hH388MVn/PO4V+1BDYQ==",
+      "commitment": "50db3c68fa2dc517c95a423061fb664cb57ed90bc0e300439a00a9af2cdc5edac1b5d4e52184c17a710252e8c3bedf4a419ab1fb3e88f98973e70bf6c84231d8",
+      "nonce": "FWntGmZiUYaHRsXP",
+      "receiptId": "rcpt_a8acc1d3cb4013b6a32a",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF9mYjJkMGNiZGNiOTUwMDY0ZThjMA==",
+      "ciphertext": "XGpmDSTfVSQuvcBEQCnOhhMMMBQv2yY4T8uwTfxpWWP4fTlE/JkyfRbyamrxaXH2AnKDiYiJh1f61MMTMgIRddcT3pvvQWYkUluYHMAe/JvbjIhxGLT8yU1Zq5a3R5MnZdXiDLHzMNlNviQs84nnnde04mFGuIU9oHiuoDSwjEdd1Lj3DL3BwwPMWbkoAdR7d4yev+wpcNaBdqq+FSRuXF4wFPyM/sooX2F4BJWRhKr87Yi0OdnImI+ab0Qy",
+      "commitment": "c6bf23291b42857162bde44025756e2b728b03b7adc0f0f7d315fcb86ea1bb76f367f85e75b88397dc3b34b1e0ccd43b112c2c254fd20e4d6eb3149516159638",
+      "nonce": "vI6TElrfF8BI1MC9",
+      "receiptId": "rcpt_fb2d0cbdcb950064e8c0",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF9kMTIyMmRkYzg4NTAzNmUzYWU1MA==",
+      "ciphertext": "rnPW34W3pKF9Tj0EvP9hPAfjCohrkaVPGYnNRkGyN4IaprGQ0Wl7kdRhgDRKGpJ1GCJMRoEX1eR5LgpXjWkIsPc/wgg+1M01wBPZJHY2DEVyC4gnj8/biuSwbUREuwjEvqOypcsVD08B8Qltk60d1YrMR8d+xWUXfs3vEr9HsZDegYPziqoXh6A11q3wrXXE6+l9WqUMW4BYh3U8EaIWBKCYYVM62pYIA5M=",
+      "commitment": "e08fe2f1d63a65ca07ad362424f4110e8b8ab1720b82c397581eb6af4708ca00a697414fbcf3142e42b4e3c7ad345ef73104c884209db4c7eaa45ab113606bba",
+      "nonce": "QkzNzDgOyHeNPZNc",
+      "receiptId": "rcpt_d1222ddc885036e3ae50",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF83NDc3OGM1MTFiMDI5YjY2ZTM4Yw==",
+      "ciphertext": "ZwykjYQ1RPrc9p/5d2yQEdR2oPdo3c07kVZBlAxkEzb6O7h+kPKxzJa5f5aTgXtUnIN/UHrnEfa/r/wa7AzcUKHW9xNb8rmQF4vyzB2KDigCq3gs7/L0wFxQGTvxJEYRHv5SKiHG+u9CGSv6WuQcivItFE7AueJuO9acB2cjI3VmlqWNjryEMPTcDba0f8JEo9V0r6PNri9smUSbg5/0Yw4m/k/4EJoh4HL9Rox2NZAnBock5cFD/Bl5TbUPil/04Kstau+Sq3tg/bMRWZtEglbrxu+sm38rXCdRBA==",
+      "commitment": "69a15a61ab0495cb1a28f4e9de833bd7783c37f77c1582a6e9b1cf2c466034730ec058dc5753f8754f0daaee138d9e4f0f745a9f6610baf2650c3e79e9685e5e",
+      "nonce": "uUV7OX9Jd0omUz0r",
+      "receiptId": "rcpt_74778c511b029b66e38c",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF8zZjcyNWU0OWJhMTU3ZGNhMWNmYg==",
+      "ciphertext": "dVVdiuItosXiWxG4iTf5y6dsPOpkX7YtCo0L1AVxuZYj6Rmkgswtx6OrCjlEre6+FlCH3Bcy6OarQU3tFp+ejZToXaXi3/BwfhQBdci0x39enwySzw8=",
+      "commitment": "21bb2a637ccea47022c5bdc8c60768ae3c4bf745e4ab44aecad18be86166c7a1f1bc2e3059627f9f18c64742bd89b579bda438faeb3e1e6b4a1c35262e7f8c0a",
+      "nonce": "/4f65LqNed1+2/A4",
+      "receiptId": "rcpt_3f725e49ba157dca1cfb",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF9iYmY0NTY4NWQwNTQ1MDAzNGNkZA==",
+      "ciphertext": "nG/UKn9yZYzLniyYVy53P1c0KJ4MSuf+Wwer0WWohuS7FpYJPezUm6/dIBr4q8TchXt7BfxaJbBneexs04xt8Z6txYN8b16Sp/2ertOlsk+DJM3iMDbCBGUFmUp7xtthdVhton/9TzZG8VPS5uzxiDJsWcss4QzMEwN01gCYzUGRcyD4CUwAl0ND2yDTqfxge8aiTKjSbJJmjaLMROO9JTVIbDP+bnPyhlFlRKfjKkVlDT0L6X8bIU8TBrHR7KnOK3APQXu6bqrpYvtvxOuAE7e8wAAYDDZsJ/4EmYEnOQ==",
+      "commitment": "65d193288d89808811a6cca44f597cbbbe872b1e1b700eddb29554daf5a7d30ef7cad74acbe60405d6de6b1bfafdfa896edd3ec29fd1149a0318428843766ca2",
+      "nonce": "z1cK6pqIU+URGkKb",
+      "receiptId": "rcpt_bbf45685d05450034cdd",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF9hYWNjZDBmNzkwZWU2NTc4MTU5Mg==",
+      "ciphertext": "bSG5lbionNs+NscMtJULamyoCAPM6hNQMV7qIfZJzNFIEcqb++liWQ1DCpaljcGZWdDUSA7fBYOBKIBxvud1iuVbF0fwL/9Jg8nAgdUEAcBJHbSzZnZxwGIxF8/XZMcl0PVwFa6qPiIwDfkVNVO2zlm/Y1b8NHa490/JC7cua9YWd1auV+3Xyh4kQDjDHERfmTb45iYr6ERwtdlHABqQ+KW0rgRBb4I7/70VVnBAn16EutRUgnYQm3Rk6CiW",
+      "commitment": "755c36a5b7bd97593bfe9702f579d1a172c80733ffb2c0727d5b958bd1120e363eff370cdbfbb77f84751f782f681f8faba70946cf541c13c92a24ff4d1b648d",
+      "nonce": "gdvvKFsh4GycvNxk",
+      "receiptId": "rcpt_aaccd0f790ee65781592",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF81ODhlNjE0MjQ2YzhjOTNhMGM4Mw==",
+      "ciphertext": "ngzKncTxFXCFea0Y+37D/vK+Ee/8tFnMVx6AXyGBBlCjjY14SjiPsuCksLcDKZ8iubt7WY6WMeTU+z9ZJ7cuTirnfdw6zavO/u8s3OKALDaoLT+zAXfV/vQ10obrVnf39+0tEe1UD0GpI45s4SUCjbSzQ102/QBxrPld5weXegDYaIo9tcXqMhChE6GPPa9HKi3ZBOIcuPA1gHYHrFpPauNG1RhZkfACNbw=",
+      "commitment": "16db422d0743e36a4347dc2a02cd7d01ac5bf4312d40687c0db0d134d6060e22182f750d53cde1b6c393c2455fe33fe697b9b28ba8c6de6446e7edbb7e1c536f",
+      "nonce": "JciPWVdSIPwjh+B+",
+      "receiptId": "rcpt_588e614246c8c93a0c83",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    },
+    {
+      "aad": "U1RPQ0tMQU5BLUpPVVJOQUwtVjM6cmNwdF82YzgzN2I0ODllOWYyZGFhZjMzNg==",
+      "ciphertext": "Pm64EyHI3fTN6yf3qJRyyeaDeDubAXFYbAVuuI3dh5VGGraufGDhZPuLlZ0M6+QY9W34O2R9lB7o+oVzqsGyk1M7wbh4wsTKpl3IlKzh0na6FG+bPYXY5zzM5tfBbyILnsF1ui/IaTvCOJe2Ue7FoJ6Rq6e6OpvZHNt5TH/ZZSWYzb5ZCKWjTzWrBVivVVBHJDTFEmyYSXCUaS/wewKnXRNqR24ceJF20vkyRNk7Ns69jEuUrV5bQiWiVUQmT4SM6RCCPkrx3xTDXbZHc1CW8JDXIlUV1bsFaQXCQg==",
+      "commitment": "b4a313841e5d508a797015f49c17efdec7547b4c37d1dd2bab8888920228cf2cb8bce83510d80b23fdd211bfe6cf9129778934d69b1992c62da3f6b31656b974",
+      "nonce": "pAetXiJx2Q2liPnK",
+      "receiptId": "rcpt_6c837b489e9f2daaf336",
+      "suite": "ML-KEM-768+X25519-wrapped-DEK/AES-256-GCM",
+      "version": 3
+    }
+  ],
+  "pendingWithdrawals": {},
+  "positionTransfers": [
+    {
+      "at": 1790229685144,
+      "id": "ptx_5dbd6008a17d",
+      "marketId": "mkt_d40824ca574d",
+      "recipient": "bob",
+      "sender": "alice",
+      "shares": 5.0,
+      "side": "YES",
+      "status": "SETTLED"
+    },
+    {
+      "at": 1790229823473,
+      "id": "ptx_d50e19d29526",
+      "marketId": "mkt_0688716e7eb6",
+      "recipient": "bob",
+      "sender": "alice",
+      "shares": 5.0,
+      "side": "YES",
+      "status": "SETTLED"
+    }
+  ],
+  "pqAnchors": [],
+  "receiptHead": "6c837b489e9f2daaf336a554458c16653789d8846795e64f2c0ba07b3ac1567b4da3c4d71a0f34acd300724169db2acf995df3de462f33d0063bfdebc5985839",
+  "receiptSequence": 10,
+  "receipts": [
+    {
+      "actor": "alice",
+      "at": 1790229684957,
+      "commitment": "1238f4520dfe1543abbb9c37b242ae9ed9a3c59adf9aefe99dc06a08f8fda26b82af0ddd61c9033f2ee16042ad169d8d625d9b820333983cfc6cd77dd04a7adf",
+      "id": "rcpt_1238f4520dfe1543abbb",
+      "kind": "vault_credit",
+      "payloadCommitment": "21bb2a637ccea47022c5bdc8c60768ae3c4bf745e4ab44aecad18be86166c7a1f1bc2e3059627f9f18c64742bd89b579bda438faeb3e1e6b4a1c35262e7f8c0a",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 1,
+      "signature": null
+    },
+    {
+      "actor": "alice",
+      "at": 1790229685086,
+      "commitment": "a8acc1d3cb4013b6a32aa57759fbffb2a4a4511e254c2d659d9e715c68361ff5a60db7546aa31c9374e54308e79cce7468fc1b2b41bcfad64bb717f82dd2edf7",
+      "id": "rcpt_a8acc1d3cb4013b6a32a",
+      "kind": "internal_transfer",
+      "payloadCommitment": "50db3c68fa2dc517c95a423061fb664cb57ed90bc0e300439a00a9af2cdc5edac1b5d4e52184c17a710252e8c3bedf4a419ab1fb3e88f98973e70bf6c84231d8",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "1238f4520dfe1543abbb9c37b242ae9ed9a3c59adf9aefe99dc06a08f8fda26b82af0ddd61c9033f2ee16042ad169d8d625d9b820333983cfc6cd77dd04a7adf",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 2,
+      "signature": null
+    },
+    {
+      "actor": "alice",
+      "at": 1790229685136,
+      "commitment": "fb2d0cbdcb950064e8c0d679b21807bb72ad8759635e0c24539a48d07ae5ebb3de2f56e2c19632314f5b1afd2104e6f11acd3c80fdba239721b870d123e1d0c6",
+      "id": "rcpt_fb2d0cbdcb950064e8c0",
+      "kind": "internal_transfer",
+      "payloadCommitment": "c6bf23291b42857162bde44025756e2b728b03b7adc0f0f7d315fcb86ea1bb76f367f85e75b88397dc3b34b1e0ccd43b112c2c254fd20e4d6eb3149516159638",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "a8acc1d3cb4013b6a32aa57759fbffb2a4a4511e254c2d659d9e715c68361ff5a60db7546aa31c9374e54308e79cce7468fc1b2b41bcfad64bb717f82dd2edf7",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 3,
+      "signature": null
+    },
+    {
+      "actor": "alice",
+      "at": 1790229685144,
+      "commitment": "d1222ddc885036e3ae506a9c93e6b847f185f552229f9e46275268bc73e8c204149e573938f6c90f895356ed9bc467ef7d26199a5ab73a98cd4e27995bf40944",
+      "id": "rcpt_d1222ddc885036e3ae50",
+      "kind": "position_transfer",
+      "payloadCommitment": "e08fe2f1d63a65ca07ad362424f4110e8b8ab1720b82c397581eb6af4708ca00a697414fbcf3142e42b4e3c7ad345ef73104c884209db4c7eaa45ab113606bba",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "fb2d0cbdcb950064e8c0d679b21807bb72ad8759635e0c24539a48d07ae5ebb3de2f56e2c19632314f5b1afd2104e6f11acd3c80fdba239721b870d123e1d0c6",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 4,
+      "signature": null
+    },
+    {
+      "actor": "stocklana:market:mkt_d40824ca574d:escrow",
+      "at": 1790229685149,
+      "commitment": "74778c511b029b66e38caacbdc13d1839b995fc439583737a84fc6893d3be8f4f16e8c2f8f284c23f55501ce02253c17eba5b28f78f5ca62830e1b7c664d6f74",
+      "id": "rcpt_74778c511b029b66e38c",
+      "kind": "internal_transfer",
+      "payloadCommitment": "69a15a61ab0495cb1a28f4e9de833bd7783c37f77c1582a6e9b1cf2c466034730ec058dc5753f8754f0daaee138d9e4f0f745a9f6610baf2650c3e79e9685e5e",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "d1222ddc885036e3ae506a9c93e6b847f185f552229f9e46275268bc73e8c204149e573938f6c90f895356ed9bc467ef7d26199a5ab73a98cd4e27995bf40944",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 5,
+      "signature": null
+    },
+    {
+      "actor": "alice",
+      "at": 1790229823349,
+      "commitment": "3f725e49ba157dca1cfbb2e508ab40e43210e4bb1d9075383d97de23890523f94d2d4f11cc3cc7cb8f65ac09a58421b9653d1a5a7d115bb9b178e2028d578f6c",
+      "id": "rcpt_3f725e49ba157dca1cfb",
+      "kind": "vault_credit",
+      "payloadCommitment": "21bb2a637ccea47022c5bdc8c60768ae3c4bf745e4ab44aecad18be86166c7a1f1bc2e3059627f9f18c64742bd89b579bda438faeb3e1e6b4a1c35262e7f8c0a",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "74778c511b029b66e38caacbdc13d1839b995fc439583737a84fc6893d3be8f4f16e8c2f8f284c23f55501ce02253c17eba5b28f78f5ca62830e1b7c664d6f74",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 6,
+      "signature": null
+    },
+    {
+      "actor": "alice",
+      "at": 1790229823425,
+      "commitment": "bbf45685d05450034cddf5d15b93a91c19a24a8d787b0ff1871ad2440742153435d9687c2fdf3ddd177aedece94b863097cc902506186790a4f0889839ab724d",
+      "id": "rcpt_bbf45685d05450034cdd",
+      "kind": "internal_transfer",
+      "payloadCommitment": "65d193288d89808811a6cca44f597cbbbe872b1e1b700eddb29554daf5a7d30ef7cad74acbe60405d6de6b1bfafdfa896edd3ec29fd1149a0318428843766ca2",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "3f725e49ba157dca1cfbb2e508ab40e43210e4bb1d9075383d97de23890523f94d2d4f11cc3cc7cb8f65ac09a58421b9653d1a5a7d115bb9b178e2028d578f6c",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 7,
+      "signature": null
+    },
+    {
+      "actor": "alice",
+      "at": 1790229823467,
+      "commitment": "aaccd0f790ee657815929f179a3f65626c9952ffa3f6d98e7a1fa68915b46f2e941c86c05f4dd0c507e0098dbcb999ce17ed72a6e7de5c3ba9fdb6848f2166f2",
+      "id": "rcpt_aaccd0f790ee65781592",
+      "kind": "internal_transfer",
+      "payloadCommitment": "755c36a5b7bd97593bfe9702f579d1a172c80733ffb2c0727d5b958bd1120e363eff370cdbfbb77f84751f782f681f8faba70946cf541c13c92a24ff4d1b648d",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "bbf45685d05450034cddf5d15b93a91c19a24a8d787b0ff1871ad2440742153435d9687c2fdf3ddd177aedece94b863097cc902506186790a4f0889839ab724d",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 8,
+      "signature": null
+    },
+    {
+      "actor": "alice",
+      "at": 1790229823473,
+      "commitment": "588e614246c8c93a0c83eeff4bcfcc6bc96014d7abe7cab93a134ff49c6854c12eb4afb78fa467f60e26aaa78041dcf7258019cfd9903189a452b85293c909d4",
+      "id": "rcpt_588e614246c8c93a0c83",
+      "kind": "position_transfer",
+      "payloadCommitment": "16db422d0743e36a4347dc2a02cd7d01ac5bf4312d40687c0db0d134d6060e22182f750d53cde1b6c393c2455fe33fe697b9b28ba8c6de6446e7edbb7e1c536f",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "aaccd0f790ee657815929f179a3f65626c9952ffa3f6d98e7a1fa68915b46f2e941c86c05f4dd0c507e0098dbcb999ce17ed72a6e7de5c3ba9fdb6848f2166f2",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 9,
+      "signature": null
+    },
+    {
+      "actor": "stocklana:market:mkt_0688716e7eb6:escrow",
+      "at": 1790229823478,
+      "commitment": "6c837b489e9f2daaf336a554458c16653789d8846795e64f2c0ba07b3ac1567b4da3c4d71a0f34acd300724169db2acf995df3de462f33d0063bfdebc5985839",
+      "id": "rcpt_6c837b489e9f2daaf336",
+      "kind": "internal_transfer",
+      "payloadCommitment": "b4a313841e5d508a797015f49c17efdec7547b4c37d1dd2bab8888920228cf2cb8bce83510d80b23fdd211bfe6cf9129778934d69b1992c62da3f6b31656b974",
+      "pqFinality": "BATCH_PENDING",
+      "prevCommitment": "588e614246c8c93a0c83eeff4bcfcc6bc96014d7abe7cab93a134ff49c6854c12eb4afb78fa467f60e26aaa78041dcf7258019cfd9903189a452b85293c909d4",
+      "privatePayloadEncrypted": true,
+      "proofSuite": "BLAKE2b-512 chain + ML-DSA-65/Ed25519 anchors",
+      "sequence": 10,
+      "signature": null
+    }
+  ],
+  "transfers": [
+    {
+      "amount": 20.0,
+      "asset": "USDC",
+      "at": 1790229685086,
+      "id": "tx_5676ad3c8b92",
+      "memo": "market collateral mkt_d40824ca574d",
+      "recipient": "stocklana:market:mkt_d40824ca574d:escrow",
+      "sender": "alice",
+      "status": "SETTLED"
+    },
+    {
+      "amount": 0.2,
+      "asset": "USDC",
+      "at": 1790229685136,
+      "id": "tx_07052ee411b6",
+      "memo": "market fee mkt_d40824ca574d",
+      "recipient": "stocklana:fees",
+      "sender": "alice",
+      "status": "SETTLED"
+    },
+    {
+      "amount": 5.0,
+      "asset": "USDC",
+      "at": 1790229685149,
+      "id": "tx_e82c3ddca36d",
+      "memo": "market redemption mkt_d40824ca574d",
+      "recipient": "bob",
+      "sender": "stocklana:market:mkt_d40824ca574d:escrow",
+      "status": "SETTLED"
+    },
+    {
+      "amount": 20.0,
+      "asset": "USDC",
+      "at": 1790229823425,
+      "id": "tx_771559226c64",
+      "memo": "market collateral mkt_0688716e7eb6",
+      "recipient": "stocklana:market:mkt_0688716e7eb6:escrow",
+      "sender": "alice",
+      "status": "SETTLED"
+    },
+    {
+      "amount": 0.2,
+      "asset": "USDC",
+      "at": 1790229823467,
+      "id": "tx_e13bf687ce56",
+      "memo": "market fee mkt_0688716e7eb6",
+      "recipient": "stocklana:fees",
+      "sender": "alice",
+      "status": "SETTLED"
+    },
+    {
+      "amount": 5.0,
+      "asset": "USDC",
+      "at": 1790229823478,
+      "id": "tx_9cb75fc8c9e1",
+      "memo": "market redemption mkt_0688716e7eb6",
+      "recipient": "bob",
+      "sender": "stocklana:market:mkt_0688716e7eb6:escrow",
+      "status": "SETTLED"
+    }
+  ]
+}

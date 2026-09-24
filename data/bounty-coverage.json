@@ -1,0 +1,16 @@
+{
+  "derivatives": ["Relative-return pair contracts", "Valuation-spread contracts"],
+  "defi": ["Meteora DBC stock-quoted liquidity builder", "USDC-backed segregated market clearing vault"],
+  "tools": ["360-instrument market factory", "ISO 20022 payment/clearing translator"],
+  "games": ["Market Leader tournament", "Gain Game / Downside Shield financial games"],
+  "ai_agents": ["Autonomous settlement keeper", "100 policy-scoped Agent Vaults"],
+  "prediction_markets": ["Valuation/price threshold markets", "Price-zone / value-zone event markets"],
+  "social_communities_memes": ["Transferable YES/NO positions to participant identities", "Shareable MAQUE market/payment requests"],
+  "lending_collateral": ["Vault-collateral credit line", "Agent working-capital credit line"],
+  "structured_products": ["Basket threshold contracts", "Dual-underlying joint-outcome contracts"],
+  "launchpads": ["Native MNTY Ethereum + Solana launch sources", "Meteora DBC + optional ClawPump launch adapters"],
+  "automations": ["PreStocks/Pyth automatic settlement", "Automatic vault reconciliation + proof receipt export"],
+  "simulations": ["Payoff/basket scenario engine", "Liquidity/slippage stress engine"],
+  "growth_experiments": ["Referral attribution engine", "Creator fee / revenue-share attribution"],
+  "new": ["MAQUE offline cryptographic payment fabric", "Phantasma PQ human/agent financial identity layer"]
+}

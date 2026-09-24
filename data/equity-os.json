@@ -1,0 +1,189 @@
+{
+  "baskets": {
+    "basket_1ff48714368f49f5": {
+      "createdAt": 1790229681,
+      "executionRail": "JUPITER_SWAP_V2",
+      "id": "basket_1ff48714368f49f5",
+      "members": [
+        {
+          "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+          "symbol": "OPENAI",
+          "weight": 0.4
+        },
+        {
+          "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+          "symbol": "ANTHROPIC",
+          "weight": 0.35
+        },
+        {
+          "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+          "symbol": "FIGUREAI",
+          "weight": 0.25
+        }
+      ],
+      "name": "AI Frontier",
+      "owner": "track-test",
+      "rebalance": "MONTHLY",
+      "type": "INDEX_BASKET"
+    },
+    "basket_c958e48d7e0c4f39": {
+      "createdAt": 1790229754,
+      "executionRail": "JUPITER_SWAP_V2",
+      "id": "basket_c958e48d7e0c4f39",
+      "members": [
+        {
+          "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+          "symbol": "OPENAI",
+          "weight": 0.4
+        },
+        {
+          "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+          "symbol": "ANTHROPIC",
+          "weight": 0.35
+        },
+        {
+          "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+          "symbol": "FIGUREAI",
+          "weight": 0.25
+        }
+      ],
+      "name": "AI Frontier",
+      "owner": "track-test",
+      "rebalance": "MONTHLY",
+      "type": "INDEX_BASKET"
+    }
+  },
+  "corporateActions": {
+    "ca_f46c28b29db74d57": {
+      "createdAt": 1790229681,
+      "effectiveAt": "2026-12-01",
+      "id": "ca_f46c28b29db74d57",
+      "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+      "payload": {
+        "cashPerUnit": 1.25
+      },
+      "source": "ISSUER_OR_PROVIDER",
+      "status": "PENDING",
+      "symbol": "OPENAI",
+      "type": "DIVIDEND"
+    },
+    "ca_f4aa459b6c924218": {
+      "createdAt": 1790229754,
+      "effectiveAt": "2026-12-01",
+      "id": "ca_f4aa459b6c924218",
+      "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+      "payload": {
+        "cashPerUnit": 1.25
+      },
+      "source": "ISSUER_OR_PROVIDER",
+      "status": "PENDING",
+      "symbol": "OPENAI",
+      "type": "DIVIDEND"
+    }
+  },
+  "plans": {
+    "rcb_1b84cdd8912149ab": {
+      "active": true,
+      "cadence": "WEEKLY",
+      "createdAt": 1790229681,
+      "day": null,
+      "executionRail": "JUPITER_SWAP_V2",
+      "id": "rcb_1b84cdd8912149ab",
+      "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+      "owner": "track-test",
+      "requiresWalletAuthorization": true,
+      "symbol": "OPENAI",
+      "type": "RECURRING_BUY",
+      "usdcAmount": 25.0
+    },
+    "rcb_3b07de4e49514095": {
+      "active": true,
+      "cadence": "WEEKLY",
+      "createdAt": 1790229754,
+      "day": null,
+      "executionRail": "JUPITER_SWAP_V2",
+      "id": "rcb_3b07de4e49514095",
+      "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+      "owner": "track-test",
+      "requiresWalletAuthorization": true,
+      "symbol": "OPENAI",
+      "type": "RECURRING_BUY",
+      "usdcAmount": 25.0
+    }
+  },
+  "robo": {
+    "robo_9cdb03e21b4b4a4c": {
+      "allocation": [
+        {
+          "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+          "symbol": "OPENAI",
+          "weight": 0.25
+        },
+        {
+          "mint": "PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh",
+          "symbol": "SPACEX",
+          "weight": 0.25
+        },
+        {
+          "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+          "symbol": "ANTHROPIC",
+          "weight": 0.2
+        },
+        {
+          "mint": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+          "symbol": "ANDURIL",
+          "weight": 0.15
+        },
+        {
+          "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+          "symbol": "FIGUREAI",
+          "weight": 0.15
+        }
+      ],
+      "createdAt": 1790229681,
+      "id": "robo_9cdb03e21b4b4a4c",
+      "monthlyUSDC": 300.0,
+      "owner": "track-test",
+      "rebalance": "MONTHLY",
+      "requiresPolicyScopedAgent": true,
+      "risk": "BALANCED"
+    },
+    "robo_b6b5253b33bb496e": {
+      "allocation": [
+        {
+          "mint": "PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF",
+          "symbol": "OPENAI",
+          "weight": 0.25
+        },
+        {
+          "mint": "PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh",
+          "symbol": "SPACEX",
+          "weight": 0.25
+        },
+        {
+          "mint": "Pren1FvFX6J3E4kXhJuCiAD5aDmGEb7qJRncwA8Lkhw",
+          "symbol": "ANTHROPIC",
+          "weight": 0.2
+        },
+        {
+          "mint": "PresTj4Yc2bAR197Er7wz4UUKSfqt6FryBEdAriBoQB",
+          "symbol": "ANDURIL",
+          "weight": 0.15
+        },
+        {
+          "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
+          "symbol": "FIGUREAI",
+          "weight": 0.15
+        }
+      ],
+      "createdAt": 1790229754,
+      "id": "robo_b6b5253b33bb496e",
+      "monthlyUSDC": 300.0,
+      "owner": "track-test",
+      "rebalance": "MONTHLY",
+      "requiresPolicyScopedAgent": true,
+      "risk": "BALANCED"
+    }
+  },
+  "social": {}
+}
