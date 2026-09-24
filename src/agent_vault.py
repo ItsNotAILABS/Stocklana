@@ -82,14 +82,22 @@ def update_commerce_policy(agent_id,owner,daily_limit=None,single_limit=None,app
     event={'type':'AGENT_COMMERCE_POLICY','agentId':agent_id,'owner':owner,'policy':{k:p[k] for k in ('dailySpendLimitUSDC','singleSpendLimitUSDC','humanApprovalAboveUSDC','allowExternalCommerce','allowedMerchants','allowSubscriptions')},'at':int(time.time())}
     d['vaults'][agent_id]=v;d.setdefault('events',[]).append(event);_save(d);return v
 
-def daily_commerce_spend(agent_id,now=None):
-    now=int(now or time.time()); start=now-86400; total=0.0
+def commerce_usage(agent_id,now=None):
+    now=int(now or time.time()); start=now-86400; spent=0.0; pending={}
     for e in _load().get('events',[]):
-        if e.get('type')=='AGENT_COMMERCE_SPEND' and e.get('agentId')==agent_id and int(e.get('at',0))>=start:
-            total+=float(e.get('amountUSDC',0))
-    return round(total,6)
+        if e.get('agentId')!=agent_id or int(e.get('at',0))<start: continue
+        t=e.get('type'); iid=e.get('intentId')
+        if t=='AGENT_COMMERCE_RESERVED' and iid:
+            pending[iid]=float(e.get('amountUSDC',0))
+        elif t in {'AGENT_COMMERCE_RELEASED','AGENT_COMMERCE_SPEND'} and iid:
+            pending.pop(iid,None)
+        if t=='AGENT_COMMERCE_SPEND': spent+=float(e.get('amountUSDC',0))
+    return {'spentUSDC':round(spent,6),'pendingUSDC':round(sum(pending.values()),6),'pending':pending}
 
-def authorize_commerce(agent_id,owner,merchant_host,amount,subscription=False,human_present=False):
+def daily_commerce_spend(agent_id,now=None):
+    return commerce_usage(agent_id,now)['spentUSDC']
+
+def authorize_commerce(agent_id,owner,merchant_host,amount,subscription=False,human_present=False,exclude_intent_id=None):
     v=get_agent_vault(agent_id)
     if not v or v.get('owner')!=owner: raise ValueError('agent_vault_not_found')
     if v.get('status')!='ACTIVE': raise ValueError('agent_vault_not_active')
@@ -100,12 +108,45 @@ def authorize_commerce(agent_id,owner,merchant_host,amount,subscription=False,hu
     if not allowed or ('*' not in allowed and host not in allowed): raise ValueError('merchant_not_allowed')
     if subscription and not p.get('allowSubscriptions',False): raise ValueError('agent_subscriptions_blocked')
     if amount>float(p.get('singleSpendLimitUSDC',0))+1e-9: raise ValueError('agent_single_spend_limit_exceeded')
-    spent=daily_commerce_spend(agent_id)
-    if spent+amount>float(p.get('dailySpendLimitUSDC',0))+1e-9: raise ValueError('agent_daily_spend_limit_exceeded')
+    usage=commerce_usage(agent_id); pending=float(usage['pendingUSDC'])
+    if exclude_intent_id and exclude_intent_id in usage['pending']: pending-=float(usage['pending'][exclude_intent_id])
+    if usage['spentUSDC']+pending+amount>float(p.get('dailySpendLimitUSDC',0))+1e-9: raise ValueError('agent_daily_spend_limit_exceeded')
     needs=amount>float(p.get('humanApprovalAboveUSDC',0))+1e-9
-    return {'authorized':not needs or bool(human_present),'requiresHumanApproval':needs and not human_present,'humanPresent':bool(human_present),'agentId':agent_id,'merchantHost':host,'amountUSDC':amount,'dailySpentBeforeUSDC':spent,'dailyLimitUSDC':p.get('dailySpendLimitUSDC'),'singleLimitUSDC':p.get('singleSpendLimitUSDC'),'approvalAboveUSDC':p.get('humanApprovalAboveUSDC')}
+    return {'authorized':not needs or bool(human_present),'requiresHumanApproval':needs and not human_present,'humanPresent':bool(human_present),'agentId':agent_id,'merchantHost':host,'amountUSDC':amount,'dailySpentBeforeUSDC':usage['spentUSDC'],'pendingBeforeUSDC':round(max(0.0,pending),6),'dailyLimitUSDC':p.get('dailySpendLimitUSDC'),'singleLimitUSDC':p.get('singleSpendLimitUSDC'),'approvalAboveUSDC':p.get('humanApprovalAboveUSDC')}
+
+def reserve_commerce(agent_id,owner,intent_id,merchant_host,amount,human_present=False):
+    d=_load()
+    for e in reversed(d.get('events',[])):
+        if e.get('agentId')==agent_id and e.get('intentId')==intent_id and e.get('type')=='AGENT_COMMERCE_RESERVED':
+            return {**e,'duplicate':True}
+        if e.get('agentId')==agent_id and e.get('intentId')==intent_id and e.get('type') in {'AGENT_COMMERCE_SPEND','AGENT_COMMERCE_RELEASED'}:
+            break
+    authz=authorize_commerce(agent_id,owner,merchant_host,amount,False,human_present)
+    e={'type':'AGENT_COMMERCE_RESERVED','agentId':agent_id,'owner':owner,'intentId':intent_id,'merchantHost':_merchant(merchant_host),'amountUSDC':float(amount),'at':int(time.time())}
+    d.setdefault('events',[]).append(e);_save(d);return {**e,'authorization':authz}
+
+def release_commerce(agent_id,owner,intent_id,reason='CANCELLED'):
+    d=_load(); found=None
+    for e in reversed(d.get('events',[])):
+        if e.get('agentId')==agent_id and e.get('intentId')==intent_id:
+            if e.get('type')=='AGENT_COMMERCE_RELEASED': return {**e,'duplicate':True}
+            if e.get('type')=='AGENT_COMMERCE_SPEND': raise ValueError('agent_commerce_already_captured')
+            if e.get('type')=='AGENT_COMMERCE_RESERVED': found=e; break
+    if not found: return {'type':'AGENT_COMMERCE_RELEASED','agentId':agent_id,'owner':owner,'intentId':intent_id,'amountUSDC':0.0,'reason':'NO_RESERVATION','duplicate':True}
+    e={'type':'AGENT_COMMERCE_RELEASED','agentId':agent_id,'owner':owner,'intentId':intent_id,'merchantHost':found.get('merchantHost'),'amountUSDC':float(found.get('amountUSDC',0)),'reason':str(reason)[:80],'at':int(time.time())}
+    d.setdefault('events',[]).append(e);_save(d);return e
 
 def record_commerce(agent_id,owner,intent_id,merchant_host,amount):
-    authz=authorize_commerce(agent_id,owner,merchant_host,amount,False,True)
-    d=_load();e={'type':'AGENT_COMMERCE_SPEND','agentId':agent_id,'owner':owner,'intentId':intent_id,'merchantHost':_merchant(merchant_host),'amountUSDC':float(amount),'at':int(time.time())}
+    d=_load(); reserved=None
+    for e in reversed(d.get('events',[])):
+        if e.get('agentId')==agent_id and e.get('intentId')==intent_id:
+            if e.get('type')=='AGENT_COMMERCE_SPEND': return {**e,'duplicate':True}
+            if e.get('type')=='AGENT_COMMERCE_RELEASED': raise ValueError('agent_commerce_reservation_released')
+            if e.get('type')=='AGENT_COMMERCE_RESERVED': reserved=e; break
+    if reserved:
+        if abs(float(reserved.get('amountUSDC',0))-float(amount))>1e-6: raise ValueError('agent_capture_amount_mismatch')
+        authz=authorize_commerce(agent_id,owner,merchant_host,amount,False,True,exclude_intent_id=intent_id)
+    else:
+        authz=authorize_commerce(agent_id,owner,merchant_host,amount,False,True)
+    e={'type':'AGENT_COMMERCE_SPEND','agentId':agent_id,'owner':owner,'intentId':intent_id,'merchantHost':_merchant(merchant_host),'amountUSDC':float(amount),'at':int(time.time())}
     d.setdefault('events',[]).append(e);_save(d);return {**e,'authorization':authz}
