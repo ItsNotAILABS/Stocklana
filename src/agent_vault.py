@@ -13,6 +13,7 @@ def _load():
 def _save(d):
     t=DB.with_suffix('.tmp'); t.write_text(json.dumps(d,indent=2,sort_keys=True)); t.replace(DB)
 
+
 def _migrate(v):
     v.setdefault('financialTokens',{'budget':'SL-AGENT','cash':'SL-CASH','collateral':'SL-COLL','positions':'SL-POS','basket':'SL-BASKET','versionProfiles':['V2_TOKEN_2022']})
     return v
