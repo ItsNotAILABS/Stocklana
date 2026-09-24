@@ -126,6 +126,11 @@
             <small>Changing stake recalculates the payoff preview from the current collateral pools.</small>
           </div>
         </div>
+        <div class="duel-strip">
+          <div><span class="kicker">HEAD-TO-HEAD</span><b>Challenge one person. No community required.</b><small>Pick any live PreStocks game, lock your side and stake, then send the invite. Your opponent funds the opposite side.</small></div>
+          <div class="duel-join"><input id="challengeJoinInput" placeholder="duel_… or invite link" /><button class="ghost" id="challengeJoinBtn">Open invite</button></div>
+        </div>
+        <div id="myChallengeShelf" class="challenge-shelf"></div>
         <div class="game-filter-row">
           <button class="active" data-game-filter="all">All games</button>
           <button data-game-filter="gain_game">Gain</button>
@@ -448,6 +453,13 @@
       <button data-nav="agents"><span>◈</span>Agent</button>
     </nav>
   </div>
+
+  <dialog id="challengeDialog">
+    <div class="dialog-sheet duel-dialog-sheet">
+      <button class="close" data-close>×</button>
+      <div id="challengeDialogContent"></div>
+    </div>
+  </dialog>
 
   <dialog id="assetDialog">
     <div class="dialog-sheet">
