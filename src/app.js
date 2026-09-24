@@ -137,9 +137,9 @@ async function loadWalletCenter(){
     $('#walletVaultBalance').textContent=money(v?.balances?.USDC||0);
     const h=$('#walletPrestockHoldings');
     if(h)h.innerHTML=portfolio.prestocks.length?portfolio.prestocks.map(x=>`<article class="wallet-holding"><img src="${x.image||''}" alt=""><div><b>${x.name.replace(' PreStocks','')}</b><small>${x.symbol} · ${x.amount.toLocaleString(undefined,{maximumFractionDigits:6})} tokens</small><div class="wallet-holding-actions"><button data-wallet-asset="${x.symbol}">Use</button><button data-wallet-spend="${x.symbol}">Spend</button><button data-wallet-play="${x.symbol}">Play</button></div></div><strong>${money(x.estimatedValueUSDC)}</strong></article>`).join(''):'<div class="empty-card">No eligible PreStocks found in this wallet yet.</div>';
-    $('[data-wallet-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.walletAsset));
-    $('[data-wallet-spend]').forEach(b=>b.onclick=()=>startSpendFromPrestock(b.dataset.walletSpend));
-    $('[data-wallet-play]').forEach(b=>b.onclick=()=>{selected=b.dataset.walletPlay;navigate('play')});
+    document.querySelectorAll('[data-wallet-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.walletAsset));
+    document.querySelectorAll('[data-wallet-spend]').forEach(b=>b.onclick=()=>startSpendFromPrestock(b.dataset.walletSpend));
+    document.querySelectorAll('[data-wallet-play]').forEach(b=>b.onclick=()=>{selected=b.dataset.walletPlay;navigate('play')});
     refreshCommercePrestocks();
   }catch(e){
     if(state)state.textContent='Connected · wallet balances temporarily unavailable';
@@ -156,7 +156,7 @@ function refreshCommercePrestocks(){
 function startSpendFromPrestock(symbol){
  navigate('commerce');setTimeout(()=>{const f=$('#commerceFunding'),p=$('#commercePrestock');if(f)f.value='PRESTOCK_TO_USDC';refreshCommercePrestocks();if(p)p.value=symbol;loadFundingPlan();$('#commerceUrl')?.focus()},60)
 }
-async function loadFundingPlan(){
+async async function loadFundingPlan(){
  const box=$('#commerceFundingPlan');if(!box)return;
  if(!sessionToken||!wallet?.publicKey||!lastWalletPortfolio){box.innerHTML='<small>Connect Phantom and enter an amount to see live funding routes.</small>';return}
  const amount=Number($('#commerceAmount')?.value||0);if(amount<=0){box.innerHTML='<small>Enter a purchase amount.</small>';return}
@@ -269,7 +269,7 @@ async function createCommercePurchase(){
  if(!merchantUrl||amount<=0){toast('Add a merchant URL and maximum spend');return}
  let chosen=$('#commerceFunding')?.value||'SMART';
  if(chosen==='SMART')chosen=selectedFundingRoute||((Number(lastWalletPortfolio?.usdc||0)>=amount)?'WALLET_USDC':(Number(vault?.balances?.USDC||0)>=amount)?'STOCKLANA_USDC':'');
- if(!chosen)throw toast('Choose a funding route');
+ if(!chosen){toast('Choose a funding route');return}
  try{
    let out;
    if(chosen==='STOCKLANA_USDC'){
