@@ -29,6 +29,7 @@ xstocks=loadmod('xstocks_adapter','xstocks_adapter.py')
 accounting_tokens=loadmod('accounting_tokens','accounting_tokens.py')
 commerce=loadmod('commerce','commerce.py')
 money_router=loadmod('money_router','money_router.py')
+prestock_object=loadmod('prestock_object','prestock_object.py')
 
 SNAPSHOT=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
 USDC_MINT=os.getenv('STOCKLANA_USDC_MINT','EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
@@ -232,6 +233,12 @@ class Handler(SimpleHTTPRequestHandler):
             ledger=ROOT/'public'/'ledger.json'; manifest=ROOT/'release-manifest.json'
             lj=json.loads(ledger.read_text()) if ledger.exists() else {'count':0}; mj=json.loads(manifest.read_text()) if manifest.exists() else {}
             return self.send_json({'marketTemplates':len(market_catalog.templates(normalized_live_assets())),'ledgerRows':lj.get('count',0),'releaseRoot':mj.get('rootCommitment'),'crypto':pq_crypto.public_metadata(),'automaticSettlement':True,'chainBackedTradeEndpoint':'/api/markets/:id/trade-chain'})
+        if path=='/api/prestocks/objects':
+            live=normalized_live_assets(); ts=market_catalog.templates(live); return self.send_json({'schema':'StocklanaPreStockObject/v1','objects':prestock_object.compile_all(live,ts)})
+        if path.startswith('/api/prestocks/object/'):
+            key=urllib.parse.unquote(path.rsplit('/',1)[-1]); live=normalized_live_assets(); a=next((x for x in live if str(x.get('symbol','')).upper()==key.upper() or str(x.get('contract_address') or x.get('mint'))==key),None)
+            if not a: return self.send_json({'error':'prestock_object_not_found'},404)
+            return self.send_json(prestock_object.compile_object(a,market_catalog.templates(live)))
         if path=='/api/prestocks': return self.send_json(normalized_live_assets())
         if path=='/api/launch/routes': return self.send_json({'routes':[{'id':'sponsored','priority':1,'status':'discover'},{'id':'native','priority':2,'serviceFeeEth':0.005,'status':'active'},{'id':'clawpump','priority':3,'status':'optional-adapter'}]})
         return super().do_GET()
