@@ -1,5 +1,6 @@
 import json, os, secrets, urllib.parse, urllib.request
 USDC=os.getenv('STOCKLANA_USDC_MINT','EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+SOL_MINT='So11111111111111111111111111111111111111112'
 JUP='https://api.jup.ag/swap/v2'
 ALPH='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 def b58encode(raw):
@@ -31,3 +32,18 @@ def solana_pay_request(recipient,amount,token=USDC,label='Stocklana',message='MA
  return {'protocol':'solana-pay','url':'solana:'+recipient+'?'+urllib.parse.urlencode(q),'reference':ref,'recipient':recipient,'amount':float(amount),'mint':token,'verification':'match reference + recipient + mint + amount on Solana RPC'}
 def capabilities():
  return {'jupiterSwapV2':True,'jupiterConfigured':bool(os.getenv('JUPITER_API_KEY')),'integratorFeeConfigured':bool(os.getenv('JUPITER_REFERRAL_ACCOUNT') and os.getenv('JUPITER_REFERRAL_FEE')),'solanaPay':True,'agenticPayments':'MPP-compatible adapter surface','token2022Roadmap':['confidential-balances','transfer-fees','transfer-hooks','pausable','permanent-delegate']}
+
+
+def wallet_swap_order(input_mint,output_mint,amount_atomic,taker,eligible_prestocks):
+ allowed=set(eligible_prestocks)|{USDC,SOL_MINT}
+ if input_mint not in allowed or output_mint not in allowed: raise ValueError('swap_asset_not_supported')
+ if input_mint==output_mint: raise ValueError('same_swap_asset')
+ return jupiter_order(input_mint,output_mint,int(amount_atomic),taker)
+
+def wallet_routes(eligible_prestocks):
+ return {
+   'settlementMint':USDC,'solMint':SOL_MINT,
+   'supportedMints':[SOL_MINT,USDC,*sorted(set(eligible_prestocks))],
+   'routes':['SOL_TO_USDC','USDC_TO_SOL','SOL_TO_PRESTOCK','USDC_TO_PRESTOCK','PRESTOCK_TO_USDC'],
+   'nonPreStocksPreIPO':False
+ }
