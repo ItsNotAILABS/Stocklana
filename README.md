@@ -65,6 +65,18 @@ The production default is a **pari-mutuel collateral pool**, not an unfunded syn
 
 A plan is not counted as a fill. A completed external execution requires the provider response and the user's wallet-signed chain result.
 
+### Native Phantom wallet workspace
+
+Phantom is now a first-class Stocklana surface instead of an external black box. The connected-wallet workspace reads the user's public Solana state directly and shows:
+
+- SOL and USDC balances;
+- eligible PreStocks holdings matched by exact mint;
+- Stocklana Vault balance alongside wallet balance;
+- direct routes into PreStocks execution, payoff games, collateral/credit, transfers and Agent Vault funding;
+- account-change refresh when the user switches Phantom accounts.
+
+Private keys never enter Stocklana. Phantom remains the signing boundary; Stocklana reads public account state, builds transactions and asks the wallet to sign.
+
 ### On-chain Stocklana market program
 
 `programs/stocklana-market/` contains the current Solana market source:
