@@ -38,7 +38,7 @@ def issue_virtual(user,pid):
  with urllib.request.urlopen(req,timeout=15) as r:res=json.loads(r.read().decode())
  # Never persist PAN/CVV. Only the provider's opaque card/token id.
  opaque=res.get('cardToken') or res.get('id');p['providerCardIdCommitment']=pq_crypto.blake_commit(str(opaque).encode()) if opaque else None;p['providerStatus']=res.get('status','CREATED');_save(d)
- return {'ready':True,'policyId':pid,'providerStatus':p['providerStatus'],'cardToken':opaque,'sensitiveDataStored':False}
+ return {'ready':True,'policyId':pid,'providerStatus':p['providerStatus'],'cardToken':opaque,'hostedRevealUrl':res.get('hostedRevealUrl') or res.get('revealUrl'),'walletPassUrl':res.get('walletPassUrl') or res.get('applePayUrl') or res.get('googlePayUrl'),'checkoutToken':res.get('checkoutToken'),'sensitiveDataStored':False}
 def get_policy(user,pid):
  p=_load()['policies'].get(pid);return p if p and p['user']==user else None
 def capabilities():return {'singleUsePolicies':True,'jitReserve':True,'captureConservesLedger':True,'providerIssuanceConfigured':bool(os.getenv('CARD_ISSUER_PROXY_URL') and os.getenv('CARD_ISSUER_PROXY_TOKEN')),'panStorage':False}
