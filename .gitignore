@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+data/pq-keys/*.private.pem
+data/finance.json
+data/markets.json
+data/agent-vaults.json
+data/equity-os.json
+data/journal-key-envelope.json
+data/token-ledger.json
+public/ledger.csv
+public/ledger.json
