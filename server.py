@@ -272,23 +272,32 @@ class Handler(SimpleHTTPRequestHandler):
                 market=market_store.create_market(prepared['market'])
                 try:
                     trade=market_execution.vault_trade(who,market['id'],prepared['challenge']['creatorSide'],prepared['challenge']['stakeUSDC'],'challenge-vault')
-                except Exception:
-                    try: market_store.cancel_unmatched(market['id'],who)
+                except Exception as e:
+                    challenges.fail_creation(prepared['challenge']['id'],who,e)
+                    try: market_store.cancel_empty(market['id'],who)
                     except Exception: pass
                     raise
                 ch=challenges.mark_creator_funded(prepared['challenge']['id'],who,trade.get('trade'))
                 return self.send_json({'challenge':ch,'market':trade.get('market'),'quote':trade.get('quote')},201)
             if p.startswith('/api/challenges/') and p.endswith('/accept'):
-                cid=p.split('/')[3]; who=self.trader(payload=payload); ch=challenges.get(cid)
-                if ch.get('status')!='OPEN_FOR_OPPONENT': raise ValueError('challenge_not_open')
-                trade=market_execution.vault_trade(who,ch['marketId'],ch['opponentSide'],ch['stakeUSDC'],'challenge-vault')
-                ch=challenges.accept(cid,who,trade.get('trade'))
+                cid=p.split('/')[3]; who=self.trader(payload=payload); claim=challenges.begin_accept(cid,who); ch=claim['challenge']
+                try:
+                    trade=market_execution.vault_trade(who,ch['marketId'],ch['opponentSide'],ch['stakeUSDC'],'challenge-vault')
+                except Exception as e:
+                    challenges.fail_accept(cid,who,claim['nonce'],e); raise
+                try:
+                    ch=challenges.finish_accept(cid,who,claim['nonce'],trade.get('trade'))
+                except Exception:
+                    # The financial trade already settled; do not silently pretend
+                    # it did not. Surface an explicit reconciliation-required state.
+                    finance_store.record_system_event('challenge_accept_reconciliation_required',who,{'challengeId':cid,'marketId':ch['marketId'],'trade':trade.get('trade')})
+                    raise
                 return self.send_json({'challenge':ch,'market':trade.get('market'),'quote':trade.get('quote')},201)
             if p.startswith('/api/challenges/') and p.endswith('/cancel'):
                 cid=p.split('/')[3]; who=self.trader(payload=payload); ch=challenges.get(cid)
                 if ch.get('creator')!=who: raise ValueError('challenge_not_found')
                 refund=None
-                if ch.get('status')=='OPEN_FOR_OPPONENT': refund=market_execution.refund_unmatched(who,ch['marketId'])
+                if ch.get('status') in {'OPEN_FOR_OPPONENT','EXPIRED'}: refund=market_execution.refund_unmatched(who,ch['marketId'])
                 ch=challenges.cancel(cid,who)
                 return self.send_json({'challenge':ch,'refund':refund})
             if p=='/api/money/plan':
