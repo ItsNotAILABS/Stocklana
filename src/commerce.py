@@ -35,6 +35,11 @@ def create_intent(user, merchant_url, amount_usdc, funding_source='WALLET_USDC',
     }
     d=_load(); d['intents'][iid]=obj; _save(d); return obj
 
+def get_intent_by_id(intent_id):
+    obj=_load()['intents'].get(intent_id)
+    if not obj: raise ValueError('purchase_intent_not_found')
+    return obj
+
 def get_intent(user, intent_id):
     obj=_load()['intents'].get(intent_id)
     if not obj or obj.get('user')!=user: raise ValueError('purchase_intent_not_found')
@@ -66,6 +71,29 @@ def attach_card(user,intent_id,policy,issuance):
     _save(d)
     return {'intent':obj,'policy':policy,'issuance':issuance}
 
+def mark_captured(user,intent_id,policy,provider_event_id=None):
+    d=_load(); obj=d['intents'].get(intent_id)
+    if not obj or obj.get('user')!=user: raise ValueError('purchase_intent_not_found')
+    if obj.get('cardPolicyId')!=policy.get('id'): raise ValueError('purchase_policy_mismatch')
+    amount=float(policy.get('capturedUSDC') or 0)
+    if amount<=0: raise ValueError('purchase_capture_missing')
+    if obj.get('status')=='PURCHASED':
+        if abs(float(obj.get('capturedUSDC',0))-amount)<=1e-9: return {**obj,'duplicate':True}
+        raise ValueError('purchase_already_captured')
+    obj['status']='PURCHASED';obj['purchaseReady']=False;obj['capturedUSDC']=amount
+    obj['capturedAt']=int(policy.get('capturedAt') or time.time());obj['providerEventId']=provider_event_id
+    obj['providerReceiptCommitment']=policy.get('providerReceiptCommitment')
+    _save(d);return obj
+
+def mark_cancelled(user,intent_id,policy=None,reason='USER_CANCELLED'):
+    d=_load(); obj=d['intents'].get(intent_id)
+    if not obj or obj.get('user')!=user: raise ValueError('purchase_intent_not_found')
+    if obj.get('status')=='PURCHASED': raise ValueError('purchase_already_captured')
+    if obj.get('status')=='CANCELLED': return {**obj,'duplicate':True}
+    obj['status']='CANCELLED';obj['purchaseReady']=False;obj['cancelledAt']=int(time.time());obj['cancelReason']=str(reason)[:80]
+    if policy: obj['cardPolicyStatus']=policy.get('status')
+    _save(d);return obj
+
 def mark_opened(user,intent_id):
     d=_load(); obj=d['intents'].get(intent_id)
     if not obj or obj.get('user')!=user: raise ValueError('purchase_intent_not_found')
@@ -83,5 +111,5 @@ def capabilities():
       'agentPurchaseIntents':True,
       'subscriptionDefault':'BLOCKED',
       'walletCustody':False,
-      'externalPurchaseRail':'issuer-hosted one-time card when CARD_ISSUER_PROXY is configured'
+      'externalPurchaseRail':'issuer-hosted one-time card when CARD_ISSUER_PROXY is configured','lifecycle':['INTENT','FUNDED','POLICY_RESERVED','PURCHASE_READY','PURCHASED_OR_CANCELLED'],'providerCaptureReceiptRequired':True
     }
