@@ -62,3 +62,28 @@
 .commerce-row{border-bottom:1px solid #1f2938;padding:11px 0}.commerce-row:last-child{border-bottom:0}.commerce-row b,.commerce-row small{display:block}.commerce-row small{color:var(--muted);margin-top:4px}
 .wallet-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:900px){.commerce-layout{grid-template-columns:1fr}.convert-grid{grid-template-columns:1fr 1fr}.convert-grid .primary{grid-column:1/-1}.commerce-policy-grid{grid-template-columns:1fr}.wallet-quick-actions{grid-template-columns:1fr 1fr}}
+
+
+/* PreStocks Arcade + Smart Money Router */
+.play-hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,.75fr);gap:16px;align-items:stretch;margin-bottom:16px}
+.play-hero>div{border:1px solid rgba(255,255,255,.09);border-radius:26px;padding:20px;background:radial-gradient(circle at 15% 0,rgba(215,255,70,.10),transparent 35%),linear-gradient(155deg,#10151a,#090d13)}
+.play-hero h2{font-size:clamp(30px,4vw,58px);line-height:.98;letter-spacing:-2px;margin:8px 0 12px;max-width:800px}
+.play-hero p{color:var(--muted);max-width:780px;line-height:1.6}
+.play-stake{display:flex;flex-direction:column;justify-content:center}.play-stake>span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stake-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.stake-pills button,.game-filter-row button{border:1px solid #273243;background:#0b1118;color:#cbd5df;border-radius:12px;padding:10px;cursor:pointer}.stake-pills button.active,.game-filter-row button.active{background:#d7ff46;color:#091006;border-color:#d7ff46;font-weight:900}
+.game-filter-row{display:flex;gap:8px;overflow:auto;padding:3px 0 14px;scrollbar-width:none}.game-filter-row button{white-space:nowrap}.game-filter-row .build-game{margin-left:auto;border-color:#44506a;color:#fff}
+.game-deck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.game-card{position:relative;overflow:hidden;border:1px solid #222d3d;border-radius:22px;padding:16px;background:linear-gradient(155deg,#0f151e,#090d13)}
+.game-card::after{content:"";position:absolute;inset:auto -15% -45% 35%;height:160px;background:radial-gradient(circle,rgba(122,163,255,.12),transparent 68%);pointer-events:none}
+.game-card[data-family="gain_game"]::after{background:radial-gradient(circle,rgba(111,255,167,.12),transparent 68%)}
+.game-card[data-family="downside_shield"]::after{background:radial-gradient(circle,rgba(107,190,255,.13),transparent 68%)}
+.game-card[data-family="margin_duel"]::after{background:radial-gradient(circle,rgba(183,118,255,.14),transparent 68%)}
+.game-card-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.game-card-head .game-symbol{font-size:10px;color:var(--muted);letter-spacing:.08em}.game-card h3{font-size:17px;line-height:1.2;margin:12px 0 14px;min-height:61px}
+.game-pool{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:var(--muted);margin-bottom:10px}.game-pool b{color:#fff}
+.game-sides{display:grid;grid-template-columns:1fr 1fr;gap:8px}.game-side{position:relative;z-index:2;border:1px solid #283446;border-radius:15px;background:#0b1219;color:white;padding:12px;text-align:left}.game-side.yes{background:#0c1914}.game-side.no{background:#1a0d11}.game-side span,.game-side small{display:block}.game-side span{font-size:9px;color:var(--muted)}.game-side b{display:block;font-size:20px;margin:3px 0}.game-side small{font-size:9px;color:#aeb9c7}
+.game-rule{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid #1d2633;color:var(--muted);font-size:9px}
+.funding-plan{border:1px solid #243247;background:#0a1119;border-radius:16px;padding:12px;display:grid;gap:8px}
+.funding-plan>small{color:var(--muted)}.funding-route{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border:1px solid #223044;background:#0c131c;border-radius:14px;padding:10px;text-align:left;color:white}.funding-route strong,.funding-route small{display:block}.funding-route small{color:var(--muted);margin-top:2px}.funding-route .route-rank{display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:#172134;font-size:10px}.funding-route.selected{border-color:#d7ff46;box-shadow:0 0 0 1px rgba(215,255,70,.25) inset}.funding-route em{font-style:normal;font-size:9px;color:#d7ff46}
+.wallet-holding-actions{display:flex;gap:7px;margin-top:9px}.wallet-holding-actions button{border:1px solid #253247;background:#0c121a;color:white;border-radius:10px;padding:7px 9px;font-size:9px}
+@media(max-width:1100px){.game-deck{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.play-hero{grid-template-columns:1fr}.game-deck{grid-template-columns:1fr}.game-filter-row .build-game{margin-left:0}.stake-pills{grid-template-columns:repeat(4,minmax(0,1fr))}}
