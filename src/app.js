@@ -267,20 +267,35 @@ async function executeWalletSwap(){
    await loadWalletCenter();
  }catch(e){toast(String(e.message||e))}
 }
+function commerceStateLabel(x){return String(x?.status||'UNKNOWN').replaceAll('_',' ')}
+async function openMerchantIntent(intentId,url){
+ try{await postJson('/api/commerce/open',{intentId})}catch{}
+ window.open(url,'_blank','noopener')
+}
+async function cancelCommerceIntent(intentId){
+ try{const out=await postJson('/api/commerce/cancel',{intentId,reason:'USER_CANCELLED'});toast(`Purchase cancelled · funds released`);await Promise.all([loadCommerce(),loadVault(),loadFundingPlan()]);return out}catch(e){toast(String(e.message||e))}
+}
+function bindCommerceActions(root=document){
+ root.querySelectorAll?.('[data-commerce-open]').forEach(b=>b.onclick=()=>openMerchantIntent(b.dataset.commerceOpen,b.dataset.merchantUrl));
+ root.querySelectorAll?.('[data-commerce-cancel]').forEach(b=>b.onclick=()=>cancelCommerceIntent(b.dataset.commerceCancel));
+}
 async function loadCommerce(){
  const h=$('#commerceHistory');if(!h)return;
  if(!sessionToken){h.innerHTML='<div class="empty-card">Connect Phantom to create wallet-backed purchases.</div>';return}
  try{
    const d=await fetch('/api/commerce/intents',{cache:'no-store'}).then(r=>r.json());
-   h.innerHTML=(d.intents||[]).length?(d.intents||[]).slice(0,10).map(x=>`<div class="commerce-row"><b>${x.merchant||x.merchantHost} · ${money(x.maxAmountUSDC)}</b><small>${x.status} · ${x.agentId?'Agent '+x.agentId:'Human'} · ${x.fundingSource}</small></div>`).join(''):'<div class="empty-card">No purchase intents yet.</div>';
+   h.innerHTML=(d.intents||[]).length?(d.intents||[]).slice(0,12).map(x=>{const cancellable=!['PURCHASED','CANCELLED'].includes(x.status);return `<div class="commerce-row"><div class="commerce-row-main"><b>${x.merchant||x.merchantHost} · ${money(x.maxAmountUSDC)}</b><small>${commerceStateLabel(x)} · ${x.agentId?'Agent '+x.agentId:'Human'} · ${x.sourceAsset||'USDC'} → ${x.fundingSource}</small>${x.capturedUSDC?'<small>Captured '+money(x.capturedUSDC)+' · provider-confirmed</small>':''}</div><div class="commerce-row-actions"><button data-commerce-open="${x.id}" data-merchant-url="${x.merchantUrl}">Merchant</button>${cancellable?`<button data-commerce-cancel="${x.id}">Cancel</button>`:''}</div></div>`}).join(''):'<div class="empty-card">No purchase intents yet.</div>';
+   bindCommerceActions(h);
  }catch{h.innerHTML='<div class="empty-card">Commerce history unavailable.</div>'}
 }
 function renderCommerceResult(out){
  const el=$('#commerceResult');if(!el)return;
  const intent=out.intent||out, issuance=out.issuance||{};
- if(out.requiresWalletTransfer){el.innerHTML=`<div class="commerce-warning"><b>Ready for wallet funding</b><p>Approve ${money(intent.maxAmountUSDC)} USDC from Phantom. Stocklana verifies the Solana transfer before reserving the one-time purchase.</p></div>`;return}
+ if(out.requiresWalletTransfer){el.innerHTML=`<div class="commerce-warning"><b>Ready for wallet funding</b><p>Approve ${money(intent.maxAmountUSDC)} USDC from Phantom. Stocklana verifies the Solana transfer before reserving the one-time purchase.</p><button class="ghost" data-commerce-cancel="${intent.id}">Cancel</button></div>`;bindCommerceActions(el);return}
  const ready=!!issuance.ready;
- el.innerHTML=`<div class="${ready?'commerce-success':'commerce-warning'}"><b>${ready?'Purchase rail ready':'Purchase policy reserved'}</b><p>${ready?'The one-time merchant-bound payment rail is ready.':'The Stocklana policy is real, but this deployment still needs the external card issuer connector before it can be used at ordinary web checkout.'}</p>${ready&&issuance.hostedRevealUrl?`<a class="primary" href="${issuance.hostedRevealUrl}" target="_blank" rel="noopener">Open secure card</a>`:''} ${ready&&issuance.walletPassUrl?`<a class="ghost" href="${issuance.walletPassUrl}" target="_blank" rel="noopener">Add to wallet</a>`:''} <a class="ghost" href="${intent.merchantUrl}" target="_blank" rel="noopener">Open merchant</a></div>`;
+ const state=intent.status==='PURCHASED'?'Purchased':intent.status==='CANCELLED'?'Cancelled':ready?'Purchase rail ready':'Purchase policy reserved';
+ el.innerHTML=`<div class="${intent.status==='PURCHASED'||ready?'commerce-success':'commerce-warning'}"><b>${state}</b><p>${intent.status==='PURCHASED'?'The issuer confirmed capture and Stocklana settled the reserved funds into card clearing.':ready?'The merchant-bound one-time payment rail is ready.':'Funds are reserved safely. This deployment still needs the configured external card issuer before ordinary web checkout can complete.'}</p>${ready&&issuance.hostedRevealUrl?`<a class="primary" href="${issuance.hostedRevealUrl}" target="_blank" rel="noopener">Open secure card</a>`:''} ${ready&&issuance.walletPassUrl?`<a class="ghost" href="${issuance.walletPassUrl}" target="_blank" rel="noopener">Add to wallet</a>`:''} ${!['PURCHASED','CANCELLED'].includes(intent.status)?`<button class="ghost" data-commerce-open="${intent.id}" data-merchant-url="${intent.merchantUrl}">Open merchant</button><button class="ghost" data-commerce-cancel="${intent.id}">Cancel & release</button>`:''}</div>`;
+ bindCommerceActions(el);
 }
 async function postJson(path,payload){
  const r=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload||{})});
