@@ -26,7 +26,9 @@ def create_agent_vault(agent_id, owner, name=None):
     if not agent_id or not owner: raise ValueError('agent_and_owner_required')
     d=_load()
     if agent_id in d['vaults']:
-        v=_migrate(d['vaults'][agent_id]); d['vaults'][agent_id]=v; _save(d); return v
+        v=_migrate(d['vaults'][agent_id])
+        if v.get('owner')!=owner: raise ValueError('agent_id_taken')
+        d['vaults'][agent_id]=v; _save(d); return v
     now=int(time.time()*1000)
     vault={
       'vaultId':'av_'+uuid.uuid4().hex[:20], 'agentId':agent_id, 'owner':owner,
