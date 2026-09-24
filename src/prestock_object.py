@@ -11,7 +11,7 @@ def compile_object(asset,templates):
     actions=[
       {'id':'TRADE','status':'EXECUTABLE_WITH_WALLET','rail':'JUPITER_SWAP_V2','orderEndpoint':'/api/prestocks/order','executeEndpoint':'/api/prestocks/execute','signer':'CONNECTED_SOLANA_WALLET'},
       {'id':'CONVERT','status':'EXECUTABLE_WITH_WALLET','rail':'JUPITER_SWAP_V2','orderEndpoint':'/api/swap/order','executeEndpoint':'/api/swap/execute','allowedSettlement':['USDC','SOL','PRESTOCKS_ONLY']},
-      {'id':'PLAY','status':'EXECUTABLE','discoverEndpoint':'/api/games','tradeEndpoint':'/api/markets/:id/trade','chainTradeEndpoint':'/api/markets/:id/trade-chain','families':fam},
+      {'id':'PLAY','status':'EXECUTABLE','discoverEndpoint':'/api/games','tradeEndpoint':'/api/markets/:id/trade','chainTradeEndpoint':'/api/markets/:id/trade-chain','challengeEndpoint':'/api/challenges','challengeMode':'ISOLATED_HEAD_TO_HEAD','families':fam},
       {'id':'SPEND','status':'EXECUTABLE_TO_ISSUER_BOUNDARY','intentEndpoint':'/api/commerce/intents','fundEndpoint':'/api/commerce/fund-wallet','sourceAsset':symbol,'conversion':'PRESTOCK_TO_USDC','merchantBound':True,'subscriptionsDefault':'BLOCKED'},
       {'id':'AUTOMATE','status':'EXECUTABLE_PLAN','recurringEndpoint':'/api/equity/recurring','basketEndpoint':'/api/equity/basket','executionRail':'JUPITER_SWAP_V2'},
       {'id':'DELEGATE','status':'EXECUTABLE_POLICY','agentEndpoint':'/api/agent-vaults','policyEndpoint':'/api/agent-vaults/policy','capabilityEndpoint':'/api/auth/agent','walletKeyDelegated':False},
