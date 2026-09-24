@@ -21,18 +21,24 @@ const fallback=[
 {name:'OpenAI PreStocks',symbol:'OPENAI',contract_address:'PreweJYECqtQwBtpxHL171nL2K6umo692gTm7Q3rpgF',markPrice:995.56955666,markValuation:1233441287355,tokenPrice:1127.221603,impliedValuation:1396548996348,image:'https://www.prestocks.com/logos/openai.png'},
 {name:'Polymarket PreStocks',symbol:'POLYMARKET',contract_address:'Pre8AREmFPtoJFT8mQSXQLh56cwJmM7CFDRuoGBZiUP',markPrice:144.29858563,markValuation:14231558175,tokenPrice:142.15989838,impliedValuation:14020628512,image:'https://www.prestocks.com/logos/polymarket.png'},
 {name:'SpaceX PreStocks',symbol:'SPACEX',contract_address:'PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh',markPrice:152.62406151,markValuation:2001071028648,tokenPrice:116.46045229,impliedValuation:1526925930061,image:'https://www.prestocks.com/logos/spacex.png'}];
-let assets=[...fallback], selected='OPENAI', marketType='threshold', wallet=null, markets=[], config={}, vault={balances:{USDC:0}}, positions=[];
+let assets=[...fallback], selected='OPENAI', marketType='threshold', wallet=null, markets=[], config={}, vault={balances:{USDC:0}}, positions=[], lastWalletPortfolio=null;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], trader=()=>wallet?.publicKey||'guest';
 const money=n=>Number(n)>=1e12?`$${(Number(n)/1e12).toFixed(2)}T`:Number(n)>=1e9?`$${(Number(n)/1e9).toFixed(1)}B`:`$${Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2})}`;
 const premium=a=>((Number(a.tokenPrice)/Number(a.markPrice))-1)*100, short=x=>x?`${x.slice(0,4)}…${x.slice(-4)}`:'guest';
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
-function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
+function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce')loadCommerce();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
 $$('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));
 function renderAssets(){
  $('#assetCount').textContent=assets.length; $('#ticker').innerHTML=assets.map(a=>{const p=premium(a);return `<div class="tick ${p>=0?'pos':'neg'}"><b>${a.symbol}</b>${p>=0?'+':''}${p.toFixed(1)}% premium</div>`}).join('');
  $('#assetGrid').innerHTML=assets.map(a=>{const p=premium(a);return `<article class="asset-card" data-asset-card="${a.symbol}"><div class="asset-head"><img class="asset-logo" src="${a.image||''}" alt=""/><span class="premium ${p>=0?'pos':'neg'}">${p>=0?'+':''}${p.toFixed(1)}%</span></div><h3>${a.name.replace(' PreStocks','')}</h3><span class="sym">${a.symbol}</span><div class="price">${money(a.tokenPrice)}</div><div class="valuation">Implied ${money(a.impliedValuation)}</div><div class="asset-actions"><button data-quick-buy="${a.symbol}">Buy</button><button data-quick-auto="${a.symbol}">Auto</button><button data-asset="${a.symbol}">More</button></div></article>`}).join('');
  $('#assetPicker').innerHTML=assets.map(a=>`<button class="pick ${a.symbol===selected?'active':''}" data-pick="${a.symbol}">${a.symbol}</button>`).join('');
- $$('[data-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.asset)); $$('[data-quick-buy]').forEach(b=>b.onclick=()=>buyUnderlying(assets.find(a=>a.symbol===b.dataset.quickBuy))); $$('[data-quick-auto]').forEach(b=>b.onclick=()=>scheduleRecurring(assets.find(a=>a.symbol===b.dataset.quickAuto))); $$('[data-pick]').forEach(b=>b.onclick=()=>{selected=b.dataset.pick;renderAssets();buildFields()});
+ refreshSwapTargets(); $('[data-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.asset)); $('[data-quick-buy]').forEach(b=>b.onclick=()=>buyUnderlying(assets.find(a=>a.symbol===b.dataset.quickBuy))); $$('[data-quick-auto]').forEach(b=>b.onclick=()=>scheduleRecurring(assets.find(a=>a.symbol===b.dataset.quickAuto))); $$('[data-pick]').forEach(b=>b.onclick=()=>{selected=b.dataset.pick;renderAssets();buildFields()});
+}
+function refreshSwapTargets(){
+ const to=$('#swapTo');if(!to)return;
+ const current=to.value||'USDC';
+ to.innerHTML='<option value="USDC">USDC</option>'+assets.map(a=>`<option value="${a.contract_address}">${a.symbol} · PreStock</option>`).join('');
+ if([...to.options].some(o=>o.value===current))to.value=current;
 }
 function renderMarketFeed(){
  $('#marketCount').textContent=markets.length; const open=markets.filter(m=>m.status==='OPEN');
@@ -108,6 +114,7 @@ async function loadWalletCenter(){
       readWalletPortfolio({owner:wallet.publicKey,rpc:config.rpcUrl||'https://api.mainnet-beta.solana.com',usdcMint:config.usdcMint,prestocks:assets}),
       sessionToken?fetch('/api/vault?trader='+encodeURIComponent(trader())).then(r=>r.json()).catch(()=>null):Promise.resolve(null)
     ]);
+    lastWalletPortfolio=portfolio;
     $('#walletSolBalance').textContent=Number(portfolio.sol).toLocaleString(undefined,{maximumFractionDigits:4});
     $('#walletUsdcBalance').textContent=money(portfolio.usdc);
     $('#walletPrestockCount').textContent=String(portfolio.prestocks.length);
@@ -120,6 +127,62 @@ async function loadWalletCenter(){
     const h=$('#walletPrestockHoldings');if(h)h.innerHTML='<div class="empty-card">Could not read Solana token accounts. Your wallet remains connected.</div>';
   }
 }
+async function executeWalletSwap(){
+ if(!wallet?.provider||!sessionToken){toast('Connect Phantom first');return}
+ const from=$('#swapFrom')?.value||'SOL', target=$('#swapTo')?.value||config.usdcMint, amount=Number($('#swapAmount')?.value||0);
+ if(amount<=0){toast('Enter an amount to convert');return}
+ const inputMint=from==='SOL'?'So11111111111111111111111111111111111111112':config.usdcMint;
+ const outputMint=target==='USDC'?config.usdcMint:target;
+ const decimals=from==='SOL'?9:6, amountAtomic=Math.round(amount*10**decimals);
+ try{
+   toast('Building the best Solana route');
+   const r=await fetch('/api/swap/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({inputMint,outputMint,amountAtomic})});
+   const o=await r.json();if(!r.ok)throw new Error(o.error||'swap_route_failed');if(!o.ready)throw new Error(o.reason||'Jupiter connector not configured');
+   toast('Approve the conversion in Phantom');
+   const signedTransaction=await signSerializedTransaction({provider:wallet.provider,transactionBase64:o.transaction});
+   const er=await fetch('/api/swap/execute',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({signedTransaction,requestId:o.requestId})});
+   const ej=await er.json();if(!er.ok)throw new Error(ej.error||'swap_execution_failed');
+   toast(`Converted on Solana · ${short(ej.signature||ej.txid||ej.status)}`);await loadWalletCenter();
+ }catch(e){toast(String(e.message||e))}
+}
+async function loadCommerce(){
+ const h=$('#commerceHistory');if(!h)return;
+ if(!sessionToken){h.innerHTML='<div class="empty-card">Connect Phantom to create wallet-backed purchases.</div>';return}
+ try{
+   const d=await fetch('/api/commerce/intents',{cache:'no-store'}).then(r=>r.json());
+   h.innerHTML=(d.intents||[]).length?(d.intents||[]).slice(0,10).map(x=>`<div class="commerce-row"><b>${x.merchant||x.merchantHost} · ${money(x.maxAmountUSDC)}</b><small>${x.status} · ${x.agentId?'Agent '+x.agentId:'Human'} · ${x.fundingSource}</small></div>`).join(''):'<div class="empty-card">No purchase intents yet.</div>';
+ }catch{h.innerHTML='<div class="empty-card">Commerce history unavailable.</div>'}
+}
+function renderCommerceResult(out){
+ const el=$('#commerceResult');if(!el)return;
+ const intent=out.intent||out, issuance=out.issuance||{};
+ if(out.requiresWalletTransfer){el.innerHTML=`<div class="commerce-warning"><b>Ready for wallet funding</b><p>Approve ${money(intent.maxAmountUSDC)} USDC from Phantom. Stocklana verifies the Solana transfer before reserving the one-time purchase.</p></div>`;return}
+ const ready=!!issuance.ready;
+ el.innerHTML=`<div class="${ready?'commerce-success':'commerce-warning'}"><b>${ready?'Purchase rail ready':'Purchase policy reserved'}</b><p>${ready?'The one-time merchant-bound payment rail is ready.':'The Stocklana policy is real, but this deployment still needs the external card issuer connector before it can be used at ordinary web checkout.'}</p>${ready&&issuance.hostedRevealUrl?`<a class="primary" href="${issuance.hostedRevealUrl}" target="_blank" rel="noopener">Open secure card</a>`:''} ${ready&&issuance.walletPassUrl?`<a class="ghost" href="${issuance.walletPassUrl}" target="_blank" rel="noopener">Add to wallet</a>`:''} <a class="ghost" href="${intent.merchantUrl}" target="_blank" rel="noopener">Open merchant</a></div>`;
+}
+async function createCommercePurchase(){
+ if(!wallet?.provider||!sessionToken){toast('Connect Phantom first');return}
+ const merchantUrl=$('#commerceUrl')?.value?.trim(),amount=Number($('#commerceAmount')?.value||0),fundingSource=$('#commerceFunding')?.value||'WALLET_USDC',agentId=$('#commerceAgent')?.value?.trim()||null;
+ if(!merchantUrl||amount<=0){toast('Add a merchant URL and maximum spend');return}
+ try{
+   const r=await fetch('/api/commerce/intents',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({merchantUrl,amount,fundingSource,agentId,allowSubscriptions:false,approvalAbove:amount,note:'Stocklana web purchase'})});
+   let out=await r.json();if(!r.ok)throw new Error(out.error||'purchase_intent_failed');
+   renderCommerceResult(out);
+   if(out.requiresWalletTransfer){
+     if(!config.vaultAddress)throw new Error('stocklana_vault_not_configured');
+     toast(`Approve ${money(amount)} USDC in Phantom`);
+     const signature=await sendSplToken({provider:wallet.provider,to:config.vaultAddress,mint:config.usdcMint,amount,decimals:6,rpc:config.rpcUrl});
+     const fr=await fetch('/api/commerce/fund-wallet',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({intentId:out.intent.id,signature,wallet:wallet.publicKey})});
+     out=await fr.json();if(!fr.ok)throw new Error(out.error||'purchase_funding_failed');renderCommerceResult(out);
+   }
+   toast((out.issuance||{}).ready?'Safe purchase ready':'Purchase policy created');await Promise.all([loadCommerce(),loadVault(),loadWalletCenter()]);
+ }catch(e){toast(String(e.message||e))}
+}
+$('#swapExecuteBtn')?.addEventListener('click',executeWalletSwap);
+$('#walletSwapBtn')?.addEventListener('click',()=>$('#swapAmount')?.focus());
+$('#walletShopBtn')?.addEventListener('click',()=>navigate('commerce'));
+$('#commerceCreateBtn')?.addEventListener('click',createCommercePurchase);
+$('#commerceUrl')?.addEventListener('input',e=>{try{$('#commerceMerchantRule').textContent=new URL(e.target.value).hostname||'Locked to URL'}catch{$('#commerceMerchantRule').textContent='Locked to URL'}});
 $('#walletConnectCenterBtn')?.addEventListener('click',async()=>{try{await connectPrimaryWallet()}catch{}});
 $('#walletRefreshBtn')?.addEventListener('click',loadWalletCenter);
 $('#walletCopyBtn')?.addEventListener('click',async()=>{if(!wallet?.publicKey)return toast('Connect Phantom first');await navigator.clipboard?.writeText(wallet.publicKey);toast('Wallet address copied')});
@@ -153,7 +216,7 @@ $$('[data-action]').forEach(b=>b.addEventListener('click',()=>{
  if(a==='borrow')navigate('credit');
  if(a==='play')navigate('lab');
  if(a==='send'){navigate('vault');setTimeout(()=>$('#maqueSendBtn')?.focus(),250)}
- if(a==='spend'){navigate('vault');setTimeout(()=>$('#singleUseCardBtn')?.focus(),250)}
+ if(a==='spend'){navigate('commerce');setTimeout(()=>$('#commerceUrl')?.focus(),250)}
  if(a==='agent')navigate('agents');
  if(a==='launch')navigate('launch');
  if(a==='add-money'){navigate('vault');setTimeout(()=>$('#fundCardBtn')?.focus(),250)}
@@ -163,7 +226,7 @@ $('#internalBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAct
 $('#kaminoBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAction())return;const market=prompt('Kamino market address','')||'',reserve=prompt('Supported collateral reserve address','')||'',amount=prompt('Atomic deposit amount','')||'';if(!market||!reserve||!amount)return;try{const r=await fetch('/api/kamino/deposit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:wallet.publicKey,market,reserve,amount})}),j=await r.json();if(!r.ok)throw new Error(j.error||'kamino_builder_failed');toast('Kamino transaction built — sign locally in wallet')}catch(e){toast(String(e.message||e))}});
 
 function ambient(){const c=$('#ambient'),x=c.getContext('2d');let w,h,d=1;function size(){d=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*d;c.height=h*d;c.style.width=w+'px';c.style.height=h+'px';x.setTransform(d,0,0,d,0,0)}function draw(t){x.clearRect(0,0,w,h);x.strokeStyle='rgba(110,180,230,.055)';x.lineWidth=1;const s=44;for(let i=-s;i<w+s;i+=s){x.beginPath();x.moveTo(i+(t*.003)%s,0);x.lineTo(i-140+(t*.003)%s,h);x.stroke()}for(let y=40;y<h;y+=s){x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke()}requestAnimationFrame(draw)}addEventListener('resize',size);size();requestAnimationFrame(draw)}
-(async()=>{ambient();renderAssets();buildFields();loadV2Home();config=await fetch('/api/config').then(r=>r.json()).catch(()=>({}));await loadLive();await loadMarkets();const s=await walletState();if(s.publicKey){wallet=await connectSolanaWallet().catch(()=>null);if(wallet){await authenticateWallet(wallet).catch(()=>{});$('#walletBtn').textContent=short(s.publicKey);$('#walletBtn').classList.add('connected');if(sessionToken)await loadVault();await loadWalletCenter()}}})();
+(async()=>{ambient();renderAssets();buildFields();loadV2Home();config=await fetch('/api/config').then(r=>r.json()).catch(()=>({}));refreshSwapTargets();await loadLive();await loadMarkets();const s=await walletState();if(s.publicKey){wallet=await connectSolanaWallet().catch(()=>null);if(wallet){await authenticateWallet(wallet).catch(()=>{});$('#walletBtn').textContent=short(s.publicKey);$('#walletBtn').classList.add('connected');if(sessionToken)await loadVault();await loadWalletCenter()}}})();
 
 async function loadCoverage(){
   const grid=document.querySelector('#coverageGrid'); if(!grid)return;
