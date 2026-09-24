@@ -1,0 +1,598 @@
+{
+  "release": "stocklana-tokenized-equities",
+  "version": "v10-full-v2-product-pq",
+  "generatedAt": 1790229876991,
+  "proofSuite": {
+    "suite": "Stocklana-Phantasma-PQ-v2",
+    "receiptSignature": [
+      "ML-DSA-65",
+      "Ed25519"
+    ],
+    "vaultKEM": [
+      "ML-KEM-768",
+      "X25519"
+    ],
+    "payloadCipher": "AES-256-GCM",
+    "commitment": "BLAKE2b-512",
+    "mldsaFingerprint": "0417c503a3936c8642988a65d88bd759fb571eadf2412bc812ff2a48cfff4423",
+    "mlkemFingerprint": "b4a08a8bb8a62c0d70aca0673808d7acc759f6fab8fbfd604b20b2983ca3e41d",
+    "ed25519Fingerprint": "a73114e1fbe66a5b95128699234de8c1d649e32a576dd2028c25c0ab7d834c92",
+    "x25519Fingerprint": "11fab1c3e8c6561ab1840c7f3b183a915bd2f5872db92ea63fb5329bd5cd00ce"
+  },
+  "files": [
+    {
+      "path": "ACCEPTANCE-RESULT-V10.json",
+      "bytes": 128,
+      "blake2b512": "14b5a373c68aa20c486d75c964eae2b332833d907003d760c13d6070b33d6837bf3001201c2989b701db0e29f7f3b68dca0b8a617710be9c54c4be371f8d53d6"
+    },
+    {
+      "path": "ACCEPTANCE-RESULT.json",
+      "bytes": 839,
+      "blake2b512": "d87646af87efb24c33783c96d81b31fdaa787e5a4bca563ec7a73deed326380fd7363c9d4923e9dca83a577a59b35b232e832776a88a4eb4a6f643655f780a55"
+    },
+    {
+      "path": "ACCOUNTING-TOKEN-RESULT.json",
+      "bytes": 774,
+      "blake2b512": "e1ff41d8001b3a50580ac8e4a909a62104f21ac63aa61b5c7a644d8a8955f48bd61c8d1e467280f695b7f0e02ce4c2cf45c50820e875a51f3ad490a02a8fa71f"
+    },
+    {
+      "path": "BUILD-V10.md",
+      "bytes": 1476,
+      "blake2b512": "343bc4ebd2e14d24d38af7c441b689b81e3fd222cac50c2d39831c30386c8fd66f78cd91aebf80e2296fcef92690be046c7e7d2ad7abbf7560186c93ee59a21c"
+    },
+    {
+      "path": "CERTIFICATION-V10.md",
+      "bytes": 638,
+      "blake2b512": "a1149b6f6c29cb7cebeb4c24506923c9081ae7e31969d96b134032bf7644facf287ace84be08d90fc99e6dd2e2d685dd6ec89131c937febfec5915c7128c6e00"
+    },
+    {
+      "path": "CERTIFICATION.md",
+      "bytes": 1493,
+      "blake2b512": "8bbe84f6ace547508de847a98bd3a7e7e9af197c3534a7f05a994389c2e8c7c3389cbbe7450b772082e1acdd3ef4e89a872aec2404c7d47ac407f77eb538c01c"
+    },
+    {
+      "path": "JOURNAL.md",
+      "bytes": 3525,
+      "blake2b512": "49822d2f43564a213551b187307f3fff267e7b155ffcd26c01f8756c2cc5f447ccf8ed553984900747478c40323c25f61f374f49e1d95c77b72c7473e05a6964"
+    },
+    {
+      "path": "LEDGER.md",
+      "bytes": 610,
+      "blake2b512": "acb9dd2674663d7f2253772a2cb57578e38f68f739725a7ab7dab4d4d3b20b6a1e4321e69bc89b4eab66940df0bc97c72d0332eb99c98fad81ed0e8fdd45690a"
+    },
+    {
+      "path": "MAQUE.md",
+      "bytes": 2043,
+      "blake2b512": "078cc6cb5f4ff02faaa6b0fde73344c323dc2d7e61c28bf36df595af105f9f6e180eea27185039bd74d58112070fc060640612fef952e186ed36aed4c12db6b0"
+    },
+    {
+      "path": "OPERATOR_BOUNDARY.md",
+      "bytes": 836,
+      "blake2b512": "1cc05df25d5bc58cbfd8da7c8e8f9bfd99bc5d425ec418d4dbf5481f66cc2f78b9081d072aed3c8dbdcbb37e721c864576728b258767c8b61fbd161b28d241e1"
+    },
+    {
+      "path": "PRODUCTION.md",
+      "bytes": 3485,
+      "blake2b512": "f118a44750cd5c040efe0a4448207239ef659627c02aacb44cfbece82abbbdd68f4ae9d192b2561f251ff0be73de7e9a2181d6ab64f9b43ace9cd9e12d47c02b"
+    },
+    {
+      "path": "PROOF-100.json",
+      "bytes": 583,
+      "blake2b512": "b20d1c0a768cf7242a50ead800dadfe6e9a313c31d4aa9c6e866ed135195cd2ec2c2bfb5981223007f65f3c16e10b7c8d0c4acd905d1a201423049e2c9bdf1c5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 12029,
+      "blake2b512": "fe9dbbfa7ba2bf63aaacae4f982c26c17a44ec003d6256ad72a7551085da41f80bd9095a0e787ff163f898c7538b47d8f5cd8024df39fa6fe57af651ca14848b"
+    },
+    {
+      "path": "RELEASE-SIGNING.json",
+      "bytes": 222,
+      "blake2b512": "ebd8966b7880aa6eb25027e616bec1c078914ccaec03366042b55b3c0cbbcd7737f988a242dbc78674a5a404944ccfb69613470853d1763dc4b77fa520afde5a"
+    },
+    {
+      "path": "REQUIREMENTS-AUDIT.md",
+      "bytes": 7895,
+      "blake2b512": "018cee74e861f0af47839520453787493e25c3f8eff788f114d5bea18224224c635f2549a2121177d58c42615730a8f1eb63c58e1d35a7d97975cd81ad8e1065"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 4272,
+      "blake2b512": "1ec3caee399bf4849326f42194e9b6a93bd6a649db096567931fcc6de772862487be4d6b8d2c95aee6d25555c837295f082968c4bff17898c8190f8c4b0b715a"
+    },
+    {
+      "path": "SUBMISSION.md",
+      "bytes": 6828,
+      "blake2b512": "9c5d4eefe3bef0ec3af611742c19150af61eeea0b70d252eea08afff3c9efbe6cdbd6e21e32d7fdb2fc248c9e4b19d19422888a6af9b145d57349f5ccd85b142"
+    },
+    {
+      "path": "TEST-RECEIPT.json",
+      "bytes": 1413,
+      "blake2b512": "adbf5b3160365da2ea0cfe9156b1457c0b8666d85f8b4ee710bfd1b99f2beb3d077ec0a2719eac426355cdb9c39b032b38a12458f7fecf29df6b6bc5880066c3"
+    },
+    {
+      "path": "TRACK-FIT.md",
+      "bytes": 4198,
+      "blake2b512": "df2d0476676f5c0cde9139844621438b6353caae308a9a41ad43df11b3feb1566bab263ba741474468a34bb8a8ad51409e0f843eb98e901c845c07ba50950f02"
+    },
+    {
+      "path": "TRACK-RESULT.json",
+      "bytes": 329,
+      "blake2b512": "25ef7261131e06c40db24310d9ac2dbb1c8963b29b8f9ce64dceb1a8afde974897753a9d132df34b030108463d25f07ddd2abddd6151788e14d7e53e9f1ec8cf"
+    },
+    {
+      "path": "V2-PRODUCT.md",
+      "bytes": 1191,
+      "blake2b512": "a217135217ba83b2ea4259145cc9595ee70dd96d901c044faa3848417320425279b1180ab07e54ffc4790f9fa1e933ad3c134c34072aed8e49fec942b605685f"
+    },
+    {
+      "path": "V2-UX-RESULT.json",
+      "bytes": 76,
+      "blake2b512": "6d5cb29e6e52a291900c32021fbb5b0609ade68f89f7cebacf855f4f856d4faabcab02129a96500fa8a3e62e3233482ca24e926fe5bbd1a2e9c64a4bcbaa6fef"
+    },
+    {
+      "path": "WEEK-100-PROOF.json",
+      "bytes": 20428,
+      "blake2b512": "842f8b6891104b0cbc119f50856364beb3a06114cc60426a5f8c176edde85f755fc838411145c1a16e48823416979308b18289206bdd2e8ab2f8f9241b82536b"
+    },
+    {
+      "path": "WEEK-100-REPORT.md",
+      "bytes": 739,
+      "blake2b512": "035144c319ed24d28ca5b08da82cfc6bda8190e73b5c45aa3248ae1b65cae3eddf96c21cc9d6ca0bc4e90f14355efb00846ab9a8e61291ffac1269150f6ea576"
+    },
+    {
+      "path": "certification.json",
+      "bytes": 1023,
+      "blake2b512": "e31a3c6642569143c74d6f581713c508fbf81b829169d618d7064af7695800ed4a1264c5509eeff0d32baf23857619b5eccce23e7a774290ddd12e2115130e57"
+    },
+    {
+      "path": "contracts/MNTY.sol",
+      "bytes": 1787,
+      "blake2b512": "f2cce73451c4a1144ba02ee6df8fd7d9d786fe538537c748f955bb2ddc7db0ca8f1c1aa8932d686c63d5c4da72d6089f3f3a86e7afdc6a321807b7c74ebd5112"
+    },
+    {
+      "path": "data/accounting-token-registry.json",
+      "bytes": 626,
+      "blake2b512": "b2adcfa0d8ae90c4af42ca054fc5d191e709250882a817c5d4f434cf5a2a95ec01c0d0e485253f71f6cde57fce0f36b89b147ec64a7b797204a30654f0d0c72c"
+    },
+    {
+      "path": "data/agent-personas.json",
+      "bytes": 15776,
+      "blake2b512": "9c672ee7bc0e770509407d968e1b7d45df64303b3071bd45dc09b9a6ae4a09af30e50515daf797a3bd2e883e16fc34e8872f78bd93b675109b28d844d1c933d8"
+    },
+    {
+      "path": "data/agent-vaults.json",
+      "bytes": 761938,
+      "blake2b512": "cc36a276c39a016a4f322f1602213cb694e505ff088dbba42a915fd750335344527cc5e780d91870019feea2ad6b134752e9bfddd0854fde388ecea62823a7a8"
+    },
+    {
+      "path": "data/bounty-coverage.json",
+      "bytes": 1413,
+      "blake2b512": "473f61f1c6dbd6cfe07865e4f89dfc6df14778badca13998a90e0b971f5179fc20869cc6bd9685d36671c8db09a252a4c5f8ddd3363391a3ce8b09505d28a943"
+    },
+    {
+      "path": "data/equity-os.json",
+      "bytes": 5140,
+      "blake2b512": "8de040a455936c6add3aaa5256ed273b5550fb01d54e562a0eb33dbb594a946ae690eef95d750ef5ba0e7a8dcbb3536a75fcd692d4a2b8388532a4892ae907ea"
+    },
+    {
+      "path": "data/finance.json",
+      "bytes": 19146,
+      "blake2b512": "51f8b7e85228b4e295c9b67ba82a81c5b5ffb3905d1a30a4e25dc52acec078ecb0aa0591301267404cc3f90ff25047f6c1a47d7baa506f6d0c7d1e69ecd9505c"
+    },
+    {
+      "path": "data/journal-key-envelope.json",
+      "bytes": 2441,
+      "blake2b512": "a092fcfa93d451d4ee1b3a6e8b89ca94b4904f4ba26a4362a0982267c76e8dcd5f5b452c210ca6629f87583a6c940838a7464282ee16a1d238539693127cf751"
+    },
+    {
+      "path": "data/markets.json",
+      "bytes": 84663,
+      "blake2b512": "57707e6de5a31086940d59c9efd614216cd603a8e5f183a5f99272ab4fdc78a6941065e81787628cc2d5aa6402b591954ba533420fb60e2a986c5f6fd87ad77b"
+    },
+    {
+      "path": "data/prestocks-snapshot.json",
+      "bytes": 1820,
+      "blake2b512": "ad4b6940f4d5f1e097020c4aee42df484b02db8333787f317f02b1e058982f648cf93dcf74a05d1fb22d37f5d14010ee9a571dca20d3481c65adfc4dd58e6f32"
+    },
+    {
+      "path": "data/requirements-ledger.json",
+      "bytes": 15442,
+      "blake2b512": "74a4571ac46de15f67ad29962498758bb47d6d49ca99929caa422a099fba3fc42f02530e1adeec4f4ce77f30ef15ce9cafea26e1ecd823a29bb0b57fb9b47d43"
+    },
+    {
+      "path": "data/token-ledger.json",
+      "bytes": 7475,
+      "blake2b512": "0ff4026735d65d38081d342c5c9e9baeb7223d786635a1780a22524712c559bbf7b61cfe8d1bdde89fea476ec5bd358642b5c0ae8108e4915745a2bc7f244199"
+    },
+    {
+      "path": "data/track-fit.json",
+      "bytes": 1568,
+      "blake2b512": "645f08f685529ece41c4dfc169b81dd8ac009ffce06b801252a3a81e65476e681ea1b1f347dda387b4e2683bbb1d8af2000a9d73f10d6578eefbbc251f0a984d"
+    },
+    {
+      "path": "data/v2-product.json",
+      "bytes": 615,
+      "blake2b512": "e4620ee88babcbbf4adf08062a1512c5a141bdb56ca06122282b1e56d6c4411f882bb5fdab07690e748df622c2eb9e78c5e0c943dfa13bdbe5883b096d3dca4e"
+    },
+    {
+      "path": "docs/V2-FINANCIAL-SUBSTRATE.md",
+      "bytes": 1114,
+      "blake2b512": "a2d72c3051326031c49f3dabfd2d342e7f62e628c4ed1df841162bdcece2019df2bffc3ff9b5860db4b7f7bd0cc0899c3686979e67b137eee082062b84f2a6ff"
+    },
+    {
+      "path": "index.html",
+      "bytes": 28624,
+      "blake2b512": "83e90857a3a2191d33124540e6d02c8b7c47b61cfa9c455b789d50d7ea07be214b08ff6037037ca60f72f794e13490421c4fb8c8eb2e5ff70c8750ae5ec7cf63"
+    },
+    {
+      "path": "mobile/pythonista_remote.py",
+      "bytes": 1741,
+      "blake2b512": "477bc9418d41bcbb742b19544e2be4fcd6f5b0b723c3eb0c00f79f1242e6cb51a2197f10937332da385802794b52c62592e706a42d0ca03035ebb0c846c5abdc"
+    },
+    {
+      "path": "package.json",
+      "bytes": 636,
+      "blake2b512": "a6ee31390708d67fbb7ed35e48b9d64d3169ff713ece2dbfbdd8467d6eb783d22a57bd5a549ad8201384557d6ade976596374d12a718209eef1c474544d8630c"
+    },
+    {
+      "path": "programs/stocklana-market/Cargo.toml",
+      "bytes": 369,
+      "blake2b512": "028371775a9adb51513b7452d03fb6393694cbf36457050ceea50362dcfa508daedc796f22e4b5e50fe3671a56d29f0b92dfa5a3f18f15dd54237969a866324d"
+    },
+    {
+      "path": "programs/stocklana-market/src/lib.rs",
+      "bytes": 14169,
+      "blake2b512": "45d5a9d85fe1e83ee86fbedd08c9faebd4a94aa6fdf907650efd4ce3b203c30468e76009b1771edf04fef2da9505cc8b15b455797ec3acea5ba528dc8272a01e"
+    },
+    {
+      "path": "public/crypto/ed25519.public.pem",
+      "bytes": 113,
+      "blake2b512": "081a84bb4ef17956c1a360bfc54711005779b2b8f9d875bd3d90e31be3ef0a56e25b4fd11bcd56cc996cfed46cf9fd7942e847bee0ab0d295633f06d9db29045"
+    },
+    {
+      "path": "public/crypto/mldsa65.public.pem",
+      "bytes": 2726,
+      "blake2b512": "438550df177fd696babd41891af777a9bb3c3e9a4d53c9ddc66c8e45b701cae23f627f4db557f970910c4b4ae8efe5409e62a5782f6a7aa4f86f5ea11264520f"
+    },
+    {
+      "path": "public/crypto/mlkem768.public.pem",
+      "bytes": 1686,
+      "blake2b512": "10dab50182cc96e17654b14af2c8275522cf08f03dd06c5195c2bb13eafed2e9bf38bb270bc30dec94a0a9bc8c586be645ebee83c44e1b129e4849673026fb7b"
+    },
+    {
+      "path": "public/crypto/x25519.public.pem",
+      "bytes": 113,
+      "blake2b512": "d29fc69273bd7e8538fff989fd147c41437bd7b5512282fa8919fb602dd744fff27a49b7784e2e24580065ca20589bf62a7c8db082e3f854e5dd87d570e2f669"
+    },
+    {
+      "path": "public/ledger.csv",
+      "bytes": 229349,
+      "blake2b512": "d39c75636af27b5f9778c9f5715ea51b6477a4b27450cc8cd6089412aaae43b92ca6f6c52ae3788231255407dd184d60e2a79906fa665e2bedebf3e56361b95c"
+    },
+    {
+      "path": "public/ledger.json",
+      "bytes": 392113,
+      "blake2b512": "7f30697aceec58eda18878d85e430e4ce978ae0aa56e2adb6fbcff0260e07be080713c70803489bc856d1b1d05446ee276b411352b96141689cf3f3abb75e838"
+    },
+    {
+      "path": "scripts/export_ledger.py",
+      "bytes": 1482,
+      "blake2b512": "83ae6c3a8a80f939027aba7e9d25b74792f4db6128c6a815fa0a9eb2ca296578caac32df709a113e3e17b4035375c3edb2857235132eb42a648289fb427e6df2"
+    },
+    {
+      "path": "scripts/launch/README.md",
+      "bytes": 588,
+      "blake2b512": "6bab047ec864d7ee1139197466d9717a3377af556e2514010c4a5431b18fb6e9f6141b0becad7e002f3962a47d80e7c134bb47e1d30f87f15b0880053f4492a1"
+    },
+    {
+      "path": "scripts/launch/create_mnty_solana.mjs",
+      "bytes": 2475,
+      "blake2b512": "7b55fbb96bf2f64879bd5584f5b3791bf10e808d576ea90dea6b271c800e3a1a1417d50e1fa5c0e9e648f8d7849b339349c56e32b165892453496eb957a5355e"
+    },
+    {
+      "path": "scripts/pq_release_manifest.py",
+      "bytes": 1576,
+      "blake2b512": "0e742eed313213f011858c61c3b4599cdeb76497c6626e3b0335b808adeab49917f3bdfec76f09c2625d8fc05f45287434f247b4780d1d588afa32ff093455a0"
+    },
+    {
+      "path": "scripts/run_week_100.py",
+      "bytes": 8956,
+      "blake2b512": "baf279fe085396a664d0727fc06286ac6d8341164aecd2eb30f9151da34bd06c65f860cfde0eab341920c1e3937cc691525ea1baadedd20fe1e353e82bec6293"
+    },
+    {
+      "path": "scripts/run_week_100_regression.py",
+      "bytes": 6686,
+      "blake2b512": "ef2cc0b11e9a3163e2bca0c519eb175f89fda66014004a6d78d198a7c2c8896560fdd6fbc8aa50c156f4167bf0636a55796a49a48c2e35bf8ff4cac87ee204b1"
+    },
+    {
+      "path": "scripts/test_acceptance.py",
+      "bytes": 5292,
+      "blake2b512": "b079d70e9a65f4dde56927e5e0887241233a2ad802ead47451c4a7ab30a27a13ddd0395c1d41247d164d929c24cb11099410ab9761fe782c4393cbe1cd927e05"
+    },
+    {
+      "path": "scripts/test_accounting_http.py",
+      "bytes": 1791,
+      "blake2b512": "eed2b0603fa41823d86342616a8d3c9d6c69e675f09926a15f13625693368115ab90b88d1512d7382a1b8204e045c22074948544c4b6e53b838e8e80415fa59e"
+    },
+    {
+      "path": "scripts/test_accounting_tokens.py",
+      "bytes": 6432,
+      "blake2b512": "6cd1444b6227945c42217a6826f9a612453036c50de4b95f95f0464883efe0e524e62ee34f0fa8e8fb8a32811c5b4b8b0a886f56ee36f3804f801e60520700c1"
+    },
+    {
+      "path": "scripts/test_api.py",
+      "bytes": 2280,
+      "blake2b512": "0606bd486acb7e61b691a2f0ec1f063c48e7ca81cb3c748d0ba1618d4d4417ded98dfbd7518141f0361d20b12001edb8d12c4bbb052f0343fd2f50cc88738ce4"
+    },
+    {
+      "path": "scripts/test_concurrency.py",
+      "bytes": 900,
+      "blake2b512": "879b0414549569df7803a7bb147221c081a89c0165921b71ffff40fce5589c409a8c906ccfb90a5e5662371c38e61b7092027253290af782e8894bc82c22264c"
+    },
+    {
+      "path": "scripts/test_finance.py",
+      "bytes": 3396,
+      "blake2b512": "665c0e18d6b813bbb381b06e556549429a3d75be5b20b26e0a96c4ddbc7b7126b7c1bb376b65eb841ae8584516b7a44a392ca51683cdd5092eda031135a09e22"
+    },
+    {
+      "path": "scripts/test_maque_100.py",
+      "bytes": 2026,
+      "blake2b512": "cd78110c1f64d935740c7005180e457abc0c747097b06aff03bbfef07f21655610ee7931c323bea81c63287fab7a5405a49cfbacd65504266426e6929dbfcaa8"
+    },
+    {
+      "path": "scripts/test_market_engine.cjs",
+      "bytes": 689,
+      "blake2b512": "0206f0327eb95872a76c66b9688ec424ec97de6c68911f6de947f18cecd5aa0c3bee83e56e5e8b6ca47198862c06f2e8ad05858e9ccf482c9f27f9f52b76f8d5"
+    },
+    {
+      "path": "scripts/test_oracle.mjs",
+      "bytes": 462,
+      "blake2b512": "5226996920a4b058338f77ff35840f8800f63293bee5a524a4eb7b8959b2d24c82d53282e206beb55260787d241fd6f46631352b3186029a372a76ad98445646"
+    },
+    {
+      "path": "scripts/test_pons_surface.py",
+      "bytes": 2071,
+      "blake2b512": "4b87624f213301295f94b2c3a69b5b474addb09f500a049864914d4e2605b7e3cb34452038a6269f4e93c0f9259aadef4b55b2b5662e640146817d85b2525192"
+    },
+    {
+      "path": "scripts/test_pq_crypto.py",
+      "bytes": 713,
+      "blake2b512": "0c99465f94531908bb3a69f8d76a8f510ffffbcedfbe98ed94ba22a658227feea43b1c40c1af90193adeeba69b3bfb42774cf885a746709ed3b487e9c62cc44f"
+    },
+    {
+      "path": "scripts/test_settlement.py",
+      "bytes": 3147,
+      "blake2b512": "20312cf7bc459d92c6648705b652a7ca31ffea22c1fab7d3f805a429142916bc5ec995aa40c2358c1d5f3c1d96278bf4ff0793f148f406b30fc1a5452f79b9b7"
+    },
+    {
+      "path": "scripts/test_token_profiles.mjs",
+      "bytes": 752,
+      "blake2b512": "5c48c25151e5bb97e20a50663f4575115302279539378d8147b55baf4a2d09b2f6820e10d924f48ab21f5d987a9dbde1f822055aca859a9b360487c6f6dae909"
+    },
+    {
+      "path": "scripts/test_track_fit.py",
+      "bytes": 1800,
+      "blake2b512": "a14b6db215c49cbef4fb905bb3469cea7722a113bbdb965b4bcc474f8fd23621970771f8d75ce302fd304a579800d43e2a61226878fc8f247f1e521864603f55"
+    },
+    {
+      "path": "scripts/test_v2_ux.py",
+      "bytes": 1885,
+      "blake2b512": "2f08911976169120d25a46b417bc7062f2913731efc9c6082687fb084185874eea67a249753419a31ac5158f5ed7b1abf2965837b33d42a6d4910c25638066f7"
+    },
+    {
+      "path": "scripts/test_withdrawal.py",
+      "bytes": 804,
+      "blake2b512": "35078e90e5697ab503fe42c74f62e5ec76b770bd8230483e2f495f5cb9b4ef38a181e1b51e94404d5945fbc4185a77a8dc5b48c9f96242efcd0a0a054c15318b"
+    },
+    {
+      "path": "scripts/test_workstation.py",
+      "bytes": 948,
+      "blake2b512": "c9b72162fabc652ff447f7a5efec9c6d979cb57e8e211ad61d918c7a111ea9081fb0da5066d48f645558d9532b34ac61ebce33c7d3b1445ef888a4705590eca3"
+    },
+    {
+      "path": "scripts/verify_http.py",
+      "bytes": 4955,
+      "blake2b512": "45a602873d9dc2b7cfd5582136f8914862d9d08beeacd0ffeacf630f7d48596a6dfe4438070feca8a459f4c850743c0ba41b648c97a67b89a83511a932ad9189"
+    },
+    {
+      "path": "scripts/verify_release_public.py",
+      "bytes": 1232,
+      "blake2b512": "8691c3cf4c3134548dfc99cd3187a6e60e776347d4baf58dd5a582cab86e52fd1bf9a9946ae6b25a6caccefc5cbcabdaca0889ea63ad5d2e79dfc8f5f96092dd"
+    },
+    {
+      "path": "scripts/week100_checkpoint.py",
+      "bytes": 7520,
+      "blake2b512": "6c8ee56e3a39a36101458a7c6958c7fe57f0ddfd37b9da0bc0c495d7cd1bfd5347e08de824f9dcf548df09bc79c9e3f7f31d3d8b8f60d89d59771f8851cddadc"
+    },
+    {
+      "path": "server.py",
+      "bytes": 33493,
+      "blake2b512": "2b4361c0872392d6974ffb35dfafa858d18a5efccbc5dcdf2c9ea578e2242a9b6e63a6e7a07132cc6f2321091ad81560a71a68469979b4bcecd6413552a747a6"
+    },
+    {
+      "path": "src/accounting_tokens.py",
+      "bytes": 22377,
+      "blake2b512": "fc2aec5ffe5b698675ebd77ec993bfafcdd558a24ed783b3a02577387b6a16ed9e54fe2b95877c96a810f6b52e94ead4210f391eb3434e3f6e8a41ada786b85c"
+    },
+    {
+      "path": "src/agent_vault.py",
+      "bytes": 3203,
+      "blake2b512": "3eae04798cfbf20c4241063fa239ca9ceeb78ec864f16ef9778fd740244ca150a96e33a305e6c95f0244b6506d069aaa12900667c9699c4a39b8d15be3d583b7"
+    },
+    {
+      "path": "src/app-three.js",
+      "bytes": 19628,
+      "blake2b512": "ed34c8be512469eae55cfa7e7914b3c4e02bf28cfa9177c9e78f364e75009d9aca2932ef0bc4197a47cde517f9b83e140e414f207f48b2212ed06f6f30d93f90"
+    },
+    {
+      "path": "src/app.js",
+      "bytes": 47921,
+      "blake2b512": "3dd9c5403b168b39b2e67db70a5cd01a95006f4f0673369fcbd3a04a0c9d06d6c89e109e34ba9d128f14ee2a2db03fb2106b76fcb11b593754a9b235d45184b6"
+    },
+    {
+      "path": "src/auth.py",
+      "bytes": 3117,
+      "blake2b512": "43c739292f7ed2d3376db9c6f21fb5a533653846850dc10ac7a77755ed767b585fea1a6bcae9c3d9a03cf5be8237bd85d42c30349fb1472f603ff8a7a8055732"
+    },
+    {
+      "path": "src/card_rail.py",
+      "bytes": 3954,
+      "blake2b512": "2bde34d275c8ea77fd636b50bd38edccdf5f63332c58fd4484d6b929bc67f42fe469e7d6d75cac751b62160e8d1c003384ea0913503dc97971eb8a0721e32fdd"
+    },
+    {
+      "path": "src/clawpump.py",
+      "bytes": 1722,
+      "blake2b512": "194a3eaf6526a94aa5e59d3e14af5c1a98fa0a446fd6e6cfd10d519e32558c0fdf8fe7f7bb823f104ab319fa5d3ff09fa166bdfd74a67361305fa85dd3adbb8b"
+    },
+    {
+      "path": "src/equity_os.py",
+      "bytes": 5734,
+      "blake2b512": "fc2b5b6d966fcaed07ff31c12850a940765b9c04e81c71fe36c4df41ac7006aa9c0d561f1bfb5fc801678d25b4d92df89d9ca20cf1f67978d17983587d684367"
+    },
+    {
+      "path": "src/finance-store.py",
+      "bytes": 16457,
+      "blake2b512": "61e8530345477bf47570ba19ba46b1a4d8c8a6b9ef8680c75c2f1fd0a3f25ec5d92e112a751e2060afc954066a5ad68e340dff01504d508d4f99c51a8bb8624a"
+    },
+    {
+      "path": "src/growth.py",
+      "bytes": 1222,
+      "blake2b512": "8c20e3d97bbe411c1b15d11dd0c911472dc53293c88e6a22ed592810f687c981a30e335f955a7e2090cbecdc8005988babd8c71c1ea71b87b22bf2cdb238261e"
+    },
+    {
+      "path": "src/iso20022_bridge.py",
+      "bytes": 1908,
+      "blake2b512": "967f7acf0701ddf645dc777a8909397a647b7a382fba20bd15a98809776e49264dd1a1e9699fb2dfde6d03612ad246c2ca1d0cf750dab7b514175d18bfad959c"
+    },
+    {
+      "path": "src/kamino_adapter.py",
+      "bytes": 1306,
+      "blake2b512": "5fdc9b3da2eca6f9b6cd6213c791705d6bf77d1dc64a14e41f58562a12ece9e688560f7f4dd74b31169d9f9a27c9e18d028bc644b16cf91bdc9c9d04bac2c4ae"
+    },
+    {
+      "path": "src/keeper.py",
+      "bytes": 1844,
+      "blake2b512": "e1d765f5b1f9fcfd7f8b67f923bed77350353ab8729823e1b64c1f8c994b81cd4009c80a4e8ab0c4925326cb08781b47894129244a036d504a3aebeb28ff71ed"
+    },
+    {
+      "path": "src/lending.py",
+      "bytes": 3009,
+      "blake2b512": "3737cbe9db8d4657450efe9412f0b258024f876358a6169d2a0642e15a9c8052c3a726cd5213985de4026afc69cf7c6b3c55cb0f95d47d31d81953e785e28424"
+    },
+    {
+      "path": "src/market-catalog.py",
+      "bytes": 11068,
+      "blake2b512": "70c299f8db07d6c759c2697208538c39de540c2b39ed8d2fb5de88417af8563e00eff75dfa2e25042eab6e4040518633c813d2b8a0eedc924ac70468009b9a06"
+    },
+    {
+      "path": "src/market-engine.cjs",
+      "bytes": 2650,
+      "blake2b512": "2d33d464c457025cf7b5f04e5a7e40230377172b3ad72507c16858475a81b4db90b6fe2686c305f3f5fe7f2e5424189edd2f47dd1d878039443d3a5a4dfcac11"
+    },
+    {
+      "path": "src/market-engine.js",
+      "bytes": 2650,
+      "blake2b512": "2d33d464c457025cf7b5f04e5a7e40230377172b3ad72507c16858475a81b4db90b6fe2686c305f3f5fe7f2e5424189edd2f47dd1d878039443d3a5a4dfcac11"
+    },
+    {
+      "path": "src/market-store.py",
+      "bytes": 7201,
+      "blake2b512": "27d6bb6660bfdfad743f155fbd8d4c63960715749cb91fbb90fa574499689ec57946a1dae735eeaa0013b902012026aebe207a0423d8b80c2acdcd45a3f0ae1f"
+    },
+    {
+      "path": "src/market_execution.py",
+      "bytes": 3301,
+      "blake2b512": "b2f07798db58a8d3f675c2e859cc59cbead1e4ffb1cb5284d055175656fdcdc122cb8c4fd5280165ab536b407278e664438268fc793d2413fa5dd97526b2c335"
+    },
+    {
+      "path": "src/meteora-dbc.js",
+      "bytes": 4101,
+      "blake2b512": "270fcdefd8ac1f8f39c9661b60b5fa4dd84830b8f804958d7ef0b249fb75903f0efd73dfc7800edf464d48c47255d16dc9800f6756dcd941556cc55f5d223b27"
+    },
+    {
+      "path": "src/oracle-policy.js",
+      "bytes": 1069,
+      "blake2b512": "65b02c923c33e16aecbf65c1697b43be61b4f850681c10cacbfd8827d77519c2923daa8d6ec94e9f4efb77d007c8d200936d6987113f211f57ff4c7f8fb4ddbf"
+    },
+    {
+      "path": "src/payment_fabric.py",
+      "bytes": 4434,
+      "blake2b512": "14d8447cacdc73f0a42bf91a87ca072348444d688be85ecf38cd70c50e66d087cf22411f7f2f7291a51973ddeb8046ca2fba322da145b9dbc17342b553820a8b"
+    },
+    {
+      "path": "src/pons-v2.js",
+      "bytes": 13328,
+      "blake2b512": "1c3894431de71245ef7ad1e6e2524864af37a90f797fae625b33f95f9cd56a7b29c5f941293b584c60be933390f6415931b8e0e32e37402f41af6d9ae2f8e7d2"
+    },
+    {
+      "path": "src/pq_crypto.py",
+      "bytes": 7573,
+      "blake2b512": "c8101cee7af85a8ca96b49b2b66638319711a26a02f1a4e9ac18f5945a34e8d279f92bffd0e5791c868a74dd91ad79ac6a78a8c72c9a57ff7cd25ad3f52eaa66"
+    },
+    {
+      "path": "src/prestocks-registry.js",
+      "bytes": 417,
+      "blake2b512": "e74fab129c69f60baf92a1deec8aff02062d68185286a73a9e570530ad87fcdf3075605e5977a2e7b0f74eeb9750e92d0342df919d4592d5a72c3e315f543524"
+    },
+    {
+      "path": "src/settlement-engine.py",
+      "bytes": 7384,
+      "blake2b512": "a58a83242b92f7755d045300e781479b8f0732f9ed463a754d13b95f21fccecf4701aeee7b4294ae8b4822784b1f3bf40b9418cdbe24dfb768158344d4423684"
+    },
+    {
+      "path": "src/simulations.py",
+      "bytes": 1376,
+      "blake2b512": "9d4ffe8b40ff4b416b7c54b3e649bbac1b2707fa847e834f4e10c7a8d8f85e1012bcb3d03e29e65515c462393a1608912b2502673f400586c8cbae8dbad7ccf5"
+    },
+    {
+      "path": "src/solana-client.js",
+      "bytes": 4031,
+      "blake2b512": "62be34680795fb1ffff00b7da20c968ca1e18304e30b63e21065099f6efed9cdc48744050e7aff04ceee9dc54596a6cdb5d86eaa2fd944dbca268b8e442f4924"
+    },
+    {
+      "path": "src/solana_finance.py",
+      "bytes": 3045,
+      "blake2b512": "4a9e3655c4932084351383533847fadb128b316822de1eedfb9e94a724808a8d513413db30dddebd60c274825baad2f63147b82090939d43308155e4021ea1ec"
+    },
+    {
+      "path": "src/stocklana-program-client.js",
+      "bytes": 7708,
+      "blake2b512": "61c16391a2ac79e31808650c1e44bc6688a233f2e9ec913c8564364e49820d56fdacf38c9d32ff69c419fd336997e0090f56c6fd4e3c483f7140e2a416c7a85b"
+    },
+    {
+      "path": "src/styles.css",
+      "bytes": 23868,
+      "blake2b512": "305e4cc250a7f4cca709e0361fe5572f76455fdfcc3e721cb8e1217c9aea68a85ea9b1a283ef136766680110441514a32d5e28f32aa3daa34f91340809e53e0b"
+    },
+    {
+      "path": "src/systems.js",
+      "bytes": 8083,
+      "blake2b512": "226915d7e233a14ab3faddd9da33b8e5ba9a2a1a8c220f2e872f8547f976dcc04c5f56a7b62e9701e84fb23fd334d42747acb77064e8f13d4aa8ff9cd6113ead"
+    },
+    {
+      "path": "src/token2022-accounting.js",
+      "bytes": 4051,
+      "blake2b512": "30ef1b3cc7806721a30284047b730b23820b305cb6ab2b06ea6666dd676879f1ebebdee40c014848593a1fa123181b5005e29bae5746349bb596a2f6bd7706a5"
+    },
+    {
+      "path": "src/vendor/README.md",
+      "bytes": 489,
+      "blake2b512": "cb979f78b53827dd9b365d6d99c8ecba57a91ca36834e2786630e1b616f35acb4f49ae51ab866f19eb22935eadfafb65a7e1030d394e7102518a0eec8788e3be"
+    },
+    {
+      "path": "src/xstocks_adapter.py",
+      "bytes": 1724,
+      "blake2b512": "fcb2b4f831bbf1493d47da3c956158030baef141e95172f169d3f57afe8db9e7f6575c1d2e5fdefb84517a2c769772d3fd7ef1bbfa5fdc98c635ae7ef2ba2046"
+    }
+  ],
+  "rootCommitment": "17006878120ca90bbd0c07619d55badc96a537c6debffb4d6c1c366baab1bb253ee52183ce47a4f5ecaee4a59d98d745df9737284946a43aea1309e394986178",
+  "hybridSignature": {
+    "suite": "ML-DSA-65+Ed25519",
+    "commitment": "2c1aaeb605b2033e59e52db1fd6f4b53eea57992789ab34fb204cc00cfc122579dd9e75cfe0051fe342e526c443efd17169788d1fbe8207f37e2009b31555e82",
+    "mldsa65": "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",
+    "ed25519": "oWFwRZ7RyMLzZ80ZXu5ctMHV30Rsfj0Uy0CGoI1xpgrTwe8f8E1cNyut5695gGaB/eq53VnzkteprjNL7Lz5Dw==",
+    "mldsaKey": "0417c503a3936c8642988a65d88bd759fb571eadf2412bc812ff2a48cfff4423",
+    "ed25519Key": "a73114e1fbe66a5b95128699234de8c1d649e32a576dd2028c25c0ab7d834c92"
+  }
+}
