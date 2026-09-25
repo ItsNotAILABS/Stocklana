@@ -174,10 +174,19 @@ document.addEventListener('click',e=>{if(!e.target.closest('.neo-search')&&$('#g
 $('#uxModeBtn')?.addEventListener('click',()=>setUxMode(!document.body.classList.contains('advanced-mode')));
 setUxMode(localStorage.getItem(UX_MODE_KEY)==='1');
 function renderAssets(){
- $('#assetCount').textContent=assets.length; $('#ticker').innerHTML=assets.map(a=>{const p=premium(a);return `<div class="tick ${p>=0?'pos':'neg'}"><b>${a.symbol}</b>${p>=0?'+':''}${p.toFixed(1)}% premium</div>`}).join('');
- $('#assetGrid').innerHTML=assets.map(a=>{const p=premium(a);return `<article class="asset-card" data-asset-card="${a.symbol}"><div class="asset-head"><img class="asset-logo" src="${a.image||''}" alt=""/><span class="premium ${p>=0?'pos':'neg'}">${p>=0?'+':''}${p.toFixed(1)}%</span></div><h3>${a.name.replace(' PreStocks','')}</h3><span class="sym">${a.symbol}</span><div class="price">${money(a.tokenPrice)}</div><div class="valuation">Implied ${money(a.impliedValuation)}</div><div class="asset-actions"><button data-quick-buy="${a.symbol}">Buy</button><button data-quick-auto="${a.symbol}">Auto</button><button data-asset="${a.symbol}">More</button></div></article>`}).join('');
- $('#assetPicker').innerHTML=assets.map(a=>`<button class="pick ${a.symbol===selected?'active':''}" data-pick="${a.symbol}">${a.symbol}</button>`).join('');
- refreshSwapTargets(); document.querySelectorAll('[data-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.asset)); document.querySelectorAll('[data-quick-buy]').forEach(b=>b.onclick=()=>buyUnderlying(assets.find(a=>a.symbol===b.dataset.quickBuy))); $$('[data-quick-auto]').forEach(b=>b.onclick=()=>scheduleRecurring(assets.find(a=>a.symbol===b.dataset.quickAuto))); $$('[data-pick]').forEach(b=>b.onclick=()=>{selected=b.dataset.pick;renderAssets();buildFields()});
+ const count=$('#assetCount');if(count)count.textContent=assets.length;
+ const ticker=$('#ticker');
+ if(ticker)ticker.innerHTML=assets.map(a=>{const p=premium(a);return `<button class="tick ${p>=0?'pos':'neg'}" data-ticker-asset="${a.symbol}"><span>${a.symbol}</span><b>${money(a.tokenPrice)}</b><em>${p>=0?'+':''}${p.toFixed(1)}%</em></button>`}).join('');
+ const grid=$('#assetGrid');
+ if(grid)grid.innerHTML=assets.map((a,i)=>{const p=premium(a),name=a.name.replace(' PreStocks',''),seed=Math.abs(Math.round((p+11)*37+i*17))%100;return `<article class="asset-card premium-asset-card" data-asset-card="${a.symbol}" style="--seed:${seed};--asset-accent:${p>=0?'#dfff42':'#ff6f8e'}"><div class="asset-card-top"><div class="asset-identity"><span class="asset-orb">${a.image?`<img class="asset-logo" src="${a.image}" alt="">`:`<b>${a.symbol.slice(0,2)}</b>`}</span><div><span class="sym">${a.symbol}</span><h3>${name}</h3></div></div><span class="premium ${p>=0?'pos':'neg'}">${p>=0?'+':''}${p.toFixed(1)}%</span></div><div class="asset-market-row"><div><span>Token price</span><b class="price">${money(a.tokenPrice)}</b></div><div><span>Mark price</span><b>${money(a.markPrice)}</b></div></div><div class="asset-sparkline" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><em></em></div><div class="asset-metrics"><span><small>Implied value</small><b>${money(a.impliedValuation)}</b></span><span><small>Mint</small><b>${short(a.contract_address)}</b></span></div><div class="asset-utility-strip"><span>BUY</span><span>AUTO</span><span>PLAY</span><span>SHOP</span><span>AI</span></div><div class="asset-actions"><button class="primary" data-quick-buy="${a.symbol}">Buy</button><button data-quick-auto="${a.symbol}">Auto</button><button data-asset="${a.symbol}">Use asset →</button></div></article>`}).join('');
+ const picker=$('#assetPicker');
+ if(picker)picker.innerHTML=assets.map(a=>`<button class="pick ${a.symbol===selected?'active':''}" data-pick="${a.symbol}">${a.symbol}</button>`).join('');
+ refreshSwapTargets();
+ document.querySelectorAll('[data-ticker-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.tickerAsset));
+ document.querySelectorAll('[data-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.asset));
+ document.querySelectorAll('[data-quick-buy]').forEach(b=>b.onclick=()=>buyUnderlying(assets.find(a=>a.symbol===b.dataset.quickBuy)));
+ $$('[data-quick-auto]').forEach(b=>b.onclick=()=>scheduleRecurring(assets.find(a=>a.symbol===b.dataset.quickAuto)));
+ $$('[data-pick]').forEach(b=>b.onclick=()=>{selected=b.dataset.pick;renderAssets();buildFields()});
 }
 function refreshSwapTargets(){
  const from=$('#swapFrom'),to=$('#swapTo');if(!from||!to)return;
