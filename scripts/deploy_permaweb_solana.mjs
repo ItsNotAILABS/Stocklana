@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import bs58 from 'bs58';
 import { TurboFactory } from '@ardrive/turbo-sdk';
+import { ARIO, ANT } from '@ar.io/sdk';
+import { createKeyPairSignerFromBytes } from '@solana/kit';
 
 const root=path.resolve(new URL('..', import.meta.url).pathname);
 const dist=path.join(root,'dist');
@@ -13,7 +15,9 @@ if(!fs.existsSync(keyPath)) throw new Error(`solana_keypair_missing:${keyPath}`)
 const raw=JSON.parse(fs.readFileSync(keyPath,'utf8'));
 const secretKey=new Uint8Array(raw);
 if(secretKey.length!==64) throw new Error('expected_64_byte_solana_keypair');
-const turbo=TurboFactory.authenticated({privateKey:bs58.encode(secretKey),token:'solana'});
+const turbo=TurboFactory.authenticated({privateKey:bs58.encode(secretKey.slice(0,32)),token:'solana'});
+const signer=await createKeyPairSignerFromBytes(secretKey);
+const ario=ARIO.mainnet({signer});
 
 console.log('Uploading Stocklana permanent frontend with Solana wallet authentication...');
 const result=await turbo.uploadFolder({
@@ -39,5 +43,15 @@ const receipt={
 };
 const dir=path.join(root,'deployments');fs.mkdirSync(dir,{recursive:true});
 const name=`frontend-${new Date().toISOString().replace(/[:.]/g,'-')}.json`;
+const arnsName=String(process.env.STOCKLANA_ARNS_NAME||'').trim();
+if(arnsName){
+  console.log(`Updating existing ArNS name "${arnsName}" to the new manifest...`);
+  const record=await ario.getArNSRecord({name:arnsName});
+  if(!record?.processId) throw new Error('arns_record_missing_process_id');
+  const ant=ANT.init({signer,processId:record.processId});
+  await ant.setRecord({undername:'@',transactionId:manifestId,ttlSeconds:3600});
+  receipt.arnsName=arnsName;
+  receipt.arnsUrl=`https://${arnsName}.ar.io`;
+}
 fs.writeFileSync(path.join(dir,name),JSON.stringify(receipt,null,2));
 console.log(JSON.stringify(receipt,null,2));
