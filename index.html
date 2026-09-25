@@ -78,27 +78,33 @@
 
           <div class="neo-hero-media" id="heroMedia">
             <canvas id="heroOrbitCanvas" aria-hidden="true"></canvas>
-            <div class="hero-orb-glass" aria-hidden="true"></div>
-            <div class="hero-float hf-chart" aria-hidden="true">↗</div>
-            <div class="hero-float hf-game" aria-hidden="true">♟</div>
-            <div class="hero-float hf-shop" aria-hidden="true">▰</div>
-            <div class="hero-float hf-ai" aria-hidden="true">◈</div>
-            <div class="hero-float hf-send" aria-hidden="true">➤</div>
-            <div class="hero-float hf-bank" aria-hidden="true">▥</div>
-            <button class="hero-media-play" id="heroMediaToggle" aria-label="Pause or play hero motion"><span>Ⅱ</span></button>
-            <div class="hero-media-copy"><b>Turn investments into a living economy</b><small id="heroMediaTime">LIVE · programmable ownership</small></div>
-            <div class="hero-media-mantra">SAME<br>MONEY.<br><strong>MORE</strong><br>POSSIBILITIES.</div>
-            <div class="hero-media-line"><i></i></div>
+            <div class="hero-planet" aria-hidden="true"><i class="hp-core"></i><i class="hp-shine"></i></div>
+            <div class="hero-ring ring-a" aria-hidden="true"></div>
+            <div class="hero-ring ring-b" aria-hidden="true"></div>
+            <div class="hero-ring ring-c" aria-hidden="true"></div>
+            <div class="hero-float hf-chart" aria-hidden="true"><b>↗</b></div>
+            <div class="hero-float hf-game" aria-hidden="true"><b>🎮</b></div>
+            <div class="hero-float hf-shop" aria-hidden="true"><b>▰</b></div>
+            <div class="hero-float hf-ai" aria-hidden="true"><b>◈</b></div>
+            <div class="hero-float hf-send" aria-hidden="true"><b>➤</b></div>
+            <div class="hero-float hf-bank" aria-hidden="true"><b>▥</b></div>
+            <button class="hero-media-play" id="heroMediaToggle" aria-label="Pause or play hero motion"><span>▶</span></button>
+            <div class="hero-media-caption">
+              <b>Turn investments into a living economy</b>
+              <div><span id="heroMediaTime">0:00 / 1:24</span><i class="hero-progress"><em></em></i></div>
+            </div>
+            <div class="hero-media-mantra">SAME<br>MONEY.<br><strong>MORE</strong><br>POSSIBILITIES.<i></i></div>
+            <div class="hero-media-controls"><span>◖</span><span>⌗</span></div>
           </div>
         </div>
 
         <div class="neo-action-ribbon" id="v2ActionGrid">
-          <button class="neo-action buy" data-action="buy"><span>↗</span><div><b>Buy a company</b><small>Own tokenized private companies</small></div></button>
-          <button class="neo-action convert" data-action="money"><span>⇄</span><div><b>Convert money</b><small>SOL · USDC · PreStocks</small></div></button>
-          <button class="neo-action play" data-action="play"><span>◇</span><div><b>Play</b><small>Real payoff games</small></div></button>
-          <button class="neo-action shop" data-action="spend"><span>▰</span><div><b>Shop</b><small>Spend with your portfolio</small></div></button>
-          <button class="neo-action send" data-action="send"><span>➤</span><div><b>Send</b><small>Move money instantly</small></div></button>
-          <button class="neo-action ai" data-action="agent"><span>◈</span><div><b>Give an AI a budget</b><small>Rules before autonomy</small></div></button>
+          <button class="neo-action buy" data-action="buy"><span>↗</span><div><b>Buy a company</b><small>Invest in tokenized stocks</small></div></button>
+          <button class="neo-action convert" data-action="money"><span>⇄</span><div><b>Convert money</b><small>Swap between assets</small></div></button>
+          <button class="neo-action play" data-action="play"><span>◇</span><div><b>Play</b><small>Prediction markets & games</small></div></button>
+          <button class="neo-action shop" data-action="spend"><span>▰</span><div><b>Shop</b><small>Spend with your PreStocks</small></div></button>
+          <button class="neo-action send" data-action="send"><span>➤</span><div><b>Send</b><small>Transfer anywhere, instantly</small></div></button>
+          <button class="neo-action ai" data-action="agent"><span>◈</span><div><b>Give an AI a budget</b><small>Let AI manage & spend for you</small></div></button>
         </div>
 
         <div class="neo-dashboard">
@@ -125,17 +131,23 @@
           </section>
 
           <section class="neo-card neo-shop-spotlight">
-            <div class="neo-card-head"><div><span class="neo-mini-icon">▰</span><b>Shop with your money</b></div><span class="status live">SAFE MODE</span></div>
-            <p>Paste a product link. Choose Phantom, Stocklana money, or a PreStock you explicitly approve selling.</p>
-            <div class="neo-shop-art" aria-hidden="true"><span>◉</span><span>◆</span><span>⌁</span></div>
-            <div class="neo-shop-input"><input id="homeShopLink" placeholder="Paste a product or checkout link…" /><button id="homeShopGo">→</button></div>
+            <div class="neo-card-head"><div><span class="neo-mini-icon shop-icon">▰</span><div><b>Shop with Your PreStocks</b><small>Use your tokenized assets to shop online.</small></div></div></div>
+            <div class="shop-product-scene" aria-hidden="true">
+              <div class="product-headphones"><i></i><b></b></div>
+              <div class="product-shoe"><i></i><b></b></div>
+              <div class="product-controller"><i></i><i></i><b></b></div>
+              <div class="product-glow"></div>
+            </div>
+            <div class="neo-shop-input"><input id="homeShopLink" placeholder="Search products, brands, or paste a link…" /><button id="homeShopGo">→</button></div>
           </section>
 
           <section class="neo-card neo-agent-budget">
-            <div class="neo-card-head"><div><span class="neo-mini-icon">◈</span><b>AI Agent Budget</b></div><button class="text-btn" data-nav="agents">Set rules</button></div>
-            <p>Give an AI a budget to shop or act while you keep the keys and the approval thresholds.</p>
-            <div class="neo-budget-box"><span>Example monthly budget</span><b>$500 USDC</b><i><em></em></i></div>
-            <ul><li>Approved merchants only</li><li>Subscriptions blocked by default</li><li>Ask above your threshold</li></ul>
+            <div class="neo-card-head"><div><span class="neo-mini-icon ai-icon">◈</span><b>AI Agent Budget</b></div><button class="neo-small-rule" data-nav="agents">Set Rules</button></div>
+            <p>Give an AI a budget to shop, pay bills, or find opportunities while you focus on bigger things.</p>
+            <div class="agent-budget-grid">
+              <div class="neo-budget-box"><span>Monthly Budget</span><b>$500.00 USDC</b><i><em></em></i></div>
+              <div class="agent-controls"><span>Spending Controls</span><small>✓ Approved merchants only</small><small>✓ No subscriptions by default</small><small>✓ Notify me for large purchases</small></div>
+            </div>
           </section>
 
           <section class="neo-card neo-activity-card">
