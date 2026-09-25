@@ -23,11 +23,20 @@ const fallback=[
 {name:'SpaceX PreStocks',symbol:'SPACEX',contract_address:'PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh',markPrice:152.62406151,markValuation:2001071028648,tokenPrice:116.46045229,impliedValuation:1526925930061,image:'https://www.prestocks.com/logos/spacex.png'}];
 let assets=[...fallback], selected='OPENAI', marketType='threshold', wallet=null, markets=[], config={}, vault={balances:{USDC:0}}, positions=[], lastWalletPortfolio=null, games=[], gameStake=10, gameFilter='all', selectedFundingRoute=null;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], trader=()=>wallet?.publicKey||'guest';
+const UX_MODE_KEY='stocklana:ux:advanced';
+function setUxMode(advanced){
+ document.body.classList.toggle('simple-mode',!advanced);
+ document.body.classList.toggle('advanced-mode',advanced);
+ const b=$('#uxModeBtn');if(b){b.setAttribute('aria-pressed',String(advanced));b.textContent=advanced?'Simple':'Advanced'}
+ localStorage.setItem(UX_MODE_KEY,advanced?'1':'0');
+}
 const money=n=>Number(n)>=1e12?`$${(Number(n)/1e12).toFixed(2)}T`:Number(n)>=1e9?`$${(Number(n)/1e9).toFixed(1)}B`:`$${Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2})}`;
 const premium=a=>((Number(a.tokenPrice)/Number(a.markPrice))-1)*100, short=x=>x?`${x.slice(0,4)}…${x.slice(-4)}`:'guest';
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
 function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play')loadGames();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
-$$('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));
+$('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));
+$('#uxModeBtn')?.addEventListener('click',()=>setUxMode(!document.body.classList.contains('advanced-mode')));
+setUxMode(localStorage.getItem(UX_MODE_KEY)==='1');
 function renderAssets(){
  $('#assetCount').textContent=assets.length; $('#ticker').innerHTML=assets.map(a=>{const p=premium(a);return `<div class="tick ${p>=0?'pos':'neg'}"><b>${a.symbol}</b>${p>=0?'+':''}${p.toFixed(1)}% premium</div>`}).join('');
  $('#assetGrid').innerHTML=assets.map(a=>{const p=premium(a);return `<article class="asset-card" data-asset-card="${a.symbol}"><div class="asset-head"><img class="asset-logo" src="${a.image||''}" alt=""/><span class="premium ${p>=0?'pos':'neg'}">${p>=0?'+':''}${p.toFixed(1)}%</span></div><h3>${a.name.replace(' PreStocks','')}</h3><span class="sym">${a.symbol}</span><div class="price">${money(a.tokenPrice)}</div><div class="valuation">Implied ${money(a.impliedValuation)}</div><div class="asset-actions"><button data-quick-buy="${a.symbol}">Buy</button><button data-quick-auto="${a.symbol}">Auto</button><button data-asset="${a.symbol}">More</button></div></article>`}).join('');
@@ -450,7 +459,8 @@ $$('[data-action]').forEach(b=>b.addEventListener('click',()=>{
  if(a==='spend'){navigate('commerce');setTimeout(()=>$('#commerceUrl')?.focus(),250)}
  if(a==='agent')navigate('agents');
  if(a==='launch')navigate('launch');
- if(a==='add-money'){navigate('vault');setTimeout(()=>$('#fundCardBtn')?.focus(),250)}
+ if(a==='money'){navigate('wallet');setTimeout(()=>$('#swapAmount')?.focus(),250)}
+ if(a==='add-money'){navigate('wallet');setTimeout(()=>$('#swapAmount')?.focus(),250)}
 }));
 $('#creditStartBtn')?.addEventListener('click',()=>requireWalletAction(loadCredit));
 $('#internalBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAction())return;const collateral=Number(prompt('Collateral value in USDC','250')||0),borrow=Number(prompt('Amount to borrow in USDC','100')||0);if(collateral<=0||borrow<=0)return;try{const q=await fetch('/api/lending/quote',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({collateral,borrow,days:30})}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'quote_failed');return j});if(confirm(`30-day quote: borrow ${money(borrow)} against ${money(collateral)}. Open funded loan?`)){const r=await fetch('/api/lending/open',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({collateral,borrow,days:30})}),j=await r.json();toast(r.ok?`Credit opened · ${j.loanId||'funded'}`:(j.error||'Credit route unavailable'));await loadCredit()}}catch(e){toast(String(e.message||e))}});
