@@ -21,7 +21,7 @@ for(const f of browserFiles){
 
 const runtime=`window.STOCKLANA_RUNTIME = Object.freeze({
   apiOrigin: ${JSON.stringify(apiOrigin)},
-  network: "solana-mainnet",
+  network: "solana-hybrid",
   release: "permanent-web"
 });
 `;
@@ -31,7 +31,7 @@ fs.writeFileSync(path.join(out,'404.html'),fs.readFileSync(path.join(out,'index.
 const meta={
   builtAt:new Date().toISOString(),
   apiOrigin,
-  network:'solana-mainnet',
+  network:'solana-hybrid',
   frontendModel:'static-permanent-web',
   publicFiles:[...files,...browserFiles],
   note:'Solana program execution and permanent frontend storage are separate deployment receipts.'
