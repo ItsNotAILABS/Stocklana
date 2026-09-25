@@ -22,5 +22,5 @@ addEventListener('resize',()=>{fit();play()});
 panel?.addEventListener('pointermove',e=>{const r=panel.getBoundingClientRect();pointer.x=(e.clientX-r.left)/r.width-.5;pointer.y=(e.clientY-r.top)/r.height-.5});
 panel?.addEventListener('pointerleave',()=>pointer={x:0,y:0});
 document.querySelector('#heroMediaToggle')?.addEventListener('click',e=>{running=!running;e.currentTarget.querySelector('span').textContent=running?'Ⅱ':'▶';play()});
-document.querySelector('#heroWatchBtn')?.addEventListener('click',()=>{running=true;document.querySelector('#heroMediaToggle span').textContent='Ⅱ';panel?.scrollIntoView({behavior:'smooth',block:'center'});play()});
+
 fit();play();
