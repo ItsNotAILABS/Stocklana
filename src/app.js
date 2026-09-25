@@ -578,47 +578,75 @@ $('#walletSendCenterBtn')?.addEventListener('click',()=>{navigate('vault');setTi
 $$('[data-wallet-route]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.walletRoute)));
 onWalletAccountChanged(async pk=>{sessionToken=null;if(!pk){wallet=null;$('#walletBtn').textContent='Connect wallet';$('#walletBtn').classList.remove('connected');await loadWalletCenter();await loadV2Home();return}try{wallet=await connectSolanaWallet();await authenticateWallet(wallet);$('#walletBtn').textContent=short(wallet.publicKey);$('#walletBtn').classList.add('connected');await Promise.all([loadWalletCenter(),loadVault(),loadV2Home()])}catch{}});
 
-async function loadV2Home(){
+function renderHomeEquities(all=assets){
   const homeAssets=$('#homeAssets');
-  try{
-    const d=await fetch('/api/v2/home',{cache:'no-store'}).then(r=>r.json());
-    const all=d.equities||assets, featured=all.find(a=>a.symbol==='OPENAI')||all[0], list=all.filter(a=>a.symbol!==featured?.symbol).slice(0,3);
-    if($('#homeFeaturedPrestock')&&featured){
-      const p=premium(featured);
-      $('#homeFeaturedPrestock').innerHTML=`<button class="featured-main" data-home-featured="${featured.symbol}"><img src="${featured.image||''}" alt=""><div><h3>${featured.name.replace(' PreStocks','')}</h3><small>${featured.symbol} · PreStock</small></div><div class="fp-price"><b>${money(featured.tokenPrice)}</b><small>${p>=0?'+':''}${p.toFixed(1)}% vs mark</small></div></button><div class="neo-spark" aria-hidden="true"></div>`;
-      $('#homeFeaturedPrestock [data-home-featured]')?.addEventListener('click',()=>openAsset(featured.symbol));
-    }
-    if(homeAssets)homeAssets.innerHTML=list.map(a=>{const p=premium(a);return `<button data-home-asset="${a.symbol}"><b>${a.symbol}</b><small>${money(a.tokenPrice)} · ${p>=0?'+':''}${p.toFixed(1)}%</small></button>`}).join('');
+  const rows=(Array.isArray(all)&&all.length?all:assets);
+  const featured=rows.find(a=>a.symbol==='OPENAI')||rows.find(a=>a.symbol==='SPACEX')||rows[0];
+  const list=rows.filter(a=>a.symbol!==featured?.symbol).slice(0,4);
+  if($('#homeFeaturedPrestock')&&featured){
+    const p=premium(featured);
+    const label=featured.name.replace(' PreStocks','');
+    $('#homeFeaturedPrestock').innerHTML=`<button class="featured-main" data-home-featured="${featured.symbol}"><span class="featured-logo">${featured.symbol.slice(0,2)}</span><div class="featured-name"><h3>${label}</h3><small>${featured.symbol} · PreStock</small><span class="featured-badges"><i>PreStock</i><i>24/7</i></span></div><div class="fp-price"><b>${money(featured.tokenPrice)}</b><small class="${p>=0?'up':'down'}">${p>=0?'+':''}${p.toFixed(1)}%</small></div></button><div class="neo-spark" aria-hidden="true"><i></i></div>`;
+    $('#homeFeaturedPrestock [data-home-featured]')?.addEventListener('click',()=>openAsset(featured.symbol));
+  }
+  if(homeAssets){
+    homeAssets.innerHTML=list.map(a=>{const p=premium(a);return `<button data-home-asset="${a.symbol}"><span class="mini-symbol">${a.symbol.slice(0,1)}</span><div><b>${a.symbol}</b><small>${money(a.tokenPrice)}</small></div><strong class="${p>=0?'up':'down'}">${p>=0?'+':''}${p.toFixed(1)}%</strong></button>`}).join('');
     $$('[data-home-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.homeAsset));
+  }
+}
+function renderHomeGamePreview(){
+ const box=$('#homeGameSpotlight');if(!box)return;
+ box.innerHTML=`<span class="status preview">PREVIEW</span><h3>Will OPENAI trade above its current mark by the end of the round?</h3><div class="neo-game-meta"><span>Fully collateralized</span><span>House exposure 0</span></div><div class="neo-game-sides"><button class="yes" data-home-preview="YES"><small>YES</small><b>3.2×</b><small>example payoff</small></button><button class="no" data-home-preview="NO"><small>NO</small><b>1.4×</b><small>example payoff</small></button></div>`;
+ box.querySelectorAll('[data-home-preview]').forEach(b=>b.onclick=()=>navigate('play'));
+}
+function renderHomeActivityFallback(){
+ const box=$('#homeActivity');if(!box)return;
+ box.innerHTML=`<div><span>◉</span><p><b>Wallet ready</b><small>Connect Phantom to populate verified activity</small></p></div><div><span>↗</span><p><b>PreStocks ready</b><small>Buy, automate, play or use for commerce</small></p></div><div><span>◇</span><p><b>Games ready</b><small>Fully collateralized payoff markets</small></p></div><div><span>◈</span><p><b>Agent controls ready</b><small>Budgets, merchants and approval thresholds</small></p></div>`;
+}
+async function loadV2Home(){
+  // Never show an empty competition demo: render the canonical local registry first,
+  // then replace it with live API data when available.
+  renderHomeEquities(assets);
+  renderHomeGamePreview();
+  if(!sessionToken)renderHomeActivityFallback();
+  try{
+    const r=await fetch('/api/v2/home',{cache:'no-store'});
+    if(!r.ok)throw new Error('home_api_'+r.status);
+    const d=await r.json();
+    const all=Array.isArray(d.equities)&&d.equities.length?d.equities:assets;
+    renderHomeEquities(all);
     const ac=d.account;
-    if(ac){
+    if(ac&&sessionToken){
       const cash=Number(ac.balances?.USDC||0);
       $('#homeCash').textContent=money(cash);
       $('#homeNetValue').textContent=money(cash);
       $('#homePositions').textContent=String(ac.positions||0);
       $('#homeAccountState').textContent='ACTIVE';
       $('#homeAccountState').className='status live';
-    }else{$('#homeAccountState').textContent='CONNECT PHANTOM'}
-    loadHomeGameSpotlight();
-    loadHomeActivity();
+    }else{
+      $('#homeAccountState').textContent=wallet?.publicKey?'WALLET CONNECTED':'NOT CONNECTED';
+      $('#homeAccountState').className='status neutral';
+    }
   }catch(e){
-    if(homeAssets)homeAssets.innerHTML='<div class="empty-card">Live PreStocks unavailable</div>';
-    loadHomeGameSpotlight();
+    // Local exact-mint registry already rendered above.
   }
+  await Promise.allSettled([loadHomeGameSpotlight(),loadHomeActivity()]);
 }
 async function loadHomeGameSpotlight(){
  const box=$('#homeGameSpotlight');if(!box)return;
  try{
-   const d=await fetch('/api/games?stake=10&limit=1',{cache:'no-store'}).then(r=>r.json()),g=d.games?.[0];
-   if(!g){box.innerHTML='<div class="empty-card">No live games yet.</div>';return}
+   const r=await fetch('/api/games?stake=10&limit=1',{cache:'no-store'});
+   if(!r.ok)throw new Error('games_api_'+r.status);
+   const d=await r.json(),g=d.games?.[0];
+   if(!g){renderHomeGamePreview();return}
    const yes=Math.round(Number(g.yesProbability??.5)*100),no=100-yes,y=g.game?.yes||{},n=g.game?.no||{};
-   box.innerHTML=`<span class="status">${gameTitle(g.family)}</span><h3>${g.question}</h3><div class="neo-game-meta"><span>${money(g.collateral||0)} real pool</span><span>${g.trades?.length||0} plays</span></div><div class="neo-game-sides"><button class="yes" data-home-game-side="YES"><small>YES · ${yes}%</small><b>${money(y.payoutIfCorrect||0)}</b><small>if correct on $10</small></button><button class="no" data-home-game-side="NO"><small>NO · ${no}%</small><b>${money(n.payoutIfCorrect||0)}</b><small>if correct on $10</small></button></div>`;
+   box.innerHTML=`<span class="status live">${gameTitle(g.family)}</span><h3>${g.question}</h3><div class="neo-game-meta"><span>${money(g.collateral||0)} real pool</span><span>${g.trades?.length||0} plays</span></div><div class="neo-game-sides"><button class="yes" data-home-game-side="YES"><small>YES · ${yes}%</small><b>${money(y.payoutIfCorrect||0)}</b><small>if correct on $10</small></button><button class="no" data-home-game-side="NO"><small>NO · ${no}%</small><b>${money(n.payoutIfCorrect||0)}</b><small>if correct on $10</small></button></div>`;
    box.querySelectorAll('[data-home-game-side]').forEach(b=>b.onclick=()=>trade(g.id,b.dataset.homeGameSide,10));
- }catch(e){box.innerHTML='<div class="empty-card">Game preview unavailable.</div>'}
+ }catch(e){renderHomeGamePreview()}
 }
 async function loadHomeActivity(){
  const box=$('#homeActivity');if(!box)return;
- if(!sessionToken){box.innerHTML='<div><span>◉</span><p><b>Connect Phantom</b><small>Your verified activity appears here.</small></p></div>';return}
+ if(!sessionToken){renderHomeActivityFallback();return}
  try{
    const r=await fetch('/api/receipts',{cache:'no-store'}),d=await r.json(),rows=Array.isArray(d)?d:(d.receipts||[]);
    box.innerHTML=rows.slice(0,4).map(x=>`<div><span>✓</span><p><b>${String(x.type||x.kind||'Stocklana action').replaceAll('_',' ')}</b><small>${x.amount?money(x.amount):x.status||'verified receipt'}</small></p></div>`).join('')||'<div><span>✓</span><p><b>Wallet connected</b><small>No recent Stocklana receipts yet.</small></p></div>';
