@@ -616,3 +616,492 @@
  .stocklana-neo .neo-shop-input{right:14px!important}
  .stocklana-neo .shop-product-scene{opacity:.42!important}
 }
+
+
+/* ===== ONE-TO-ONE MOCKUP LOCK V3 =====
+   Canonical visual reference: neon_crypto_economy_dashboard.png.
+   This layer only changes presentation. Existing product routes, IDs, APIs and flows remain intact.
+*/
+.stocklana-neo{
+  --mock-rail:220px;
+  --mock-top:78px;
+  --mock-gap:10px;
+  --mock-card:#091019;
+  --mock-border:rgba(88,119,160,.30);
+  --mock-lime:#dfff3f;
+  --mock-cyan:#42e8ff;
+  --mock-violet:#875cff;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Inter,Arial,sans-serif!important;
+  background:
+    radial-gradient(circle at 46% -12%,rgba(42,105,146,.09),transparent 29%),
+    radial-gradient(circle at 92% 4%,rgba(101,54,255,.07),transparent 26%),
+    #03070c!important;
+}
+.stocklana-neo .shell{min-height:100vh!important}
+.stocklana-neo .desktop-rail.neo-rail{
+  width:var(--mock-rail)!important;
+  padding:10px 13px 13px!important;
+  border-right:1px solid #18304b!important;
+  border-bottom:1px solid #11253a!important;
+  border-radius:0 0 18px 0!important;
+  background:
+    linear-gradient(180deg,rgba(4,9,15,.995),rgba(5,10,16,.995)),
+    #04090f!important;
+}
+.stocklana-neo .neo-brand{
+  height:68px!important;
+  padding:9px 6px 14px!important;
+  gap:10px!important;
+}
+.stocklana-neo .neo-brand b{
+  font-size:27px!important;
+  font-weight:860!important;
+  letter-spacing:-1.15px!important;
+}
+.stocklana-neo .neo-brand small{display:none!important}
+.stocklana-neo .neo-logo-mark{
+  width:34px!important;height:38px!important;
+  transform:scale(.96);
+}
+.stocklana-neo .neo-nav-group{gap:4px!important}
+.stocklana-neo .neo-nav-group button{
+  min-height:48px!important;
+  padding:0 12px!important;
+  border-radius:12px!important;
+  font-size:13px!important;
+  font-weight:560!important;
+  color:#b9c1ce!important;
+}
+.stocklana-neo .neo-nav-group button>span{
+  width:23px!important;
+  font-size:17px!important;
+  color:#d6dde7!important;
+}
+.stocklana-neo .neo-nav-group button.active{
+  color:var(--mock-lime)!important;
+  background:linear-gradient(90deg,rgba(207,255,57,.10),rgba(207,255,57,.025) 78%,transparent)!important;
+  border:1px solid rgba(209,255,65,.11)!important;
+  box-shadow:inset 2px 0 0 var(--mock-lime)!important;
+}
+.stocklana-neo.simple-mode .cmesh-nav,
+.stocklana-neo.simple-mode #uxModeBtn,
+.stocklana-neo.simple-mode .neo-nav-secondary{display:none!important}
+.stocklana-neo .neo-rail-promo{
+  height:205px!important;
+  min-height:205px!important;
+  margin-top:10px!important;
+  padding:18px 14px!important;
+  border-radius:15px!important;
+  border:1px solid rgba(45,114,255,.45)!important;
+  background:
+    radial-gradient(circle at 75% 78%,rgba(56,83,255,.23),transparent 33%),
+    radial-gradient(circle at 18% 20%,rgba(30,255,196,.05),transparent 30%),
+    linear-gradient(180deg,#07111d,#06101a)!important;
+  overflow:hidden;
+}
+.stocklana-neo .neo-rail-promo span{
+  font-size:13px!important;color:#eef3f8!important;line-height:1.1!important
+}
+.stocklana-neo .neo-rail-promo b{
+  color:var(--mock-lime)!important;
+  font-size:18px!important;
+  line-height:1.23!important;
+  margin-top:3px!important;
+}
+.stocklana-neo .rail-wave{
+  height:112px!important;
+  margin-top:8px!important;
+}
+.stocklana-neo .rail-wave:before{
+  top:55px!important;
+  left:-27px!important;right:-29px!important;
+  height:3px!important;
+  transform:rotate(-6deg)!important;
+  background:linear-gradient(90deg,#32f6cf,#dfff3f 40%,#48e9ff 70%,#775dff)!important;
+  filter:drop-shadow(0 0 7px #dfff3f) drop-shadow(0 0 14px #5ea6ff)!important;
+}
+.stocklana-neo .rail-wave:after{
+  top:75px!important;
+  opacity:.22!important;
+}
+
+.stocklana-neo .neo-topbar{
+  left:var(--mock-rail)!important;
+  height:var(--mock-top)!important;
+  padding:11px 19px 10px 32px!important;
+  background:linear-gradient(180deg,rgba(3,7,12,.99),rgba(3,7,12,.93) 74%,rgba(3,7,12,.40))!important;
+}
+.stocklana-neo .neo-search{
+  width:min(47vw,660px)!important;
+  max-width:660px!important;
+  height:46px!important;
+  margin-left:auto!important;margin-right:auto!important;
+  border-radius:16px!important;
+  border:1px solid rgba(78,114,153,.38)!important;
+  background:linear-gradient(180deg,#0a141e,#08111a)!important;
+}
+.stocklana-neo .neo-search>span{font-size:19px!important}
+.stocklana-neo .neo-search input{font-size:12px!important;color:#c8d0db!important}
+.stocklana-neo .neo-top-actions{gap:10px!important}
+.stocklana-neo .neo-bell{
+  width:47px!important;height:47px!important;
+  border-radius:14px!important;
+  border-color:#27374b!important;
+  background:#0a1119!important;
+}
+.stocklana-neo .neo-wallet-connect{
+  min-width:211px!important;
+  height:48px!important;
+  border-radius:14px!important;
+  border-color:#34465f!important;
+  background:linear-gradient(180deg,#101821,#0a1118)!important;
+  font-size:12px!important;
+  font-weight:760!important;
+}
+
+.stocklana-neo main{
+  margin-left:var(--mock-rail)!important;
+  padding:var(--mock-top) 17px 26px 16px!important;
+}
+.stocklana-neo .neo-home{max-width:1485px!important;margin:0 auto!important}
+.stocklana-neo .neo-hero{
+  min-height:306px!important;
+  height:306px!important;
+  grid-template-columns:minmax(475px,.78fr) minmax(690px,1.22fr)!important;
+  gap:25px!important;
+  align-items:center!important;
+}
+.stocklana-neo .neo-hero-copy{
+  padding:2px 0 0 18px!important;
+  align-self:center!important;
+}
+.stocklana-neo .neo-eyebrow{display:none!important}
+.stocklana-neo .neo-hero h1{
+  max-width:610px!important;
+  margin:0 0 14px!important;
+  font-size:clamp(54px,4.12vw,69px)!important;
+  font-weight:900!important;
+  line-height:.915!important;
+  letter-spacing:-4.35px!important;
+  color:#f6f8fb!important;
+}
+.stocklana-neo .neo-hero h1 em{
+  font-style:normal!important;
+  color:var(--mock-lime)!important;
+  text-shadow:0 0 25px rgba(218,255,67,.10)!important;
+}
+.stocklana-neo .neo-hero p{
+  max-width:548px!important;
+  margin:0!important;
+  color:#afb8c4!important;
+  font-size:14px!important;
+  line-height:1.48!important;
+}
+.stocklana-neo .neo-hero-actions{
+  margin-top:18px!important;
+  gap:12px!important;
+}
+.stocklana-neo .hero-primary,
+.stocklana-neo .hero-watch{
+  height:47px!important;
+  border-radius:999px!important;
+  padding:0 23px!important;
+  font-size:12px!important;
+}
+.stocklana-neo .hero-primary{
+  color:#0b100b!important;
+  background:var(--mock-lime)!important;
+  box-shadow:0 0 24px rgba(216,255,79,.12)!important;
+}
+.stocklana-neo .hero-watch{
+  background:#0a131d!important;
+  border:1px solid #30455f!important;
+}
+.stocklana-neo .neo-hero-proof{display:none!important}
+
+/* Exact decorative media from the approved mockup, with the real product reel still bound to the play target. */
+.stocklana-neo .neo-hero-media{
+  height:307px!important;
+  min-height:307px!important;
+  border:0!important;
+  border-radius:19px!important;
+  overflow:hidden!important;
+  background:url("../assets/hero-reference.webp") center center/100% 100% no-repeat!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.30),0 0 0 1px rgba(63,224,255,.24)!important;
+}
+.stocklana-neo .neo-hero-media:before,
+.stocklana-neo #heroOrbitCanvas,
+.stocklana-neo .hero-planet,
+.stocklana-neo .hero-ring,
+.stocklana-neo .hero-float,
+.stocklana-neo .hero-media-caption,
+.stocklana-neo .hero-media-mantra,
+.stocklana-neo .hero-media-controls{display:none!important}
+.stocklana-neo .hero-media-play{
+  display:block!important;
+  left:48.2%!important;
+  top:50%!important;
+  width:86px!important;
+  height:86px!important;
+  transform:translate(-50%,-50%)!important;
+  border:0!important;
+  background:transparent!important;
+  color:transparent!important;
+  opacity:0!important;
+  cursor:pointer!important;
+  z-index:30!important;
+}
+
+/* Exact six-button rhythm from the reference. */
+.stocklana-neo .neo-action-ribbon{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:11px 0 10px!important;
+}
+.stocklana-neo .neo-action{
+  min-height:76px!important;
+  padding:10px 12px!important;
+  grid-template-columns:46px 1fr!important;
+  gap:10px!important;
+  border-radius:13px!important;
+  background:linear-gradient(155deg,#0b121a,#080d13)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 8px 22px rgba(0,0,0,.16)!important;
+}
+.stocklana-neo .neo-action>span{
+  width:45px!important;height:45px!important;
+  border-radius:12px!important;
+  font-size:19px!important;
+}
+.stocklana-neo .neo-action b{
+  color:#f2f5f8!important;
+  font-size:11px!important;
+  font-weight:770!important;
+}
+.stocklana-neo .neo-action small{
+  margin-top:3px!important;
+  color:#818d9d!important;
+  font-size:7.7px!important;
+  line-height:1.25!important;
+}
+.stocklana-neo .neo-action.buy{border-color:rgba(216,255,79,.34)!important}
+.stocklana-neo .neo-action.convert{border-color:rgba(155,108,255,.36)!important}
+.stocklana-neo .neo-action.play{border-color:rgba(53,217,255,.38)!important}
+.stocklana-neo .neo-action.shop{border-color:rgba(255,211,80,.36)!important}
+.stocklana-neo .neo-action.send{border-color:rgba(77,229,232,.35)!important}
+.stocklana-neo .neo-action.ai{border-color:rgba(212,125,255,.38)!important}
+
+/* Two-row dashboard geometry from the locked image. */
+.stocklana-neo .neo-dashboard{
+  display:grid!important;
+  grid-template-columns:.98fr 1.32fr .92fr!important;
+  grid-template-areas:
+    "wallet prestocks game"
+    "shop agent activity"!important;
+  grid-template-rows:252px 171px!important;
+  gap:9px!important;
+}
+.stocklana-neo .neo-card{
+  min-height:0!important;
+  padding:13px!important;
+  border-radius:15px!important;
+  border:1px solid rgba(85,119,158,.28)!important;
+  background:
+    linear-gradient(155deg,rgba(13,20,29,.99),rgba(6,10,15,.995))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.022),0 11px 30px rgba(0,0,0,.16)!important;
+}
+.stocklana-neo .neo-card-head{margin-bottom:9px!important}
+.stocklana-neo .neo-card-head b{font-size:11px!important}
+.stocklana-neo .neo-mini-icon{
+  width:24px!important;height:24px!important;
+  border-radius:7px!important;
+  font-size:11px!important;
+  background:#101923!important;
+}
+.stocklana-neo .neo-wallet-card,
+.stocklana-neo .neo-prestocks-card,
+.stocklana-neo .neo-game-spotlight{min-height:252px!important}
+.stocklana-neo .neo-shop-spotlight,
+.stocklana-neo .neo-agent-budget,
+.stocklana-neo .neo-activity-card{min-height:171px!important}
+.stocklana-neo .neo-big-balance{
+  margin-top:2px!important;
+  font-size:33px!important;
+  font-weight:880!important;
+  letter-spacing:-1px!important;
+}
+.stocklana-neo .neo-balance-sub{margin:4px 0 6px!important}
+.stocklana-neo .neo-inline-wallet{
+  height:28px!important;
+  border-radius:9px!important;
+  font-size:7px!important;
+}
+.stocklana-neo .neo-wallet-rows button{padding:7px 0!important}
+.stocklana-neo .asset-coin{width:29px!important;height:29px!important;font-size:10px!important}
+.stocklana-neo .neo-wallet-rows b{font-size:10px!important}
+.stocklana-neo .neo-wallet-rows small{font-size:7px!important}
+.stocklana-neo .neo-wallet-rows strong{font-size:9px!important}
+
+.stocklana-neo .neo-prestocks-card{
+  background:
+    radial-gradient(circle at 82% 55%,rgba(216,255,79,.045),transparent 27%),
+    linear-gradient(155deg,rgba(13,20,29,.99),rgba(6,10,15,.995))!important;
+}
+.stocklana-neo .featured-prestock{min-height:95px!important}
+.stocklana-neo .featured-main{
+  min-height:91px!important;
+  padding:8px!important;
+  border-radius:12px!important;
+  border:1px solid rgba(111,145,182,.13)!important;
+  background:#080d13!important;
+}
+.stocklana-neo .featured-main img{width:48px!important;height:48px!important}
+.stocklana-neo .featured-main h3{font-size:18px!important;letter-spacing:-.55px!important}
+.stocklana-neo .featured-main small{font-size:7px!important}
+.stocklana-neo .featured-main .fp-price b{font-size:17px!important}
+.stocklana-neo .neo-spark{
+  height:30px!important;
+  margin:5px 0 2px!important;
+}
+.stocklana-neo .neo-spark:before{
+  top:17px!important;
+  background:linear-gradient(90deg,transparent,var(--mock-lime) 12%,var(--mock-lime) 70%,transparent)!important;
+  filter:drop-shadow(0 0 5px var(--mock-lime))!important;
+}
+.stocklana-neo .neo-mini-assets{gap:5px!important}
+.stocklana-neo .neo-mini-assets button{
+  min-height:47px!important;
+  padding:7px!important;
+  border-radius:10px!important;
+}
+.stocklana-neo .neo-mini-assets b{font-size:9px!important}
+.stocklana-neo .neo-mini-assets small{font-size:7px!important}
+
+.stocklana-neo .neo-game-spotlight h3{
+  margin:9px 0 10px!important;
+  min-height:58px!important;
+  font-size:15px!important;
+  line-height:1.23!important;
+}
+.stocklana-neo .neo-game-meta{font-size:7px!important}
+.stocklana-neo .neo-game-sides{
+  gap:6px!important;
+  margin-top:9px!important;
+}
+.stocklana-neo .neo-game-sides button{
+  min-height:68px!important;
+  padding:8px!important;
+  border-radius:11px!important;
+}
+.stocklana-neo .neo-game-sides b{font-size:16px!important}
+.stocklana-neo .neo-game-sides small{font-size:7px!important}
+
+.stocklana-neo .neo-shop-spotlight{
+  position:relative!important;
+  overflow:hidden!important;
+  background:
+    radial-gradient(circle at 76% 60%,rgba(70,222,255,.10),transparent 34%),
+    linear-gradient(155deg,#0c121a,#080d13)!important;
+}
+.stocklana-neo .neo-shop-spotlight .neo-card-head{
+  position:relative!important;z-index:4!important;width:58%!important;
+}
+.stocklana-neo .neo-shop-spotlight .neo-card-head small{
+  display:block!important;
+  color:#7e8b9d!important;
+  font-size:7px!important;
+  margin-top:2px!important;
+}
+.stocklana-neo .shop-reference-art{
+  position:absolute!important;
+  right:-1px!important;top:31px!important;
+  width:47%!important;height:111px!important;
+  background:url("../assets/shop-products-clean.webp") 74% 62%/128% auto no-repeat!important;
+  opacity:.98!important;
+  filter:saturate(1.08) contrast(1.03)!important;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.68) 16%,#000 37%,#000 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.68) 16%,#000 37%,#000 100%);
+}
+.stocklana-neo .product-headphones,
+.stocklana-neo .product-shoe,
+.stocklana-neo .product-controller,
+.stocklana-neo .product-glow{display:none!important}
+.stocklana-neo .neo-shop-input{
+  left:13px!important;right:48%!important;bottom:12px!important;
+  height:36px!important;
+  border-radius:9px!important;
+}
+.stocklana-neo .neo-shop-input input{
+  padding:8px!important;
+  font-size:7.5px!important;
+}
+.stocklana-neo .neo-shop-input button{width:34px!important}
+
+.stocklana-neo .neo-agent-budget p{
+  margin:0 0 7px!important;
+  max-width:96%!important;
+  font-size:8.3px!important;
+  line-height:1.32!important;
+}
+.stocklana-neo .neo-small-rule{
+  padding:6px 10px!important;
+  font-size:7px!important;
+  border-radius:9px!important;
+}
+.stocklana-neo .agent-budget-grid{
+  grid-template-columns:.95fr 1.05fr!important;
+  gap:8px!important;
+}
+.stocklana-neo .neo-budget-box{
+  padding:8px!important;margin:0!important;
+  border-radius:10px!important;
+}
+.stocklana-neo .neo-budget-box span{font-size:7px!important}
+.stocklana-neo .neo-budget-box b{font-size:12px!important}
+.stocklana-neo .agent-controls{gap:3px!important;padding:2px 0!important}
+.stocklana-neo .agent-controls>span{font-size:7px!important}
+.stocklana-neo .agent-controls small{font-size:7px!important}
+
+.stocklana-neo .neo-activity-list>div{padding:6px 0!important}
+.stocklana-neo .neo-activity-list>div>span{
+  width:24px!important;height:24px!important;font-size:9px!important;
+}
+.stocklana-neo .neo-activity-list b{font-size:8px!important}
+.stocklana-neo .neo-activity-list small{font-size:7px!important}
+
+/* CMESH remains a real separate tab, but the simple home matches the reference frame exactly. */
+.stocklana-neo.simple-mode #view-home .neo-platform-strip{display:none!important}
+
+@media(min-width:1500px){
+  .stocklana-neo .neo-home{max-width:none!important}
+}
+@media(max-width:1320px){
+  .stocklana-neo .neo-hero{
+    height:auto!important;min-height:0!important;
+    grid-template-columns:1fr!important;
+  }
+  .stocklana-neo .neo-hero-media{height:auto!important;min-height:0!important;aspect-ratio:842/307!important}
+  .stocklana-neo .neo-action-ribbon{grid-template-columns:repeat(3,1fr)!important}
+  .stocklana-neo .neo-dashboard{
+    grid-template-columns:1fr 1fr!important;
+    grid-template-areas:"wallet prestocks" "game activity" "shop agent"!important;
+    grid-template-rows:auto!important;
+  }
+}
+@media(max-width:900px){
+  .stocklana-neo main{margin-left:0!important;padding:76px 12px 88px!important}
+  .stocklana-neo .neo-topbar{left:0!important}
+  .stocklana-neo .neo-hero-copy{padding-left:2px!important}
+}
+@media(max-width:650px){
+  .stocklana-neo .neo-hero h1{
+    font-size:42px!important;
+    letter-spacing:-2.5px!important;
+  }
+  .stocklana-neo .neo-action-ribbon{grid-template-columns:1fr 1fr!important}
+  .stocklana-neo .neo-dashboard{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"wallet" "prestocks" "game" "shop" "agent" "activity"!important;
+  }
+  .stocklana-neo .shop-reference-art{opacity:.48!important}
+  .stocklana-neo .neo-shop-input{right:13px!important}
+}
