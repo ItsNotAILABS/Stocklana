@@ -19,7 +19,12 @@ git clone --depth 1 --branch "$BRANCH" "$REPO" "$WORK"
 cd "$WORK"
 echo "SOURCE_COMMIT=$(git rev-parse HEAD)"
 
-solana-keygen new --no-bip39-passphrase --force -o "$KEYPAIR" >/dev/null
+if [ -n "${STOCKLANA_DEVNET_KEYPAIR_JSON:-}" ]; then
+  printf '%s' "$STOCKLANA_DEVNET_KEYPAIR_JSON" > "$KEYPAIR"
+  chmod 600 "$KEYPAIR"
+else
+  solana-keygen new --no-bip39-passphrase --force -o "$KEYPAIR" >/dev/null
+fi
 AUTHORITY="$(solana address -k "$KEYPAIR")"
 echo "DEPLOY_AUTHORITY=$AUTHORITY"
 
