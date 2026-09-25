@@ -6,7 +6,7 @@ const root=path.resolve(new URL('..', import.meta.url).pathname);
 const out=path.join(root,'dist');
 const apiOrigin=(process.env.STOCKLANA_PUBLIC_API_ORIGIN||'').replace(/\/$/,'');
 const files=['index.html','runtime-config.js'];
-const browserFiles=['src/app-three.js','src/app.js','src/market-engine.js','src/meteora-dbc.js','src/oracle-policy.js','src/pons-v2.js','src/prestocks-registry.js','src/solana-client.js','src/stocklana-hero.js','src/stocklana-program-client.js','src/styles.css','src/surface-motion.js','src/systems.js','src/token2022-accounting.js'];
+const browserFiles=['src/app-three.js','src/app.js','src/demo-reel.js','src/market-engine.js','src/meteora-dbc.js','src/oracle-policy.js','src/pons-v2.js','src/prestocks-registry.js','src/solana-client.js','src/stocklana-hero.js','src/stocklana-program-client.js','src/styles.css','src/surface-motion.js','src/systems.js','src/token2022-accounting.js'];
 
 fs.rmSync(out,{recursive:true,force:true});
 fs.mkdirSync(out,{recursive:true});
