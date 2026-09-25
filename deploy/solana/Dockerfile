@@ -9,6 +9,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --pr
 ENV PATH="/root/.cargo/bin:/root/.local/share/solana/install/active_release/bin:${PATH}"
 RUN sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
 RUN solana --version && cargo --version && rustc --version
+RUN cargo install devnet-pow
 
 WORKDIR /deploy
 COPY entrypoint.sh /deploy/entrypoint.sh
