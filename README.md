@@ -1,20 +1,25 @@
-# Stocklana V2 — Programmable Tokenized-Equity Account on Solana
+# Stocklana — Programmable PreStocks on Solana
 
-Stocklana V2 is the productized version of the financial infrastructure built across the earlier releases. The app is now organized around immediate user jobs rather than protocols: **Buy · Auto-invest · Borrow · Play · Send · Spend · Agent · Launch**.
+**Your money shouldn’t stop working after you invest it.**
 
-The user-facing default is **Token-2022 V2**. Internal double-entry accounting remains the source of financial truth; programmable public receipts use V2 Token-2022 profiles only where composability or policy needs to travel with the claim. The earlier V1 issuance path is removed from the product surface.
+Stocklana is a desktop-first web app where eligible PreStocks become programmable financial objects. A user can connect Phantom, buy a PreStock, convert SOL/USDC, enter fully collateralized payoff games, spend through governed commerce rails, send money, or give an AI a bounded budget — all from one interface.
 
-### V2 acceptance
+The public experience is intentionally simple: **PreStocks · Convert · Play · Shop · AI · Send**. The deeper market factory, credit, launch, accounting, settlement, proof, and deployment systems remain underneath the same application.
 
-- 145/145 dedicated V2 UX assertions pass.
-- 1,342 core acceptance assertions pass.
-- 494 accounting / backing assertions pass.
-- 360 programmable instruments across 16 families remain available.
-- 100 Agent Vaults and the 700/700 seven-day workload remain part of the regression evidence.
-- 10/10 navigation views resolve.
-- Browser HTTP/API certification passes; Chromium visual capture was attempted but did not complete in this runtime, so visual browser automation is not claimed.
+> **CMESH is not a PreStock.** CipherMesh (CMESH) is Stocklana’s separate Pons / Robinhood Chain platform-token lane and has its own dedicated tab. It is never added to the PreStocks eligibility registry.
 
-See `V2-PRODUCT.md` for the experience contract and `docs/V2-FINANCIAL-SUBSTRATE.md` for the token/accounting substrate.
+## Approved visual system
+
+The current product shell follows Stocklana's neon-black / acid-lime / cyan / violet design language: cinematic animated hero, action ribbon, wallet card, featured PreStocks, live game spotlight, commerce, AI budget, activity, and a distinct CMESH surface. The design is implemented in the canonical app; it is not a separate demo.
+
+## Deployment
+
+- Solana program deployment: `npm run deploy:program:solana`
+- permanent static build: `npm run build:static`
+- permanent web upload authenticated by a Solana wallet: `npm run deploy:frontend:solana`
+- full release runbook: `DEPLOY-SOLANA.md`
+
+A deployment is only considered complete when the chain/provider returns a real receipt.
 
 ## V2 financial token substrate
 
