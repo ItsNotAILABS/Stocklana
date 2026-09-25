@@ -1,0 +1,16 @@
+{
+  "name": "CipherMesh",
+  "symbol": "CMESH",
+  "role": "Stocklana platform token",
+  "lane": "platform-token",
+  "isPreStock": false,
+  "chain": "Robinhood Chain",
+  "chainId": 4663,
+  "origin": "Pons",
+  "ponsFactory": "0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e",
+  "tokenAddress": null,
+  "tokenAddressEnv": "STOCKLANA_CMESH_ADDRESS",
+  "knownPublicAddressHint": "0xBD7a6f4aCC4E9369fB9Ec7875e...0977",
+  "verificationRule": "Never populate tokenAddress from the truncated hint. Bind only a full address verified by the Pons factory as CipherMesh/CMESH.",
+  "preStocksEligibility": "EXCLUDED"
+}
