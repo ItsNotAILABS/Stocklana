@@ -37,6 +37,9 @@ USDC_MINT=os.getenv('STOCKLANA_USDC_MINT','EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZ
 SOLANA_RPC=os.getenv('SOLANA_RPC_URL','https://api.mainnet-beta.solana.com')
 VAULT_ADDRESS=os.getenv('STOCKLANA_VAULT_ADDRESS','')
 PROGRAM_ID=os.getenv('STOCKLANA_PROGRAM_ID','')
+CMESH_ADDRESS=os.getenv('STOCKLANA_CMESH_ADDRESS','').strip()
+CMESH_CHAIN_ID=4663
+CMESH_PONS_FACTORY='0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e'
 _ASSET_CACHE={'at':0.0,'data':SNAPSHOT}
 
 def normalized_live_assets():
@@ -152,6 +155,8 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         u=urllib.parse.urlparse(self.path); path=u.path; qs=urllib.parse.parse_qs(u.query)
         if path=='/api/config': return self.send_json({'network':'solana-mainnet','vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'programId':PROGRAM_ID or None,'programDeployed':bool(PROGRAM_ID),'rpcConfigured':bool(SOLANA_RPC),'rpcUrl':SOLANA_RPC})
+        if path=='/api/cmesh/config':
+            return self.send_json({'name':'CipherMesh','symbol':'CMESH','role':'Stocklana platform token','isPreStock':False,'chain':'Robinhood Chain','chainId':CMESH_CHAIN_ID,'origin':'Pons','tokenAddress':CMESH_ADDRESS or None,'factory':CMESH_PONS_FACTORY,'explorer':'https://robinhoodchain.blockscout.com'})
         if path=='/api/health': return self.send_json({'ok':True,'service':'stocklana','mode':'market-clearing-vault','marketLifecycle':['create','quote','trade','transfer-position','resolve','redeem'],'finance':['vault','internal-transfer','receipts','onramp-routing'],'crypto':pq_crypto.public_metadata()})
         if path=='/api/systems': return self.send_json({'count':9,'systems':[{'id':'markets','name':'PreStocks Market Factory','status':'active'},{'id':'clearing','name':'PARRALAX-derived Clearing Layer','status':'active'},{'id':'vault','name':'Stocklana Vault','status':'active'},{'id':'accounting','name':'Double-entry Financial Token Digest','status':'active'},{'id':'token-profiles','name':'V2 Token-2022 Financial Receipts','status':'wallet-signature-ready'},{'id':'solana','name':'Solana Wallet Rail','status':'client-ready'},{'id':'launcher','name':'Launch Router','status':'active'},{'id':'oracle','name':'Settlement Oracle','status':'adapter-ready'},{'id':'proof','name':'Phantasma PQ Receipts','status':'active'}]})
         if path=='/api/challenges':
