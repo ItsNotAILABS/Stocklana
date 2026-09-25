@@ -402,3 +402,33 @@ body.stocklana-neo:after{
 .stocklana-neo #view-wallet .competition-action-ribbon button:nth-child(1){border-color:rgba(141,100,255,.26)!important}.stocklana-neo #view-play .competition-action-ribbon button:nth-child(-n+2){border-color:rgba(67,233,255,.23)!important}.stocklana-neo #view-commerce .competition-action-ribbon button:nth-child(1){border-color:rgba(255,211,90,.25)!important}.stocklana-neo #view-agents .competition-action-ribbon button:nth-child(1){border-color:rgba(196,119,255,.24)!important}.stocklana-neo #view-credit .competition-action-ribbon button:nth-child(1){border-color:rgba(255,211,90,.22)!important}
 @media(max-width:1180px){.stocklana-neo .competition-action-ribbon{grid-template-columns:repeat(3,1fr)!important}}
 @media(max-width:650px){.stocklana-neo .competition-action-ribbon{grid-template-columns:1fr 1fr!important}}
+
+
+/* ===== WALLET MONEY GRAPH ===== */
+.stocklana-neo #view-wallet .wallet-shell-card{
+  position:relative!important;
+  padding:14px!important;
+  overflow:hidden!important;
+  background:
+    radial-gradient(circle at 82% 34%,rgba(141,100,255,.085),transparent 28%),
+    radial-gradient(circle at 67% 68%,rgba(67,233,255,.055),transparent 26%),
+    linear-gradient(155deg,#0b121b,#070c12)!important;
+}
+.stocklana-neo #view-wallet .wallet-shell-card:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent 54%,rgba(255,255,255,.012) 55%,transparent 56%);
+}
+.stocklana-neo #view-wallet .wallet-money-graph{
+  position:absolute!important;right:15px!important;top:58px!important;width:39%!important;height:128px!important;
+  z-index:1!important;pointer-events:none!important;
+}
+.stocklana-neo .wmg-core{position:absolute!important;left:50%!important;top:50%!important;width:92px!important;height:92px!important;transform:translate(-50%,-50%)!important;display:grid!important;place-items:center!important;align-content:center!important;border-radius:50%!important;border:1px solid rgba(141,100,255,.34)!important;background:radial-gradient(circle at 35% 28%,rgba(216,255,66,.18),rgba(67,233,255,.10) 25%,rgba(18,19,40,.82) 58%,#080d13 72%)!important;box-shadow:0 0 28px rgba(141,100,255,.16),inset -14px -18px 26px rgba(85,52,195,.16)!important}.stocklana-neo .wmg-core span{font-size:4.8px!important;letter-spacing:.16em!important;color:#7f8da0!important}.stocklana-neo .wmg-core b{font-size:8px!important;letter-spacing:.05em!important}.stocklana-neo .wmg-core small{font-size:4.8px!important;color:#68778a!important}
+.stocklana-neo .wmg-node{position:absolute!important;width:58px!important;height:42px!important;display:grid!important;place-items:center!important;align-content:center!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:11px!important;background:rgba(8,14,21,.86)!important;box-shadow:0 12px 26px rgba(0,0,0,.24)!important}.stocklana-neo .wmg-node b{font-size:7px!important}.stocklana-neo .wmg-node small{font-size:4.6px!important;color:#6e7c8e!important;margin-top:2px!important}.stocklana-neo .wmg-node.sol{left:4%!important;top:10%!important;border-color:rgba(141,100,255,.26)!important}.stocklana-neo .wmg-node.usdc{right:1%!important;top:13%!important;border-color:rgba(67,163,255,.25)!important}.stocklana-neo .wmg-node.pre{left:10%!important;bottom:2%!important;border-color:rgba(216,255,66,.23)!important}.stocklana-neo .wmg-node.actions{right:8%!important;bottom:1%!important;border-color:rgba(67,233,255,.22)!important}
+.stocklana-neo .wmg-ring{position:absolute!important;left:50%!important;top:50%!important;border-radius:50%!important;border:1px solid rgba(67,233,255,.15)!important;transform:translate(-50%,-50%) rotate(9deg)!important}.stocklana-neo .wmg-ring.r1{width:210px!important;height:64px!important}.stocklana-neo .wmg-ring.r2{width:245px!important;height:82px!important;transform:translate(-50%,-50%) rotate(-13deg)!important;border-color:rgba(216,255,66,.12)!important}.stocklana-neo .wmg-route{position:absolute!important;left:16%!important;right:13%!important;height:1px!important;background:linear-gradient(90deg,transparent,#8d64ff,#43e9ff,#dfff42,transparent)!important;opacity:.42!important}.stocklana-neo .wmg-route.a{top:50%!important;transform:rotate(-8deg)!important}.stocklana-neo .wmg-route.b{top:58%!important;transform:rotate(12deg)!important}
+.stocklana-neo #view-wallet .wallet-identity-block,
+.stocklana-neo #view-wallet .wallet-balance-grid,
+.stocklana-neo #view-wallet .wallet-quick-actions{position:relative!important;z-index:2!important;width:57%!important}
+.stocklana-neo #view-wallet .wallet-balance-grid{grid-template-columns:1fr 1fr!important}
+.stocklana-neo #view-wallet .wallet-quick-actions{grid-template-columns:repeat(3,1fr)!important}
+@media(max-width:1050px){.stocklana-neo #view-wallet .wallet-money-graph{display:none!important}.stocklana-neo #view-wallet .wallet-identity-block,.stocklana-neo #view-wallet .wallet-balance-grid,.stocklana-neo #view-wallet .wallet-quick-actions{width:100%!important}.stocklana-neo #view-wallet .wallet-balance-grid{grid-template-columns:repeat(4,1fr)!important}.stocklana-neo #view-wallet .wallet-quick-actions{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:650px){.stocklana-neo #view-wallet .wallet-balance-grid{grid-template-columns:1fr 1fr!important}.stocklana-neo #view-wallet .wallet-quick-actions{grid-template-columns:1fr 1fr!important}}
