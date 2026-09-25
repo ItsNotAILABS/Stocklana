@@ -34,8 +34,10 @@ challenges=loadmod('challenges','challenges.py')
 
 SNAPSHOT=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
 USDC_MINT=os.getenv('STOCKLANA_USDC_MINT','EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
-SOLANA_NETWORK=os.getenv('STOCKLANA_SOLANA_NETWORK','devnet').strip().lower()
-SOLANA_RPC=os.getenv('SOLANA_RPC_URL','https://api.devnet.solana.com' if SOLANA_NETWORK=='devnet' else 'https://api.mainnet-beta.solana.com')
+SOLANA_NETWORK=os.getenv('STOCKLANA_SOLANA_NETWORK','mainnet-beta').strip().lower()
+SOLANA_RPC=os.getenv('SOLANA_RPC_URL','https://api.mainnet-beta.solana.com')
+PROGRAM_CLUSTER=os.getenv('STOCKLANA_PROGRAM_CLUSTER','devnet').strip().lower()
+PROGRAM_RPC=os.getenv('STOCKLANA_PROGRAM_RPC_URL','https://api.devnet.solana.com' if PROGRAM_CLUSTER=='devnet' else SOLANA_RPC)
 VAULT_ADDRESS=os.getenv('STOCKLANA_VAULT_ADDRESS','')
 PROGRAM_ID=os.getenv('STOCKLANA_PROGRAM_ID','')
 CMESH_ADDRESS=os.getenv('STOCKLANA_CMESH_ADDRESS','').strip()
@@ -165,7 +167,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         u=urllib.parse.urlparse(self.path); path=u.path; qs=urllib.parse.parse_qs(u.query)
-        if path=='/api/config': return self.send_json({'network':f'solana-{SOLANA_NETWORK}','cluster':SOLANA_NETWORK,'vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'programId':PROGRAM_ID or None,'programDeployed':bool(PROGRAM_ID),'rpcConfigured':bool(SOLANA_RPC),'rpcUrl':SOLANA_RPC})
+        if path=='/api/config': return self.send_json({'network':f'solana-{SOLANA_NETWORK}','cluster':SOLANA_NETWORK,'walletCluster':SOLANA_NETWORK,'programCluster':PROGRAM_CLUSTER,'vaultAddress':VAULT_ADDRESS or None,'usdcMint':USDC_MINT,'programId':PROGRAM_ID or None,'programDeployed':bool(PROGRAM_ID),'rpcConfigured':bool(SOLANA_RPC),'rpcUrl':SOLANA_RPC,'programRpcUrl':PROGRAM_RPC,'architecture':'hybrid-solana-coordination'})
         if path=='/api/cmesh/config':
             return self.send_json({'name':'CipherMesh','symbol':'CMESH','role':'Stocklana platform token','isPreStock':False,'chain':'Robinhood Chain','chainId':CMESH_CHAIN_ID,'origin':'Pons','tokenAddress':CMESH_ADDRESS or None,'factory':CMESH_PONS_FACTORY,'explorer':'https://robinhoodchain.blockscout.com'})
         if path=='/api/health': return self.send_json({'ok':True,'service':'stocklana','mode':'market-clearing-vault','marketLifecycle':['create','quote','trade','transfer-position','resolve','redeem'],'finance':['vault','internal-transfer','receipts','onramp-routing'],'crypto':pq_crypto.public_metadata()})
