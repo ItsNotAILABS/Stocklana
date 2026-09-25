@@ -614,6 +614,30 @@
     </div>
   </dialog>
 
+  <dialog id="demoReelDialog" class="demo-reel-dialog">
+    <div class="demo-reel-shell">
+      <button class="demo-reel-close" id="demoReelClose" aria-label="Close">×</button>
+      <div class="demo-reel-stage">
+        <canvas id="demoReelCanvas" aria-hidden="true"></canvas>
+        <div class="demo-reel-noise" aria-hidden="true"></div>
+        <div class="demo-reel-scene" id="demoReelScene"></div>
+        <div class="demo-reel-copy">
+          <span id="demoReelEyebrow">STOCKLANA</span>
+          <h2 id="demoReelTitle">One portfolio. More possibilities.</h2>
+          <p id="demoReelCopy"></p>
+        </div>
+        <div class="demo-reel-watermark"><b>STOCKLANA</b><span>PROGRAMMABLE PRESTOCKS</span></div>
+      </div>
+      <div class="demo-reel-controls">
+        <button id="demoReelPrev" aria-label="Previous">←</button>
+        <button id="demoReelPlay" aria-label="Pause or play">Ⅱ</button>
+        <div class="demo-reel-progress" id="demoReelProgress"></div>
+        <button id="demoReelNext" aria-label="Next">→</button>
+        <button class="primary demo-reel-open" id="demoReelOpenSurface">Open surface</button>
+      </div>
+    </div>
+  </dialog>
+
   <dialog id="actionDialog" class="action-dialog">
     <form method="dialog" class="action-dialog-sheet" id="actionDialogForm">
       <button class="close" value="cancel" aria-label="Close">×</button>
@@ -632,6 +656,7 @@
   <div class="toast" id="toast"></div>
   <script src="./runtime-config.js"></script>
   <script type="module" src="./src/stocklana-hero.js"></script>
+  <script type="module" src="./src/demo-reel.js"></script>
   <script type="module" src="./src/surface-motion.js"></script>\n  <script type="module" src="./src/app.js"></script>
 </body>
 </html>
