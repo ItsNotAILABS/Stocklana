@@ -82,3 +82,24 @@ export function onWalletAccountChanged(handler){
   p.on('accountChanged',fn);
   return ()=>p.removeListener?.('accountChanged',fn);
 }
+
+
+export async function getSolanaConnection(rpc='https://api.mainnet-beta.solana.com'){
+  const {Connection}=await w3();
+  return new Connection(rpc,'confirmed');
+}
+
+export async function sendSolanaInstructions({provider,instructions=[],rpc='https://api.mainnet-beta.solana.com'}){
+  if(!provider?.publicKey) throw new Error('wallet_not_connected');
+  const {Connection,Transaction}=await w3();
+  const connection=new Connection(rpc,'confirmed');
+  const tx=new Transaction();
+  for(const ix of instructions) tx.add(ix);
+  tx.feePayer=provider.publicKey;
+  const latest=await connection.getLatestBlockhash('confirmed');
+  tx.recentBlockhash=latest.blockhash;
+  const signed=await provider.signTransaction(tx);
+  const sig=await connection.sendRawTransaction(signed.serialize(),{skipPreflight:false,maxRetries:3});
+  await connection.confirmTransaction({signature:sig,blockhash:latest.blockhash,lastValidBlockHeight:latest.lastValidBlockHeight},'confirmed');
+  return sig;
+}
