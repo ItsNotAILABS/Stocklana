@@ -202,3 +202,70 @@
 @media(max-width:650px){
  .neo-action-ribbon{grid-template-columns:1fr 1fr}.neo-hero-copy{padding-left:2px}.neo-hero h1{font-size:40px;letter-spacing:-2px}.neo-hero-media{min-height:260px}.hero-media-mantra{display:none}.hero-orb-glass{width:140px;height:140px}.hero-float{width:38px;height:38px;border-radius:12px;font-size:15px}.neo-mini-assets{grid-template-columns:1fr 1fr 1fr}.cmesh-copy h1{font-size:42px}.cmesh-address-bind>div{display:grid}.neo-wallet-connect{font-size:0}.neo-wallet-connect .phantom-mark{font-size:14px}.neo-wallet-connect i{display:none}
 }
+
+
+/* ===== FULL APP SURFACE WORLDS ===== */
+.stocklana-neo .view:not(#view-home){max-width:1520px;margin:0 auto}
+.surface-intro{display:grid;grid-template-columns:minmax(0,.86fr) minmax(420px,1.14fr);gap:20px;align-items:center;min-height:250px;margin:8px 0 18px;padding:20px;border:1px solid rgba(115,145,181,.16);border-radius:26px;background:
+ radial-gradient(circle at 12% 20%,rgba(216,255,79,.055),transparent 29%),
+ linear-gradient(145deg,rgba(10,15,22,.98),rgba(7,10,16,.98));overflow:hidden;position:relative}
+.surface-intro:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.025),transparent 35%);pointer-events:none}
+.surface-copy{position:relative;z-index:2;padding:4px 4px 4px 6px}.surface-eyebrow{display:inline-flex;padding:6px 9px;border:1px solid rgba(255,255,255,.08);border-radius:999px;font-size:8px;letter-spacing:.14em;color:#9aabba;background:rgba(255,255,255,.025)}
+.surface-copy h1{font-size:clamp(34px,4vw,60px);line-height:.98;letter-spacing:-2.4px;max-width:760px;margin:10px 0 12px}.surface-copy p{max-width:700px;color:#8d99aa;line-height:1.55;font-size:13px}
+.surface-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.surface-tags span{font-size:8px;letter-spacing:.09em;padding:6px 8px;border:1px solid rgba(255,255,255,.08);border-radius:999px;color:#aab6c5;background:#0b1118}
+.surface-visual{position:relative;min-height:220px;border:1px solid rgba(117,153,197,.18);border-radius:21px;overflow:hidden;background:linear-gradient(140deg,#071019,#090b13 60%,#0d0a17);box-shadow:inset 0 0 42px rgba(71,120,255,.06)}
+.surface-visual canvas{position:absolute;inset:0;width:100%;height:100%}
+.surface-glass-label{position:absolute;left:18px;bottom:18px;display:grid;gap:2px;padding:10px 12px;border:1px solid rgba(255,255,255,.10);background:rgba(7,12,18,.62);backdrop-filter:blur(14px);border-radius:13px}.surface-glass-label span,.surface-glass-label small{font-size:7px;letter-spacing:.12em;color:#728094}.surface-glass-label b{font-size:12px}
+.surface-orbit{position:absolute;left:50%;top:50%;border:1px solid color-mix(in srgb,var(--sa) 32%,transparent);border-radius:50%;transform:translate(-50%,-50%) rotate(19deg);pointer-events:none}.surface-orbit.o1{width:240px;height:90px}.surface-orbit.o2{width:310px;height:110px;transform:translate(-50%,-50%) rotate(-18deg);border-color:color-mix(in srgb,var(--sb) 28%,transparent)}.surface-orbit.o3{width:180px;height:180px;border-color:color-mix(in srgb,var(--sa) 18%,transparent)}
+.surface-original-head{margin-top:10px!important;padding-top:0!important}
+.surface-original-head h2{font-size:25px!important;letter-spacing:-.7px!important}.surface-original-head .kicker{color:#8390a1!important}
+
+.stocklana-neo .view:not(#view-home) .section-copy{max-width:820px;color:#7f8c9c;line-height:1.55;margin-bottom:16px}
+.stocklana-neo .view:not(#view-home) .route,
+.stocklana-neo .view:not(#view-home) .home-panel,
+.stocklana-neo .view:not(#view-home) .wallet-shell-card,
+.stocklana-neo .view:not(#view-home) .commerce-builder,
+.stocklana-neo .view:not(#view-home) .agent-commerce-card,
+.stocklana-neo .view:not(#view-home) .credit-hero,
+.stocklana-neo .view:not(#view-home) .lab-card{
+  border-color:rgba(118,148,185,.16)!important;
+  box-shadow:0 14px 38px rgba(0,0,0,.12);
+}
+.stocklana-neo .view:not(#view-home) .route:hover,
+.stocklana-neo .view:not(#view-home) .asset-card:hover,
+.stocklana-neo .view:not(#view-home) .game-card:hover{border-color:rgba(216,255,79,.28)!important;transform:translateY(-2px)}
+.stocklana-neo .view:not(#view-home) .route,
+.stocklana-neo .view:not(#view-home) .asset-card,
+.stocklana-neo .view:not(#view-home) .game-card{transition:transform .18s ease,border-color .18s ease,background .18s ease}
+
+#view-markets .surface-intro{background:radial-gradient(circle at 72% 40%,rgba(216,255,79,.08),transparent 28%),linear-gradient(145deg,#071009,#081018 68%,#081016)}
+#view-play .surface-intro{background:radial-gradient(circle at 76% 40%,rgba(65,217,255,.10),transparent 29%),radial-gradient(circle at 60% 65%,rgba(155,108,255,.10),transparent 28%),linear-gradient(145deg,#071019,#090914)}
+#view-wallet .surface-intro{background:radial-gradient(circle at 72% 42%,rgba(169,133,255,.12),transparent 28%),linear-gradient(145deg,#0a0c18,#071018)}
+#view-commerce .surface-intro{background:radial-gradient(circle at 76% 44%,rgba(255,212,90,.09),transparent 30%),linear-gradient(145deg,#111006,#071018)}
+#view-agents .surface-intro{background:radial-gradient(circle at 70% 45%,rgba(196,119,255,.13),transparent 29%),radial-gradient(circle at 83% 38%,rgba(53,217,255,.08),transparent 26%),linear-gradient(145deg,#0e0916,#071018)}
+#view-credit .surface-intro{background:radial-gradient(circle at 72% 42%,rgba(255,212,90,.10),transparent 28%),radial-gradient(circle at 65% 67%,rgba(216,255,79,.07),transparent 25%),linear-gradient(145deg,#121007,#071018)}
+#view-vault .surface-intro{background:radial-gradient(circle at 76% 42%,rgba(77,229,232,.11),transparent 29%),linear-gradient(145deg,#071517,#071018)}
+#view-launch .surface-intro{background:radial-gradient(circle at 72% 40%,rgba(255,206,88,.09),transparent 28%),radial-gradient(circle at 80% 65%,rgba(155,108,255,.11),transparent 27%),linear-gradient(145deg,#120d08,#0b0916)}
+#view-lab .surface-intro{background:radial-gradient(circle at 72% 42%,rgba(98,255,158,.08),transparent 28%),linear-gradient(145deg,#07140d,#071018)}
+#view-portfolio .surface-intro{background:radial-gradient(circle at 75% 42%,rgba(216,255,79,.08),transparent 27%),radial-gradient(circle at 60% 60%,rgba(155,108,255,.08),transparent 25%),linear-gradient(145deg,#091008,#0c0913)}
+#view-infrastructure .surface-intro{background:radial-gradient(circle at 72% 42%,rgba(53,217,255,.09),transparent 28%),radial-gradient(circle at 80% 63%,rgba(111,124,255,.09),transparent 28%),linear-gradient(145deg,#071018,#0b0c16)}
+#view-coverage .surface-intro{background:radial-gradient(circle at 72% 42%,rgba(108,255,157,.09),transparent 28%),linear-gradient(145deg,#07150e,#071018)}
+
+#view-markets .asset-card{background:linear-gradient(160deg,#0e1517,#090d12)!important}
+#view-play .game-card{min-height:250px}
+#view-commerce .commerce-builder{background:radial-gradient(circle at 0 0,rgba(255,212,90,.05),transparent 32%),linear-gradient(155deg,#10141a,#090d13)!important}
+#view-agents .agent-commerce-setup{background:radial-gradient(circle at 0 0,rgba(196,119,255,.08),transparent 34%),linear-gradient(155deg,#0d1119,#090d13)!important}
+#view-credit .credit-hero{background:radial-gradient(circle at 80% 20%,rgba(255,212,90,.08),transparent 30%),linear-gradient(150deg,#11130d,#090d13)!important}
+#view-infrastructure .route-stack{grid-template-columns:repeat(3,minmax(0,1fr))}
+#view-infrastructure .route{min-height:180px}
+#view-coverage .asset-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+#view-portfolio #portfolioState{min-height:260px;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 35%,rgba(155,108,255,.08),transparent 30%),#0a0f16}
+
+@media(max-width:1050px){
+ .surface-intro{grid-template-columns:1fr}.surface-visual{min-height:200px}
+ #view-infrastructure .route-stack,#view-coverage .asset-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:720px){
+ .surface-intro{padding:14px;min-height:0}.surface-copy h1{font-size:34px;letter-spacing:-1.7px}.surface-visual{min-height:180px}
+ #view-infrastructure .route-stack,#view-coverage .asset-grid{grid-template-columns:1fr}
+}
