@@ -2,14 +2,21 @@ import { connectSolanaWallet, walletState, sendSplToken, executeChainBackedTrade
 import { connectRobinhood, getPonsConfig, launchPonsV2, readPonsLaunch, buyPons, sellPons, PONS_V2 } from './pons-v2.js';
 let sessionToken=null;
 const nativeFetch=window.fetch.bind(window);
-window.fetch=(input,init={})=>{const url=typeof input==='string'?input:input.url; if(sessionToken && url.startsWith('/api/')){const h=new Headers(init.headers||{});h.set('Authorization',`Bearer ${sessionToken}`);init={...init,headers:h}} return nativeFetch(input,init)};
+const API_ORIGIN=String(window.STOCKLANA_RUNTIME?.apiOrigin||'').replace(/\/$/,'');
+const apiUrl=url=>url.startsWith('/api/')&&API_ORIGIN?API_ORIGIN+url:url;
+window.fetch=(input,init={})=>{
+ const raw=typeof input==='string'?input:input.url;
+ const url=apiUrl(raw);
+ if(sessionToken && raw.startsWith('/api/')){const h=new Headers(init.headers||{});h.set('Authorization',`Bearer ${sessionToken}`);init={...init,headers:h}}
+ return nativeFetch(url,init)
+};
 function b64(bytes){let x='';for(const b of bytes)x+=String.fromCharCode(b);return btoa(x)}
 async function authenticateWallet(w){
- const c=await nativeFetch('/api/auth/challenge',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:w.publicKey})}).then(async r=>{if(!r.ok)throw new Error(await r.text());return r.json()});
+ const c=await nativeFetch(apiUrl('/api/auth/challenge'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:w.publicKey})}).then(async r=>{if(!r.ok)throw new Error(await r.text());return r.json()});
  if(!w.provider?.signMessage) throw new Error('wallet_sign_message_not_supported');
  const sig=await w.provider.signMessage(new TextEncoder().encode(c.message),'utf8');
  const signature=b64(sig.signature||sig);
- const v=await nativeFetch('/api/auth/verify',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:w.publicKey,nonce:c.nonce,signature})}).then(async r=>{if(!r.ok)throw new Error(await r.text());return r.json()});
+ const v=await nativeFetch(apiUrl('/api/auth/verify'),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:w.publicKey,nonce:c.nonce,signature})}).then(async r=>{if(!r.ok)throw new Error(await r.text());return r.json()});
  sessionToken=v.token; return v;
 }
 const fallback=[
