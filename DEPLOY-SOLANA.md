@@ -1,8 +1,10 @@
-# Stocklana — Solana Mainnet + Permanent Web Release
+# Stocklana — Hybrid Solana Release
 
 Stocklana ships as two production layers. This is intentional.
 
 ## 1. Solana executable layer
+
+For judging, Stocklana now defaults its custom coordination program to **Solana Devnet** while the real PreStocks/Jupiter wallet lane can remain on Solana mainnet-beta. This is the intended hybrid architecture: decentralized trust / market state on Solana, heavier orchestration and external-provider work off-chain.
 
 The on-chain Stocklana market program lives in `programs/stocklana-market`. It enforces:
 
@@ -13,22 +15,30 @@ The on-chain Stocklana market program lives in `programs/stocklana-market`. It e
 - transferable positions;
 - resolution commitments and redemption.
 
-A live mainnet deployment requires a funded Solana signer. Never commit a signer keypair.
+A Devnet judging deployment does not require paid SOL; the deployment script requests faucet SOL when the signer is low. Never commit a signer keypair.
 
 ```bash
-export SOLANA_RPC_URL='https://api.mainnet-beta.solana.com'
 export SOLANA_KEYPAIR_PATH="$HOME/.config/solana/id.json"
-
-npm run deploy:program:solana
+npm run deploy:program:devnet
 ```
 
-The script builds with `cargo build-sbf`, requires an explicit `DEPLOY-MAINNET` confirmation, submits the program, and writes the Program ID plus CLI receipt under `deployments/`.
+Mainnet remains available later:
+
+```bash
+npm run deploy:program:mainnet
+```
+
+The script builds with `cargo build-sbf`, requires an explicit cluster confirmation, submits the program, and writes the Program ID plus CLI receipt under `deployments/`.
 
 After deployment set:
 
 ```bash
+export STOCKLANA_PROGRAM_CLUSTER='devnet'
+export STOCKLANA_PROGRAM_RPC_URL='https://api.devnet.solana.com'
 export STOCKLANA_PROGRAM_ID='<confirmed program id>'
 ```
+
+The user-facing PreStocks wallet rail remains separately configurable with `SOLANA_RPC_URL` and defaults to mainnet-beta.
 
 Do not call the program deployed until `solana program show <PROGRAM_ID>` confirms it.
 
