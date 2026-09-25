@@ -191,6 +191,32 @@
             <small>Changing stake recalculates the payoff preview from the current collateral pools.</small>
           </div>
         </div>
+        <section class="solana-judge-loop" id="solanaJudgeLoop">
+          <div class="judge-loop-copy">
+            <div class="judge-loop-head">
+              <span class="status live">SOLANA LIVE LOOP</span>
+              <span id="judgeProgramCluster" class="status neutral">DEVNET</span>
+            </div>
+            <h3>Show the whole loop onchain.</h3>
+            <p>Create a Stocklana market on Solana, stake Circle Devnet USDC, resolve it with a proof commitment, then redeem — all from Phantom.</p>
+            <div class="judge-loop-proof">
+              <div><span>Program</span><b id="judgeProgramId">Not deployed yet</b></div>
+              <div><span>Collateral</span><b id="judgeProgramUsdc">Circle Devnet USDC</b></div>
+              <div><span>Market</span><b id="judgeMarketAddress">Create one below</b></div>
+            </div>
+          </div>
+          <div class="judge-loop-actions">
+            <button class="judge-step active" data-judge-step="connect"><span>01</span><div><b>Connect Phantom</b><small>Same wallet. Devnet transaction signing.</small></div><i>→</i></button>
+            <button class="judge-step" id="judgeCreateMarketBtn" disabled><span>02</span><div><b>Create market</b><small>OPENAI · 1 minute demo market.</small></div><i>→</i></button>
+            <button class="judge-step" id="judgeStakeYesBtn" disabled><span>03</span><div><b>Stake 1 USDC on YES</b><small>Fully collateralized on Solana.</small></div><i>→</i></button>
+            <button class="judge-step" id="judgeResolveBtn" disabled><span>04</span><div><b>Resolve YES</b><small>Available after the demo timer.</small></div><i>→</i></button>
+            <button class="judge-step" id="judgeRedeemBtn" disabled><span>05</span><div><b>Redeem</b><small>Return the onchain payout to your wallet.</small></div><i>→</i></button>
+          </div>
+          <div class="judge-loop-footer">
+            <span id="judgeLoopStatus">Connect Phantom to begin.</span>
+            <div><a id="judgeFaucetLink" href="https://faucet.circle.com/" target="_blank" rel="noopener">Get Devnet USDC ↗</a><a id="judgeExplorerLink" href="https://explorer.solana.com/?cluster=devnet" target="_blank" rel="noopener">Solana Explorer ↗</a></div>
+          </div>
+        </section>
         <div class="duel-strip">
           <div><span class="kicker">HEAD-TO-HEAD</span><b>Challenge one person. No community required.</b><small>Pick any live PreStocks game, lock your side and stake, then send the invite. Your opponent funds the opposite side.</small></div>
           <div class="duel-join"><input id="challengeJoinInput" placeholder="duel_… or invite link" /><button class="ghost" id="challengeJoinBtn">Open invite</button></div>
