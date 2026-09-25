@@ -587,8 +587,14 @@
         <div class="section-head"><div><span class="kicker">CREDIT</span><h2>Turn supported equity value into working capital.</h2></div><span class="status neutral">NO FORCED SELL UX</span></div>
         <p class="section-copy">Choose a route. Stocklana keeps the position and credit state visible in the same account; external DeFi transactions remain wallet-signed.</p>
         <div class="credit-hero">
-          <div><span>Borrowing power</span><b id="creditPower">Connect to calculate</b><small>Based only on eligible, supported collateral and live provider rules.</small></div>
-          <button class="primary" id="creditStartBtn">Check my options</button>
+          <div class="credit-copy"><span>Borrowing power</span><b id="creditPower">Connect to calculate</b><small>Based only on eligible, supported collateral and live provider rules.</small><button class="primary" id="creditStartBtn">Check my options</button></div>
+          <div class="credit-visual" aria-hidden="true">
+            <span class="cv-asset">PRE<small>collateral</small></span>
+            <i class="cv-rail"></i>
+            <span class="cv-cash">USDC<small>working capital</small></span>
+            <div class="cv-meter"><span>LTV</span><b>VISIBLE</b><i><em></em></i></div>
+            <div class="cv-rule">NO FORCED SELL UX</div>
+          </div>
         </div>
         <div class="route-stack">
           <article class="route"><div class="route-top"><span class="status live">STOCKLANA</span><b>Funded pool</b></div><h3>Simple internal credit</h3><p>Lock supported value, draw from an actually funded lending pool, and keep the receivable visible in your V2 accounting digest.</p><button class="primary wide" id="internalBorrowBtn">Get a quote</button></article>
