@@ -14,10 +14,27 @@ const surfaces={
 };
 
 function hex(c,a=.7){const x=c.replace('#','');const n=parseInt(x,16);return `rgba(${n>>16},${n>>8&255},${n&255},${a})`}
+function sceneMarkup(scene){
+ const map={
+  equity:'<div class="scene-equity"><span class="scene-token t1">OPENAI</span><span class="scene-token t2">SPACE X</span><span class="scene-token t3">ANTHROPIC</span><i class="scene-price-line"></i></div>',
+  duel:'<div class="scene-duel"><span class="duel-puck yes">YES<b>63%</b></span><i>VS</i><span class="duel-puck no">NO<b>37%</b></span></div>',
+  wallet:'<div class="scene-wallet"><span class="wallet-slab sol">SOL<small>PHANTOM</small></span><span class="wallet-slab usdc">USDC<small>SPENDABLE</small></span><span class="wallet-slab pre">PRE<small>STOCKS</small></span></div>',
+  commerce:'<div class="scene-commerce"><span class="commerce-box">▰<small>MERCHANT LOCKED</small></span><i class="commerce-beam"></i><span class="commerce-receipt">✓<small>RECEIPT</small></span></div>',
+  money:'<div class="scene-money"><span>@YOU</span><i></i><span>@FRIEND</span><i></i><span>USDC</span></div>',
+  portfolio:'<div class="scene-portfolio"><span class="port-bar b1"></span><span class="port-bar b2"></span><span class="port-bar b3"></span><span class="port-bar b4"></span><i class="port-curve"></i></div>',
+  credit:'<div class="scene-credit"><span class="credit-cube">ASSET</span><i class="credit-arrow">→</i><span class="credit-cube cash">USDC</span></div>',
+  agent:'<div class="scene-agent"><span class="agent-core">AI</span><i class="n1"></i><i class="n2"></i><i class="n3"></i><i class="n4"></i><b>$500<br><small>RULED BUDGET</small></b></div>',
+  forge:'<div class="scene-forge"><span>THESIS</span><i></i><span>PAYOFF</span><i></i><span>MARKET</span></div>',
+  launch:'<div class="scene-launch"><span class="launch-core">✦</span><i class="lr1"></i><i class="lr2"></i><b>CREATE<br><small>ONCHAIN</small></b></div>',
+  mesh:'<div class="scene-mesh"><span>◎</span><i class="mn1"></i><i class="mn2"></i><i class="mn3"></i><i class="mn4"></i><i class="mn5"></i></div>',
+  proof:'<div class="scene-proof"><span>01<small>SIGNED</small></span><span>02<small>CHAIN</small></span><span>03<small>RECEIPT</small></span></div>'
+ };
+ return map[scene]||'<div class="scene-generic"><span>STOCKLANA</span></div>'
+}
 function addHero(id,cfg){
  const view=document.querySelector(`#view-${id}`);if(!view||view.querySelector('.surface-intro'))return;
  const hero=document.createElement('section');hero.className=`surface-intro surface-${cfg.scene}`;hero.dataset.world=id;
- hero.innerHTML=`<div class="surface-copy"><span class="surface-eyebrow">${cfg.eyebrow}</span><h1>${cfg.title}</h1><p>${cfg.copy}</p><div class="surface-tags">${cfg.tags.map(x=>`<span>${x}</span>`).join('')}</div></div><div class="surface-visual" style="--sa:${cfg.a};--sb:${cfg.b}"><canvas aria-hidden="true"></canvas><div class="surface-glass-label"><span>STOCKLANA</span><b>${cfg.eyebrow}</b><small>LIVE PRODUCT SURFACE</small></div><div class="surface-orbit o1"></div><div class="surface-orbit o2"></div><div class="surface-orbit o3"></div></div>`;
+ hero.innerHTML=`<div class="surface-copy"><span class="surface-eyebrow">${cfg.eyebrow}</span><h1>${cfg.title}</h1><p>${cfg.copy}</p><div class="surface-tags">${cfg.tags.map(x=>`<span>${x}</span>`).join('')}</div></div><div class="surface-visual" style="--sa:${cfg.a};--sb:${cfg.b}"><canvas aria-hidden="true"></canvas>${sceneMarkup(cfg.scene)}<div class="surface-glass-label"><span>STOCKLANA</span><b>${cfg.eyebrow}</b><small>LIVE PRODUCT SURFACE</small></div><div class="surface-orbit o1"></div><div class="surface-orbit o2"></div><div class="surface-orbit o3"></div></div>`;
  view.prepend(hero);
  const status=document.createElement('div');status.className='surface-statusbar';
  status.innerHTML='<span><i class="dot live"></i><b>PRESTOCKS</b><em data-surface-wallet-cluster>MAINNET</em></span><span><i class="dot"></i><b>STOCKLANA PROGRAM</b><em data-surface-program-cluster>DEVNET</em></span><span><i class="dot live"></i><b>API</b><em data-surface-api>LIVE</em></span><span class="surface-status-proof"><b>RECEIPT RULE</b><em>NO EXTERNAL CLAIM WITHOUT PROOF</em></span>';
