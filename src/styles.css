@@ -1774,3 +1774,101 @@
   .stocklana-neo .world-duel .side{width:104px;height:120px}
   .stocklana-neo .world-commerce .shop-card{width:78px;height:87px}
 }
+
+
+/* ===== EMERGENCY LAYOUT CORRECTION: REMOVE LEGACY DOUBLE OFFSET =====
+   The old workstation shell still carried 248px left padding underneath the new fixed rail,
+   which doubled the desktop offset and made the real site look nothing like the locked mockup.
+*/
+@media(min-width:901px){
+  .stocklana-neo .shell{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  .stocklana-neo .mobile-brand{display:none!important}
+  .stocklana-neo .neo-topbar{
+    position:fixed!important;
+    top:0!important;
+    right:0!important;
+    left:var(--mock-rail)!important;
+    z-index:70!important;
+  }
+  .stocklana-neo main{
+    width:auto!important;
+    max-width:none!important;
+    margin-left:var(--mock-rail)!important;
+    padding-left:16px!important;
+    padding-right:17px!important;
+  }
+  .stocklana-neo .neo-home{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+}
+/* Approved hero/shop artwork is now a real DOM image, not a fragile CSS-only background. */
+.stocklana-neo .hero-reference-image{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  display:block!important;
+  z-index:1!important;
+}
+.stocklana-neo .hero-media-play{z-index:12!important}
+.stocklana-neo .shop-reference-art{
+  background:none!important;
+}
+.stocklana-neo .shop-reference-art img{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+  object-fit:cover!important;
+  object-position:74% 62%!important;
+  opacity:.98!important;
+  filter:saturate(1.08) contrast(1.03)!important;
+}
+/* Fallback live cards must look finished even before external APIs answer. */
+.stocklana-neo .featured-logo{
+  width:48px!important;height:48px!important;
+  display:grid!important;place-items:center!important;
+  border-radius:50%!important;
+  color:#061006!important;
+  background:radial-gradient(circle at 32% 28%,#f1ffae,var(--mock-lime) 42%,#7baa1c 100%)!important;
+  font-size:12px!important;font-weight:950!important;
+  box-shadow:0 0 18px rgba(216,255,79,.16)!important;
+}
+.stocklana-neo .featured-name{min-width:0!important}
+.stocklana-neo .featured-badges{display:flex!important;gap:4px!important;margin-top:5px!important}
+.stocklana-neo .featured-badges i{
+  font-style:normal!important;font-size:6px!important;color:#8794a5!important;
+  border:1px solid #253246!important;border-radius:999px!important;padding:3px 5px!important;
+}
+.stocklana-neo .fp-price .up,
+.stocklana-neo .up{color:#7df0b2!important}
+.stocklana-neo .fp-price .down,
+.stocklana-neo .down{color:#ff8b96!important}
+.stocklana-neo .neo-mini-assets button{
+  display:grid!important;grid-template-columns:26px 1fr auto!important;gap:7px!important;align-items:center!important;
+  text-align:left!important;
+}
+.stocklana-neo .mini-symbol{
+  width:25px!important;height:25px!important;display:grid!important;place-items:center!important;
+  border-radius:8px!important;background:#101923!important;color:#d9e4ef!important;font-size:8px!important;font-weight:900!important;
+}
+.stocklana-neo .neo-mini-assets button>div{min-width:0!important}
+.stocklana-neo .neo-mini-assets button>div b,
+.stocklana-neo .neo-mini-assets button>div small{display:block!important}
+.stocklana-neo .neo-mini-assets button>strong{font-size:7px!important}
+.stocklana-neo .status.preview{
+  color:#071006!important;background:rgba(216,255,79,.92)!important;
+}
+/* Make the card stack begin strictly after the hero; no more overlap at desktop widths. */
+@media(min-width:1321px){
+  .stocklana-neo .neo-hero{margin-bottom:0!important}
+  .stocklana-neo .neo-action-ribbon{position:relative!important;z-index:10!important}
+}
