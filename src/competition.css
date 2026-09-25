@@ -325,3 +325,42 @@ body.stocklana-neo:after{
 .stocklana-neo .premium-asset-card .asset-actions{display:grid!important;grid-template-columns:.8fr .7fr 1.15fr!important;gap:5px!important}.stocklana-neo .premium-asset-card .asset-actions button{min-height:29px!important;border-radius:8px!important;font-size:6px!important}
 @media(max-width:1320px){.stocklana-neo #view-markets .asset-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.stocklana-neo .portfolio-overview,.stocklana-neo .portfolio-grid{grid-template-columns:1fr 1fr!important}.stocklana-neo .portfolio-proof-card,.stocklana-neo .portfolio-receipts-card{grid-column:1/-1!important}}
 @media(max-width:760px){.stocklana-neo #view-markets .asset-grid,.stocklana-neo .portfolio-overview,.stocklana-neo .portfolio-grid{grid-template-columns:1fr!important}.stocklana-neo .portfolio-proof-card,.stocklana-neo .portfolio-receipts-card{grid-column:auto!important}.stocklana-neo .portfolio-utility-actions{grid-template-columns:repeat(3,1fr)!important}}
+
+
+/* ===== PLAY ARENA PASS ===== */
+.stocklana-neo #view-play .game-deck{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}
+.stocklana-neo .game-card-premium{
+  position:relative!important;
+  min-height:300px!important;
+  padding:12px!important;
+  overflow:hidden!important;
+  border:1px solid rgba(84,119,158,.28)!important;
+  border-radius:15px!important;
+  background:
+    radial-gradient(circle at 77% 17%,color-mix(in srgb,var(--game-accent,#43e9ff) 8%,transparent),transparent 29%),
+    linear-gradient(155deg,#0b121b,#070c12)!important;
+}
+.stocklana-neo .game-card-premium:before{
+  content:"";position:absolute;right:-45px;top:-55px;width:165px;height:165px;border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--game-accent,#43e9ff) 12%,transparent);
+  box-shadow:0 0 40px color-mix(in srgb,var(--game-accent,#43e9ff) 7%,transparent);
+  pointer-events:none
+}
+.stocklana-neo .game-card-head{display:flex!important;justify-content:space-between!important;align-items:center!important;position:relative!important;z-index:2!important}
+.stocklana-neo .game-card-head>div{display:flex!important;gap:6px!important;align-items:center!important}
+.stocklana-neo .game-symbol{font-size:6px!important;letter-spacing:.09em!important;color:#728094!important;font-weight:850!important}
+.stocklana-neo .game-visual{position:relative!important;height:80px!important;margin:2px 0 4px!important;overflow:hidden!important}
+.stocklana-neo .gv-orb{position:absolute!important;left:50%!important;top:50%!important;width:68px!important;height:68px!important;transform:translate(-50%,-50%)!important;display:grid!important;place-items:center!important;border-radius:50%!important;background:radial-gradient(circle at 35% 30%,#eaffb1 0 3%,#3cd8cc 8%,#102431 44%,#071018 71%)!important;border:1px solid rgba(67,233,255,.22)!important;box-shadow:0 0 24px rgba(67,233,255,.16),inset -12px -14px 20px rgba(141,100,255,.18)!important;font-size:8px!important;font-weight:900!important;overflow:hidden!important}.stocklana-neo .gv-orb img{width:100%!important;height:100%!important;object-fit:cover!important}
+.stocklana-neo .gv-ring{position:absolute!important;left:50%!important;top:50%!important;border-radius:50%!important;border:1px solid rgba(67,233,255,.18)!important;transform:translate(-50%,-50%) rotate(9deg)!important}.stocklana-neo .gv-ring.r1{width:126px!important;height:36px!important}.stocklana-neo .gv-ring.r2{width:158px!important;height:44px!important;transform:translate(-50%,-50%) rotate(-13deg)!important;border-color:rgba(216,255,66,.16)!important}
+.stocklana-neo .gv-prob{position:absolute!important;right:8%!important;top:26%!important;text-align:right!important}.stocklana-neo .gv-prob small{display:block!important;color:#6f7d8f!important;font-size:5px!important}.stocklana-neo .gv-prob b{display:block!important;color:var(--sl-lime)!important;font-size:17px!important}
+.stocklana-neo .game-card-premium h3{position:relative!important;z-index:2!important;min-height:54px!important;margin:5px 0 7px!important;font-size:11px!important;line-height:1.28!important;letter-spacing:-.15px!important}
+.stocklana-neo .game-card-premium .game-pool{display:flex!important;justify-content:space-between!important;align-items:center!important;padding:6px 0!important;border-top:1px solid rgba(255,255,255,.035)!important;border-bottom:1px solid rgba(255,255,255,.035)!important;color:#708093!important;font-size:5.8px!important}.stocklana-neo .game-card-premium .game-pool b{color:#dce5ed!important}
+.stocklana-neo .game-card-premium .game-sides{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;margin-top:7px!important}
+.stocklana-neo .game-card-premium .game-side{min-height:70px!important;padding:7px!important;border-radius:10px!important;text-align:left!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important}
+.stocklana-neo .game-card-premium .game-side span{font-size:6px!important;font-weight:850!important}.stocklana-neo .game-card-premium .game-side b{display:block!important;margin:3px 0!important;font-size:14px!important}.stocklana-neo .game-card-premium .game-side small{display:block!important;font-size:5.2px!important;line-height:1.25!important}
+.stocklana-neo .game-card-premium .yes{border:1px solid rgba(121,242,173,.25)!important;background:linear-gradient(145deg,rgba(48,132,82,.14),rgba(21,55,38,.10))!important;color:#7df0b2!important}.stocklana-neo .game-card-premium .no{border:1px solid rgba(255,111,142,.23)!important;background:linear-gradient(145deg,rgba(139,40,64,.13),rgba(66,23,36,.09))!important;color:#ff7898!important}
+.stocklana-neo .game-challenge{width:100%!important;margin-top:6px!important;padding:6px 8px!important;border:1px solid rgba(141,100,255,.14)!important;border-radius:8px!important;background:rgba(141,100,255,.035)!important;color:#9e8bf0!important;font-size:5.8px!important;text-align:left!important}
+.stocklana-neo .game-rule{display:flex!important;gap:5px!important;flex-wrap:wrap!important;margin-top:6px!important}.stocklana-neo .game-rule span{padding:3px 5px!important;border:1px solid rgba(255,255,255,.04)!important;border-radius:999px!important;background:#080e15!important;color:#627183!important;font-size:4.8px!important}
+.stocklana-neo .preview-game{opacity:.92!important}
+@media(max-width:1180px){.stocklana-neo #view-play .game-deck{grid-template-columns:1fr 1fr!important}}
+@media(max-width:700px){.stocklana-neo #view-play .game-deck{grid-template-columns:1fr!important}}
