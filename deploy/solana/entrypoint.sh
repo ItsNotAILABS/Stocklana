@@ -30,7 +30,19 @@ for i in 1 2 3 4 5; do
   solana airdrop 2 "$AUTHORITY" --url "$RPC" || true
   sleep 5
 done
+BAL="$(solana balance -k "$KEYPAIR" --url "$RPC" --lamports 2>/dev/null | tr -dc '0-9' || true)"
+if [ "${BAL:-0}" -lt 2500000000 ]; then
+  echo "PUBLIC_RPC_AIRDROP_RATE_LIMITED=true"
+  echo "POW_FAUCET_START=true"
+  devnet-pow --keypair-path "$KEYPAIR" --url dev mine --target-lamports 3000000000 || true
+fi
+
 echo "DEPLOY_BALANCE=$(solana balance -k "$KEYPAIR" --url "$RPC")"
+BAL="$(solana balance -k "$KEYPAIR" --url "$RPC" --lamports 2>/dev/null | tr -dc '0-9' || true)"
+if [ "${BAL:-0}" -lt 1000000000 ]; then
+  echo "ERROR=unable_to_fund_devnet_deployer"
+  exit 7
+fi
 
 cd "$WORK/programs/stocklana-market"
 cargo build-sbf
