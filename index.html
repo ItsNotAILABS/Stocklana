@@ -254,10 +254,10 @@
             <button class="primary" id="walletConnectCenterBtn">Connect Phantom</button>
           </div>
           <div class="wallet-balance-grid">
-            <article><span>SOL</span><b id="walletSolBalance">—</b><small>Native network balance</small></article>
-            <article><span>USDC</span><b id="walletUsdcBalance">—</b><small>Ready for PreStocks + markets</small></article>
-            <article><span>PreStocks held</span><b id="walletPrestockCount">—</b><small>Eligible pre-IPO assets detected</small></article>
-            <article><span>Stocklana vault</span><b id="walletVaultBalance">—</b><small>Internal spend / collateral balance</small></article>
+            <article><span>SOL</span><b id="walletSolBalance">—</b><small>Solana money in Phantom</small></article>
+            <article><span>USDC</span><b id="walletUsdcBalance">—</b><small>Dollar balance in Phantom</small></article>
+            <article><span>PreStocks</span><b id="walletPrestockCount">—</b><small>Companies you own</small></article>
+            <article><span>Stocklana</span><b id="walletVaultBalance">—</b><small>Money ready for games, AI and shopping</small></article>
           </div>
           <div class="wallet-quick-actions">
             <button class="primary" id="walletBuyPrestockBtn">Buy PreStock</button>
@@ -278,21 +278,21 @@
             <label>To<select id="swapTo"><option value="USDC">USDC</option></select></label>
             <button class="primary" id="swapExecuteBtn">Preview & convert</button>
           </div>
-          <small class="helper">SOL ↔ USDC and SOL/USDC → eligible PreStocks route through the existing Jupiter execution rail. Your Phantom signs the transaction.</small>
+          <small class="helper">Choose what you have and what you want. Stocklana finds the route; Phantom shows the final transaction before you approve it.</small>
         </section>
 
         <div class="wallet-columns">
           <section class="home-panel">
-            <div class="panel-head"><div><span class="kicker">PRESTOCKS IN YOUR WALLET</span><h2>Holdings</h2></div><span class="helper">Read directly from Solana token accounts.</span></div>
+            <div class="panel-head"><div><span class="kicker">YOUR PRESTOCKS</span><h2>Companies you own</h2></div><span class="helper">Read from your connected Phantom wallet.</span></div>
             <div id="walletPrestockHoldings" class="wallet-holdings"><div class="empty-card">Connect Phantom to read holdings.</div></div>
           </section>
           <section class="home-panel">
-            <div class="panel-head"><div><span class="kicker">WALLET → STOCKLANA</span><h2>Use what you already own</h2></div></div>
+            <div class="panel-head"><div><span class="kicker">USE YOUR MONEY</span><h2>What do you want to do next?</h2></div></div>
             <div class="wallet-flow-list">
-              <button data-wallet-route="markets"><span>01</span><div><b>Trade PreStocks</b><small>Use wallet USDC through the existing Jupiter execution rail.</small></div><i>→</i></button>
-              <button data-wallet-route="play"><span>02</span><div><b>Enter payoff games</b><small>Fund collateral from the same connected wallet.</small></div><i>→</i></button>
-              <button data-wallet-route="credit"><span>03</span><div><b>Use collateral</b><small>Keep wallet signing local while Stocklana builds the route.</small></div><i>→</i></button>
-              <button data-wallet-route="agents"><span>04</span><div><b>Fund an agent safely</b><small>Delegate bounded purchasing power, never your private key.</small></div><i>→</i></button>
+              <button data-wallet-route="markets"><span>01</span><div><b>Buy a PreStock</b><small>Use USDC or convert SOL first.</small></div><i>→</i></button>
+              <button data-wallet-route="play"><span>02</span><div><b>Play a game</b><small>Choose YES or NO and see the payoff before you enter.</small></div><i>→</i></button>
+              <button class="advanced-only" data-wallet-route="credit"><span>03</span><div><b>Explore credit</b><small>Advanced collateral options.</small></div><i>→</i></button>
+              <button data-wallet-route="agents"><span>04</span><div><b>Give an AI a budget</b><small>Set a spending limit and allowed stores. Your wallet key stays private.</small></div><i>→</i></button>
             </div>
           </section>
         </div>
@@ -312,9 +312,9 @@
             <label>Product / checkout URL<input id="commerceUrl" type="url" placeholder="https://merchant.com/product" /></label>
             <div class="convert-grid">
               <label>Max spend (USDC)<input id="commerceAmount" type="number" min="0.01" step="0.01" value="50" /></label>
-              <label>Pay from<select id="commerceFunding"><option value="SMART">Smart money router</option><option value="WALLET_USDC">Phantom USDC</option><option value="STOCKLANA_USDC">Stocklana balance</option><option value="SPLIT_USDC">Split Phantom + Stocklana</option><option value="PRESTOCK_TO_USDC">A PreStock holding</option><option value="SOL_TO_USDC">SOL (convert first)</option></select></label>
+              <label>Pay from<select id="commerceFunding"><option value="SMART">Choose the easiest way</option><option value="WALLET_USDC">USDC in Phantom</option><option value="STOCKLANA_USDC">Money in Stocklana</option><option value="SPLIT_USDC">Use both balances</option><option value="PRESTOCK_TO_USDC">Sell part of a PreStock</option><option value="SOL_TO_USDC">Use SOL</option></select></label>
               <label>PreStock source<select id="commercePrestock"><option value="">Choose a holding</option></select></label>
-              <label>Agent (optional)<input id="commerceAgent" placeholder="stocklana-agent-001" /></label>
+              <label>Use an AI shopper? (optional)<input id="commerceAgent" placeholder="Choose one of your AI helpers" /></label>
             </div>
             <div id="commerceFundingPlan" class="funding-plan"><small>Connect Phantom and enter an amount to see live funding routes.</small></div>
             <div class="commerce-policy-grid">
@@ -322,19 +322,19 @@
               <article><span>SUBSCRIPTIONS</span><b>Blocked</b><small>One purchase unless you explicitly change policy.</small></article>
               <article><span>PRIVATE KEY</span><b>Never shared</b><small>Wallet signs locally; agents receive scoped authority only.</small></article>
             </div>
-            <button class="primary wide" id="commerceCreateBtn">Create safe purchase</button>
+            <button class="primary wide" id="commerceCreateBtn">Continue to payment</button>
             <div id="commerceResult" class="commerce-result"></div>
           </section>
 
           <section class="commerce-side">
             <div class="agent-commerce-card">
-              <span class="kicker">AGENT COMMERCE</span>
-              <h3>“Find it under $300 and buy it.”</h3>
-              <p>Agent Vault policy controls merchant, amount, approval threshold and whether an external purchase may proceed. Wallet-backed purchases still require the human wallet signature.</p>
-              <div class="policy-rail"><span>FIND</span><i>→</i><span>POLICY</span><i>→</i><span>PAY</span><i>→</i><span>RECEIPT</span></div>
+              <span class="kicker">AI SHOPPER</span>
+              <h3>“Find this under $300 and buy it.”</h3>
+              <p>You choose the stores, budget and approval limit. If a purchase crosses your limit, the AI stops and asks you.</p>
+              <div class="policy-rail"><span>FIND</span><i>→</i><span>CHECK RULES</span><i>→</i><span>PAY</span><i>→</i><span>RECEIPT</span></div>
             </div>
             <div class="home-panel">
-              <div class="panel-head"><div><span class="kicker">RECENT PURCHASE INTENTS</span><h2>Commerce activity</h2></div></div>
+              <div class="panel-head"><div><span class="kicker">RECENT</span><h2>Your purchases</h2></div></div>
               <div id="commerceHistory"><div class="empty-card">No purchase intents yet.</div></div>
             </div>
           </section>
@@ -406,8 +406,8 @@
       </section>
 
       <section class="view" id="view-agents">
-        <div class="section-head"><div><span class="kicker">AGENT NETWORK</span><h2>100 governed financial actors</h2></div><button class="mini" id="agentRefresh">Refresh proof</button></div>
-        <p class="section-copy">Every agent owns a scoped Agent Vault, spend policy, connector set, reconciliation state and Phantasma PQ identity. The seven-day regression run exercises the same market/payment modules used by the app.</p>
+        <div class="section-head"><div><span class="kicker">AI</span><h2>Give an AI a budget and clear rules.</h2></div><button class="mini" id="agentRefresh">Refresh</button></div>
+        <p class="section-copy">Create an AI helper for shopping or money tasks. You decide how much it can spend, where it can spend, and when it must ask you.</p>
         <div class="agent-commerce-setup" id="agentCommerceSetup">
           <div class="agent-commerce-copy">
             <span class="kicker">AI SHOPPING</span>
@@ -426,10 +426,10 @@
             <div id="agentCapabilityResult" class="agent-capability-result span-2"></div>
           </div>
         </div>
-        <div class="section-head compact"><div><span class="kicker">YOUR AGENTS</span><h2>Owner-linked runtimes</h2></div></div>
+        <div class="section-head compact"><div><span class="kicker">YOUR AI HELPERS</span><h2>Agents you control</h2></div></div>
         <div id="myAgentGrid" class="my-agent-grid"><div class="empty-card">Connect Phantom to load your agents.</div></div>
-        <div class="metric-row agent-metrics" id="agentWeekMetrics"><div><b>100</b><span>Agents</span></div><div><b>700</b><span>Sessions</span></div><div><b>0</b><span>Unexpected failures</span></div></div>
-        <div class="asset-grid" id="agentGrid"></div>
+        <div class="metric-row agent-metrics advanced-only" id="agentWeekMetrics"><div><b>100</b><span>Agents</span></div><div><b>700</b><span>Sessions</span></div><div><b>0</b><span>Unexpected failures</span></div></div>
+        <div class="asset-grid advanced-only" id="agentGrid"></div>
       </section>
 
       <section class="view" id="view-infrastructure">
@@ -457,10 +457,10 @@
 
     <nav class="bottom-nav" aria-label="Primary">
       <button class="active" data-nav="home"><span>⌂</span>Home</button>
-      <button data-nav="markets"><span>◫</span>Invest</button>
+      <button data-nav="markets"><span>◫</span>Buy</button>
       <button data-nav="play"><span>◇</span>Play</button>
       <button data-nav="commerce"><span>▱</span>Shop</button>
-      <button data-nav="agents"><span>◈</span>Agent</button>
+      <button data-nav="agents"><span>◈</span>AI</button>
     </nav>
   </div>
 
