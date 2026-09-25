@@ -1,0 +1,19 @@
+FROM debian:bookworm-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl build-essential pkg-config libssl-dev libudev-dev clang cmake git python3 \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal
+ENV PATH="/root/.cargo/bin:/root/.local/share/solana/install/active_release/bin:${PATH}"
+RUN sh -c "$(curl -sSfL https://release.anza.xyz/v3.1.13/install)"
+
+WORKDIR /app
+COPY . .
+
+ENV STOCKLANA_PROGRAM_CLUSTER=devnet
+ENV STOCKLANA_PROGRAM_RPC_URL=https://api.devnet.solana.com
+ENV PORT=8081
+
+CMD ["bash","scripts/railway_deploy_devnet.sh"]
