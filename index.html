@@ -270,6 +270,11 @@
           </div>
           <div class="step"><span>03</span><div><b>Define terms</b><small>Set the payoff, fee and automatic resolution rule.</small></div></div>
           <div id="builderFields" class="builder-fields"></div>
+          <div class="lab-simulation-stage" aria-hidden="true">
+            <div class="lss-head"><span>MARKET COMPILER</span><b>Thesis becomes executable settlement logic.</b></div>
+            <div class="lss-flow"><span>THESIS<small>human idea</small></span><i></i><span>RULE<small>deterministic</small></span><i></i><span>ESCROW<small>fully funded</small></span><i></i><span>SETTLE<small>receipt</small></span></div>
+            <div class="lss-book"><span>YES POOL<i></i></span><span>NO POOL<i></i></span><b>HOUSE EXPOSURE 0</b></div>
+          </div>
           <div class="preview" id="marketPreview"></div>
           <div class="field"><label>Protocol fee</label><input id="feeBps" type="number" value="100" min="0" max="1000" step="5"/><small>Basis points. The default pari-mutuel engine is fully collateralized by participants; Stocklana does not take a side.</small></div><button class="primary wide" id="createMarketBtn">Create live Stocklana market</button>
         </div>
