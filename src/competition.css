@@ -534,3 +534,11 @@ body.stocklana-neo:after{
 .stocklana-neo #view-coverage #coverageGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.stocklana-neo #view-coverage #coverageGrid .asset-card,.stocklana-neo #view-coverage #coverageGrid .route{min-height:145px!important;padding:12px!important}.stocklana-neo #view-coverage #coverageGrid h3{font-size:10px!important}.stocklana-neo #view-coverage #coverageGrid p,.stocklana-neo #view-coverage #coverageGrid .market-chips span{font-size:6px!important}
 @media(max-width:950px){.stocklana-neo .system-topology-stage{grid-template-columns:1fr!important}.stocklana-neo .sts-map{height:170px!important}.stocklana-neo .proof-scoreboard{grid-template-columns:1fr 1fr!important}}
 @media(max-width:600px){.stocklana-neo .proof-scoreboard{grid-template-columns:1fr!important}}
+
+
+/* professional vector icons */
+.stocklana-neo .nav-icon{width:22px!important;height:22px!important;display:grid!important;place-items:center!important;flex:0 0 22px!important}
+.stocklana-neo .nav-icon svg,.stocklana-neo .top-search-icon svg,.stocklana-neo .neo-action>span svg,.stocklana-neo .neo-bell svg{width:100%!important;height:100%!important;fill:none!important;stroke:currentColor!important;stroke-width:1.75!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.stocklana-neo .neo-nav-group button>span.nav-icon{font-size:0!important;color:#cdd5df!important}.stocklana-neo .neo-nav-group button.active>span.nav-icon{color:var(--sl-lime)!important;filter:drop-shadow(0 0 6px rgba(216,255,66,.18))!important}
+.stocklana-neo .top-search-icon{width:18px!important;height:18px!important;color:#7c899b!important;display:grid!important;place-items:center!important}
+.stocklana-neo .neo-bell svg{width:18px!important;height:18px!important}.stocklana-neo .neo-action>span svg{width:21px!important;height:21px!important}
