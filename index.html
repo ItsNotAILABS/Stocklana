@@ -8,25 +8,26 @@
   <title>Stocklana — Programmable Tokenized Equities</title>
   <link rel="stylesheet" href="./src/styles.css" />
 </head>
-<body>
+<body class="simple-mode">
   <canvas id="ambient" aria-hidden="true"></canvas>
   <div class="shell">
     <aside class="desktop-rail" aria-label="Stocklana V2 navigation">
       <div class="rail-brand"><div class="brand-mark">S</div><div><b>Stocklana</b><small>V2</small></div></div>
       <button class="active" data-nav="home">⌂ Home</button>
-      <button data-nav="markets">◫ Invest</button>
+      <button data-nav="markets">↗ Buy</button>
       <button data-nav="play">◇ Play</button>
-      <button data-nav="wallet">◉ Wallet</button>
+      <button data-nav="wallet">◉ Money</button>
       <button data-nav="commerce">▱ Shop</button>
-      <button data-nav="vault">▣ Money</button>
-      <button data-nav="credit">↯ Credit</button>
-      <button data-nav="agents">◈ Agent</button>
-      <button data-nav="launch">↗ Launch</button>
-      <button data-nav="infrastructure">⌘ System</button>
+      <button data-nav="agents">◈ AI</button>
+      <div class="rail-divider advanced-only"><span>ADVANCED</span></div>
+      <button class="advanced-only" data-nav="vault">▣ Stocklana balance</button>
+      <button class="advanced-only" data-nav="credit">↯ Credit</button>
+      <button class="advanced-only" data-nav="launch">↗ Launch</button>
+      <button class="advanced-only" data-nav="lab">＋ Build a market</button>
+      <button class="advanced-only" data-nav="infrastructure">⌘ System</button>
       <div class="rail-spacer"></div>
-      <button class="subtle-rail" data-nav="lab">＋ Build a market</button>
-      <button class="subtle-rail" data-nav="portfolio">◎ My activity</button>
-      <button class="subtle-rail" data-nav="coverage">✓ Proof</button>
+      <button class="subtle-rail" data-nav="portfolio">◎ Activity</button>
+      <button class="subtle-rail advanced-only" data-nav="coverage">✓ Proof</button>
       <div class="rail-proof"><b>V2 ACCOUNT FABRIC</b><br/>Token-2022 · Phantasma PQ<br/><br/><b>SETTLEMENT</b><br/>Solana · PreStocks · Pyth<br/><br/><b>CLEARING</b><br/>PARRALAX · ISO 20022</div>
     </aside>
 
@@ -35,7 +36,7 @@
         <div class="brand-mark">S</div>
         <div><strong>Stocklana</strong><span>TOKENIZED EQUITY OS</span></div>
       </div>
-      <div class="desktop-status"><span class="live">● APP READY</span><span>TRADE · CONVERT · PLAY · SPEND</span></div><button class="wallet" id="walletBtn">Connect wallet</button>
+      <div class="desktop-status"><span class="live">● READY</span><span>BUY · CONVERT · PLAY · SHOP</span></div><button class="ux-mode" id="uxModeBtn" aria-pressed="false">Advanced</button><button class="wallet" id="walletBtn">Connect Phantom</button>
     </header>
 
     <main>
@@ -43,25 +44,34 @@
 
       <section class="view active" id="view-home">
         <div class="v2-home-head">
-          <div><span class="v2-pill">STOCKLANA V2 · SOLANA</span><h1>Your equities can<br/><em>do more.</em></h1><p>Buy tokenized companies 24/7, put them on autopilot, use supported assets for credit, play simple market ideas, send money, spend from your account, or hand a budget to an AI.</p></div>
+          <div><span class="v2-pill">PRESTOCKS ON SOLANA</span><h1>Buy it. Use it.<br/><em>Play with it.</em></h1><p>Stocklana makes PreStocks feel simple: buy a company, convert your money, play a payoff game, shop online, send money, or let an AI buy within rules you set.</p></div>
           <div class="home-account-card">
             <div class="home-account-top"><span>Stocklana account</span><span id="homeAccountState" class="status neutral">NOT CONNECTED</span></div>
             <b id="homeNetValue">$0.00</b><small>Available + positions</small>
-            <div class="home-account-actions"><button class="primary" data-action="add-money">Add money</button><button class="ghost" data-action="send">Send</button></div>
+            <div class="home-account-actions"><button class="primary" data-action="money">Open my money</button><button class="ghost" data-action="send">Send</button></div>
           </div>
         </div>
 
         <div class="section-head compact"><div><span class="kicker">START HERE</span><h2>What do you want to do?</h2></div><span class="helper">Every action uses the same V2 account underneath.</span></div>
-        <div class="action-grid" id="v2ActionGrid">
-          <button class="action-card featured" data-action="buy"><span class="action-icon">↗</span><div><b>Buy an equity</b><small>24/7 tokenized-equity access</small></div><i>Start</i></button>
-          <button class="action-card" data-action="auto"><span class="action-icon">⟳</span><div><b>Auto-invest</b><small>Recurring buys, baskets & robo</small></div><i>Set up</i></button>
-          <button class="action-card" data-action="borrow"><span class="action-icon">↯</span><div><b>Borrow</b><small>Use supported assets as collateral</small></div><i>Explore</i></button>
-          <button class="action-card" data-action="play"><span class="action-icon">◇</span><div><b>Play a market</b><small>Simple payoff games backed by real assets</small></div><i>Discover</i></button>
-          <button class="action-card" data-action="send"><span class="action-icon">→</span><div><b>Send money</b><small>@handle, QR or wallet</small></div><i>Pay</i></button>
-          <button class="action-card" data-action="spend"><span class="action-icon">▰</span><div><b>Buy anything</b><small>Use wallet or Stocklana money outside the app</small></div><i>Shop</i></button>
-          <button class="action-card" data-action="agent"><span class="action-icon">◈</span><div><b>Give an AI a budget</b><small>Governed Agent Vault</small></div><i>Assign</i></button>
-          <button class="action-card" data-action="launch"><span class="action-icon">✦</span><div><b>Launch</b><small>ETH + Solana token/liquidity rails</small></div><i>Create</i></button>
+        <div class="action-grid simple-actions" id="v2ActionGrid">
+          <button class="action-card featured" data-action="buy"><span class="action-icon">↗</span><div><b>Buy a company</b><small>Choose a PreStock and pay with USDC or SOL.</small></div><i>Buy</i></button>
+          <button class="action-card" data-action="money"><span class="action-icon">⇄</span><div><b>Convert money</b><small>SOL, USDC and your PreStocks in one place.</small></div><i>Convert</i></button>
+          <button class="action-card" data-action="play"><span class="action-icon">◇</span><div><b>Play</b><small>Pick YES or NO. See your stake, payoff and max loss first.</small></div><i>Play</i></button>
+          <button class="action-card" data-action="spend"><span class="action-icon">▰</span><div><b>Buy something online</b><small>Use Phantom, Stocklana money or a PreStock you choose.</small></div><i>Shop</i></button>
+          <button class="action-card" data-action="send"><span class="action-icon">→</span><div><b>Send money</b><small>Send to a person, QR code or wallet.</small></div><i>Send</i></button>
+          <button class="action-card" data-action="agent"><span class="action-icon">◈</span><div><b>Give an AI a budget</b><small>Choose where it can shop, how much it can spend, and when it must ask you.</small></div><i>Set rules</i></button>
+          <button class="action-card advanced-only" data-action="auto"><span class="action-icon">⟳</span><div><b>Automate investing</b><small>Recurring buys, baskets and rebalancing.</small></div><i>Automate</i></button>
+          <button class="action-card advanced-only" data-action="borrow"><span class="action-icon">↯</span><div><b>Use credit</b><small>Explore supported collateral routes.</small></div><i>Explore</i></button>
+          <button class="action-card advanced-only" data-action="launch"><span class="action-icon">✦</span><div><b>Launch an asset</b><small>Advanced ETH + Solana launch tools.</small></div><i>Build</i></button>
         </div>
+
+        <section class="how-it-works" aria-label="How Stocklana works">
+          <div class="how-step"><span>1</span><div><b>Connect Phantom</b><small>Your keys stay in your wallet.</small></div></div>
+          <i>→</i>
+          <div class="how-step"><span>2</span><div><b>Choose what you want</b><small>Buy, convert, play, shop, send or use AI.</small></div></div>
+          <i>→</i>
+          <div class="how-step"><span>3</span><div><b>Approve money moves</b><small>You see the amount before anything is signed.</small></div></div>
+        </section>
 
         <div class="home-grid">
           <section class="home-panel home-discover">
@@ -69,18 +79,18 @@
             <div id="homeAssets" class="home-assets"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
           </section>
           <section class="home-panel">
-            <div class="panel-head"><div><span class="kicker">V2 ACCOUNT</span><h2>One balance. Many uses.</h2></div></div>
+            <div class="panel-head"><div><span class="kicker">YOUR MONEY</span><h2>Everything you can use.</h2></div></div>
             <div class="money-map">
-              <button data-nav="vault"><span>Spendable</span><b id="homeCash">$0.00</b><small>Send · spend · withdraw</small></button>
-              <button data-nav="portfolio"><span>Positions</span><b id="homePositions">0</b><small>Equities + markets + baskets</small></button>
-              <button data-nav="credit"><span>Credit</span><b>Routes</b><small>Collateral options</small></button>
-              <button data-nav="agents"><span>Agent</span><b>Scoped</b><small>Policy-controlled automation</small></button>
+              <button data-nav="vault"><span>Available now</span><b id="homeCash">$0.00</b><small>Send · shop · play</small></button>
+              <button data-nav="portfolio"><span>Things you own</span><b id="homePositions">0</b><small>PreStocks + games + baskets</small></button>
+              <button data-nav="credit"><span>Credit</span><b>Optional</b><small>Advanced collateral tools</small></button>
+              <button data-nav="agents"><span>AI</span><b>Controlled</b><small>You set the rules and limits</small></button>
             </div>
           </section>
         </div>
 
         <section class="home-panel use-cases">
-          <div class="panel-head"><div><span class="kicker">WHY V2</span><h2>Not another brokerage account.</h2></div><span class="helper">The equity stays useful after you buy it.</span></div>
+          <div class="panel-head"><div><span class="kicker">WHAT MAKES IT DIFFERENT</span><h2>Your PreStock stays useful after you buy it.</h2></div><span class="helper">The equity stays useful after you buy it.</span></div>
           <div class="use-strip">
             <div><span>01</span><b>Own</b><small>Buy the real tokenized asset.</small></div>
             <div><span>02</span><b>Program</b><small>Automate, basket, or build a payoff.</small></div>
@@ -92,16 +102,16 @@
 
       <section class="view" id="view-markets">
         <div class="section-head">
-          <div><span class="kicker">INVEST</span><h2>Buy, automate and use tokenized equities</h2></div>
+          <div><span class="kicker">BUY PRESTOCKS</span><h2>Choose a company. Decide what to do with it.</h2></div>
           <button class="mini" id="refreshBtn">↻ Live</button>
         </div>
         <div class="ticker" id="ticker"></div>
-        <div class="section-head compact"><div><span class="kicker">QUICK ROUTES</span><h2>Choose what happens after you own it.</h2></div></div>
+        <div class="section-head compact"><div><span class="kicker">AFTER YOU BUY</span><h2>Your PreStock can keep working.</h2></div></div>
         <div class="route-stack">
-          <article class="route"><div class="route-top"><span class="status">TRADE</span><b>24/7</b></div><h3>Acquire or exit</h3><p>Execute the exact tokenized-equity mint against USDC through Jupiter.</p></article>
-          <article class="route"><div class="route-top"><span class="status">INVEST</span><b>AUTO</b></div><h3>Recurring + baskets</h3><p>Schedule buys, compile weighted baskets and let policy-scoped agents rebalance.</p></article>
-          <article class="route"><div class="route-top"><span class="status">CREDIT</span><b>DeFi</b></div><h3>Use equity as collateral</h3><p>Route supported tokenized shares into Kamino transaction builders; keep keys local.</p></article>
-          <article class="route"><div class="route-top"><span class="status">SPEND</span><b>MAQUE</b></div><h3>Spend from portfolio value</h3><p>Internal payments, Solana payment requests and governed one-use card funding.</p></article>
+          <article class="route"><div class="route-top"><span class="status">TRADE</span><b>24/7</b></div><h3>Buy or sell</h3><p>Trade the PreStock from your connected wallet.</p></article>
+          <article class="route"><div class="route-top"><span class="status">INVEST</span><b>AUTO</b></div><h3>Buy automatically</h3><p>Choose how much and how often.</p></article>
+          <article class="route"><div class="route-top"><span class="status">CREDIT</span><b>DeFi</b></div><h3>Explore credit</h3><p>See supported ways to borrow without hiding the risks.</p></article>
+          <article class="route"><div class="route-top"><span class="status">SPEND</span><b>MAQUE</b></div><h3>Spend from what you own</h3><p>Choose a PreStock, convert only what you approve, then shop.</p></article>
         </div>
         <div class="market-feed" id="marketFeed" aria-live="polite"></div>
         <div class="section-head compact"><div><span class="kicker">UNDERLYINGS</span><h2>PreStocks assets</h2></div></div>
@@ -111,9 +121,9 @@
       <section class="view" id="view-play">
         <div class="play-hero">
           <div>
-            <span class="kicker">PRESTOCKS ARCADE</span>
-            <h2>Put your private-company thesis to work.</h2>
-            <p>Fast, fully collateralized payoff games built from the same eligible PreStocks. Pick a side, see the real pool, know the maximum loss, and settle from the market engine already inside Stocklana.</p>
+            <span class="kicker">PLAY</span>
+            <h2>Pick a side. Know the payoff.</h2>
+            <p>Choose YES or NO on a PreStock outcome. Your stake, possible payout and maximum loss are shown before you enter.</p>
           </div>
           <div class="play-stake">
             <span>Quick stake</span>
@@ -232,10 +242,10 @@
 
       <section class="view" id="view-wallet">
         <div class="section-head">
-          <div><span class="kicker">CONNECTED WALLET</span><h2>Your Phantom lives inside Stocklana.</h2></div>
+          <div><span class="kicker">YOUR MONEY</span><h2>Use what you already have.</h2></div>
           <div class="wallet-toolbar"><button class="mini" id="walletRefreshBtn">↻ Refresh</button><button class="mini" id="walletCopyBtn">Copy address</button></div>
         </div>
-        <p class="section-copy">Stocklana reads your connected Solana wallet directly. Your keys stay in Phantom; balances, PreStocks holdings and wallet actions are surfaced here so the wallet feels native to the app.</p>
+        <p class="section-copy">Connect Phantom once. Stocklana shows your SOL, USDC and PreStocks here. Your private keys stay in Phantom, and you approve transactions before money moves.</p>
 
         <div class="wallet-shell-card">
           <div class="wallet-identity-block">
@@ -291,10 +301,10 @@
 
       <section class="view" id="view-commerce">
         <div class="section-head">
-          <div><span class="kicker">STOCKLANA COMMERCE</span><h2>Use Solana money anywhere the web already sells things.</h2></div>
+          <div><span class="kicker">SHOP</span><h2>Buy something online with money you already have.</h2></div>
           <span class="status live">SAFE PURCHASE MODE</span>
         </div>
-        <p class="section-copy">Paste a product or checkout URL, set the maximum spend, choose Phantom USDC or your Stocklana balance, and Stocklana creates a merchant-bound one-time purchase rail. Agents can use the same rail without ever receiving your wallet key.</p>
+        <p class="section-copy">Paste the product or checkout link, set the most you are willing to spend, then choose where the money comes from. Stocklana locks the payment to that merchant and amount.</p>
 
         <div class="commerce-layout">
           <section class="commerce-builder">
@@ -400,9 +410,9 @@
         <p class="section-copy">Every agent owns a scoped Agent Vault, spend policy, connector set, reconciliation state and Phantasma PQ identity. The seven-day regression run exercises the same market/payment modules used by the app.</p>
         <div class="agent-commerce-setup" id="agentCommerceSetup">
           <div class="agent-commerce-copy">
-            <span class="kicker">BUILD YOUR SHOPPING AGENT</span>
-            <h3>Give an AI purchasing power without giving it your wallet.</h3>
-            <p>Create an owner-linked Agent Vault, restrict it to merchants you choose, cap each purchase and each day, then issue a one-time-view capability token for the agent runtime.</p>
+            <span class="kicker">AI SHOPPING</span>
+            <h3>Let an AI buy things without giving it your wallet.</h3>
+            <p>Choose where the AI can shop, its daily budget, its per-purchase limit, and the amount where it must stop and ask you.</p>
           </div>
           <div class="agent-policy-form">
             <label>Agent ID<input id="agentCreateId" placeholder="my-shopping-agent" maxlength="64"></label>
