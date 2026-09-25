@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@ardrive/turbo-sdk": "^1.43.0",
-    "bs58": "^6.0.0"
+    "bs58": "^6.0.0",
+    "@ar.io/sdk": "^3.23.0",
+    "@solana/kit": "^5.1.0"
   }
 }
