@@ -40,6 +40,7 @@ PROGRAM_ID=os.getenv('STOCKLANA_PROGRAM_ID','')
 CMESH_ADDRESS=os.getenv('STOCKLANA_CMESH_ADDRESS','').strip()
 CMESH_CHAIN_ID=4663
 CMESH_PONS_FACTORY='0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e'
+CORS_ORIGIN=os.getenv('STOCKLANA_CORS_ORIGIN','').strip()
 _ASSET_CACHE={'at':0.0,'data':SNAPSHOT}
 
 def normalized_live_assets():
@@ -88,6 +89,15 @@ def featured_games(limit=24,stake=10):
     return rows[:int(limit)]
 
 class Handler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        if CORS_ORIGIN:
+            self.send_header('Access-Control-Allow-Origin',CORS_ORIGIN)
+            self.send_header('Vary','Origin')
+            self.send_header('Access-Control-Allow-Headers','Authorization, Content-Type, X-Stocklana-Session')
+            self.send_header('Access-Control-Allow-Methods','GET, POST, OPTIONS')
+        super().end_headers()
+    def do_OPTIONS(self):
+        self.send_response(204); self.end_headers()
     def translate_path(self,path):
         raw=super().translate_path(path); rel=os.path.relpath(raw,os.getcwd()); return str(ROOT/rel)
     def body(self):
