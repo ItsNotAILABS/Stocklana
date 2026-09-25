@@ -588,6 +588,21 @@
     </div>
   </dialog>
 
+  <dialog id="actionDialog" class="action-dialog">
+    <form method="dialog" class="action-dialog-sheet" id="actionDialogForm">
+      <button class="close" value="cancel" aria-label="Close">×</button>
+      <span class="action-dialog-kicker" id="actionDialogKicker">STOCKLANA</span>
+      <h2 id="actionDialogTitle">Action</h2>
+      <p id="actionDialogCopy"></p>
+      <div id="actionDialogFields" class="action-dialog-fields"></div>
+      <div class="action-dialog-summary" id="actionDialogSummary" hidden></div>
+      <div class="action-dialog-actions">
+        <button class="ghost" value="cancel">Cancel</button>
+        <button class="primary" value="confirm" id="actionDialogConfirm">Continue</button>
+      </div>
+    </form>
+  </dialog>
+
   <div class="toast" id="toast"></div>
   <script src="./runtime-config.js"></script>
   <script type="module" src="./src/stocklana-hero.js"></script>
