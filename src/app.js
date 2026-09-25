@@ -33,7 +33,7 @@ function setUxMode(advanced){
 const money=n=>Number(n)>=1e12?`$${(Number(n)/1e12).toFixed(2)}T`:Number(n)>=1e9?`$${(Number(n)/1e9).toFixed(1)}B`:`$${Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2})}`;
 const premium=a=>((Number(a.tokenPrice)/Number(a.markPrice))-1)*100, short=x=>x?`${x.slice(0,4)}…${x.slice(-4)}`:'guest';
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
-function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play')loadGames();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
+function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play')loadGames();if(v==='cmesh')loadCmesh();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
 $('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));
 $('#uxModeBtn')?.addEventListener('click',()=>setUxMode(!document.body.classList.contains('advanced-mode')));
 setUxMode(localStorage.getItem(UX_MODE_KEY)==='1');
@@ -216,7 +216,7 @@ async function loadWalletCenter(){
       sessionToken?fetch('/api/vault?trader='+encodeURIComponent(trader())).then(r=>r.json()).catch(()=>null):Promise.resolve(null)
     ]);
     lastWalletPortfolio=portfolio;refreshCommercePrestocks();refreshSwapTargets();
-    $('#walletSolBalance').textContent=Number(portfolio.sol).toLocaleString(undefined,{maximumFractionDigits:4});
+    $('#walletSolBalance').textContent=Number(portfolio.sol).toLocaleString(undefined,{maximumFractionDigits:4});if($('#homeSolBalance'))$('#homeSolBalance').textContent=Number(portfolio.sol).toLocaleString(undefined,{maximumFractionDigits:3})+' SOL';if($('#homeWalletLabel'))$('#homeWalletLabel').textContent='My money';
     $('#walletUsdcBalance').textContent=money(portfolio.usdc);
     $('#walletPrestockCount').textContent=String(portfolio.prestocks.length);
     $('#walletVaultBalance').textContent=money(v?.balances?.USDC||0);
@@ -440,11 +440,47 @@ async function loadV2Home(){
   const homeAssets=$('#homeAssets');
   try{
     const d=await fetch('/api/v2/home',{cache:'no-store'}).then(r=>r.json());
-    const list=(d.equities||assets).slice(0,3);
-    if(homeAssets)homeAssets.innerHTML=list.map(a=>`<button class="home-equity" data-home-asset="${a.symbol}"><div class="home-equity-head"><img src="${a.image||''}" alt=""><span class="status live">24/7</span></div><b>${a.name.replace(' PreStocks','')}</b><small>${a.symbol}</small><div class="eq-price">${money(a.tokenPrice)}</div><small>Use it →</small></button>`).join('');
-    $$('[data-home-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.homeAsset));
-    const ac=d.account;if(ac){const cash=Number(ac.balances?.USDC||0);$('#homeCash').textContent=money(cash);$('#homeNetValue').textContent=money(cash);$('#homePositions').textContent=String(ac.positions||0);$('#homeAccountState').textContent='ACTIVE';$('#homeAccountState').className='status live'}else{$('#homeAccountState').textContent='CONNECT TO ACTIVATE'}
-  }catch(e){if(homeAssets)homeAssets.innerHTML='<div class="empty-card">Live account summary unavailable</div>'}
+    const all=d.equities||assets, featured=all.find(a=>a.symbol==='OPENAI')||all[0], list=all.filter(a=>a.symbol!==featured?.symbol).slice(0,3);
+    if($('#homeFeaturedPrestock')&&featured){
+      const p=premium(featured);
+      $('#homeFeaturedPrestock').innerHTML=`<button class="featured-main" data-home-featured="${featured.symbol}"><img src="${featured.image||''}" alt=""><div><h3>${featured.name.replace(' PreStocks','')}</h3><small>${featured.symbol} · PreStock</small></div><div class="fp-price"><b>${money(featured.tokenPrice)}</b><small>${p>=0?'+':''}${p.toFixed(1)}% vs mark</small></div></button><div class="neo-spark" aria-hidden="true"></div>`;
+      $('#homeFeaturedPrestock [data-home-featured]')?.addEventListener('click',()=>openAsset(featured.symbol));
+    }
+    if(homeAssets)homeAssets.innerHTML=list.map(a=>{const p=premium(a);return `<button data-home-asset="${a.symbol}"><b>${a.symbol}</b><small>${money(a.tokenPrice)} · ${p>=0?'+':''}${p.toFixed(1)}%</small></button>`}).join('');
+    $('[data-home-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.homeAsset));
+    const ac=d.account;
+    if(ac){
+      const cash=Number(ac.balances?.USDC||0);
+      $('#homeCash').textContent=money(cash);
+      $('#homeNetValue').textContent=money(cash);
+      $('#homePositions').textContent=String(ac.positions||0);
+      $('#homeAccountState').textContent='ACTIVE';
+      $('#homeAccountState').className='status live';
+    }else{$('#homeAccountState').textContent='CONNECT PHANTOM'}
+    loadHomeGameSpotlight();
+    loadHomeActivity();
+  }catch(e){
+    if(homeAssets)homeAssets.innerHTML='<div class="empty-card">Live PreStocks unavailable</div>';
+    loadHomeGameSpotlight();
+  }
+}
+async function loadHomeGameSpotlight(){
+ const box=$('#homeGameSpotlight');if(!box)return;
+ try{
+   const d=await fetch('/api/games?stake=10&limit=1',{cache:'no-store'}).then(r=>r.json()),g=d.games?.[0];
+   if(!g){box.innerHTML='<div class="empty-card">No live games yet.</div>';return}
+   const yes=Math.round(Number(g.yesProbability??.5)*100),no=100-yes,y=g.game?.yes||{},n=g.game?.no||{};
+   box.innerHTML=`<span class="status">${gameTitle(g.family)}</span><h3>${g.question}</h3><div class="neo-game-meta"><span>${money(g.collateral||0)} real pool</span><span>${g.trades?.length||0} plays</span></div><div class="neo-game-sides"><button class="yes" data-home-game-side="YES"><small>YES · ${yes}%</small><b>${money(y.payoutIfCorrect||0)}</b><small>if correct on $10</small></button><button class="no" data-home-game-side="NO"><small>NO · ${no}%</small><b>${money(n.payoutIfCorrect||0)}</b><small>if correct on $10</small></button></div>`;
+   box.querySelectorAll('[data-home-game-side]').forEach(b=>b.onclick=()=>trade(g.id,b.dataset.homeGameSide,10));
+ }catch(e){box.innerHTML='<div class="empty-card">Game preview unavailable.</div>'}
+}
+async function loadHomeActivity(){
+ const box=$('#homeActivity');if(!box)return;
+ if(!sessionToken){box.innerHTML='<div><span>◉</span><p><b>Connect Phantom</b><small>Your verified activity appears here.</small></p></div>';return}
+ try{
+   const r=await fetch('/api/receipts',{cache:'no-store'}),d=await r.json(),rows=Array.isArray(d)?d:(d.receipts||[]);
+   box.innerHTML=rows.slice(0,4).map(x=>`<div><span>✓</span><p><b>${String(x.type||x.kind||'Stocklana action').replaceAll('_',' ')}</b><small>${x.amount?money(x.amount):x.status||'verified receipt'}</small></p></div>`).join('')||'<div><span>✓</span><p><b>Wallet connected</b><small>No recent Stocklana receipts yet.</small></p></div>';
+ }catch{box.innerHTML='<div><span>✓</span><p><b>Wallet connected</b><small>Activity is ready when you transact.</small></p></div>'}
 }
 async function loadCredit(){
   if(!$('#creditPower'))return;
@@ -465,6 +501,8 @@ $$('[data-action]').forEach(b=>b.addEventListener('click',()=>{
  if(a==='money'){navigate('wallet');setTimeout(()=>$('#swapAmount')?.focus(),250)}
  if(a==='add-money'){navigate('wallet');setTimeout(()=>$('#swapAmount')?.focus(),250)}
 }));
+$('[data-home-wallet]')?.addEventListener('click',async()=>{if(wallet?.publicKey){navigate('wallet');return}try{await connectPrimaryWallet();navigate('wallet')}catch{}});
+$('#homeShopGo')?.addEventListener('click',()=>{const u=$('#homeShopLink')?.value?.trim();navigate('commerce');setTimeout(()=>{if(u&&$('#commerceUrl'))$('#commerceUrl').value=u;$('#commerceUrl')?.dispatchEvent(new Event('input'));$('#commerceAmount')?.focus()},80)});
 $('#creditStartBtn')?.addEventListener('click',()=>requireWalletAction(loadCredit));
 $('#internalBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAction())return;const collateral=Number(prompt('Collateral value in USDC','250')||0),borrow=Number(prompt('Amount to borrow in USDC','100')||0);if(collateral<=0||borrow<=0)return;try{const q=await fetch('/api/lending/quote',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({collateral,borrow,days:30})}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'quote_failed');return j});if(confirm(`30-day quote: borrow ${money(borrow)} against ${money(collateral)}. Open funded loan?`)){const r=await fetch('/api/lending/open',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({collateral,borrow,days:30})}),j=await r.json();toast(r.ok?`Credit opened · ${j.loanId||'funded'}`:(j.error||'Credit route unavailable'));await loadCredit()}}catch(e){toast(String(e.message||e))}});
 $('#kaminoBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAction())return;const market=prompt('Kamino market address','')||'',reserve=prompt('Supported collateral reserve address','')||'',amount=prompt('Atomic deposit amount','')||'';if(!market||!reserve||!amount)return;try{const r=await fetch('/api/kamino/deposit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:wallet.publicKey,market,reserve,amount})}),j=await r.json();if(!r.ok)throw new Error(j.error||'kamino_builder_failed');toast('Kamino transaction built — sign locally in wallet')}catch(e){toast(String(e.message||e))}});
@@ -484,6 +522,46 @@ document.querySelectorAll('[data-nav="coverage"]').forEach(b=>b.addEventListener
 document.querySelector('#coverageRefresh')?.addEventListener('click',loadCoverage);
 document.querySelectorAll('[data-nav="infrastructure"]').forEach(b=>b.addEventListener('click',async()=>{try{await fetch('/api/iso20022').then(r=>r.json());const a=await fetch('/api/accounting/tokens',{cache:'no-store'}).then(r=>r.json());const i=a.invariants||{};const c=document.querySelector('#acctCoverage'),p=document.querySelector('#acctProof');if(c)c.textContent=(i.cashCoverageRatio==null?'N/A':`${i.cashCoverageRatio.toFixed(4)}×`);if(p)p.textContent=`USDC ${Number(i.externalUSDC||0).toFixed(2)} · claims ${Number(i.monetaryClaimsUSDC||0).toFixed(2)} · journal ${i.journalBalanced?'balanced':'ERROR'} · ${i.fullyBackedMonetaryClaims?'fully backed':'UNDERBACKED'}.`;}catch(e){const p=document.querySelector('#acctProof');if(p)p.textContent='Accounting proof unavailable.';}}));
 
+
+
+// ---- CMESH · separate platform-token lane (Pons / Robinhood Chain) ----
+const CMESH_STORAGE_KEY='stocklana:cmesh:token-address';
+let cmeshToken=null,cmeshState=null;
+const validEvmAddress=x=>/^0x[a-fA-F0-9]{40}$/.test(String(x||'').trim());
+function storedCmesh(){return localStorage.getItem(CMESH_STORAGE_KEY)||''}
+async function resolveCmeshAddress(){
+ if(validEvmAddress(cmeshToken))return cmeshToken;
+ try{const cfg=await fetch('/api/cmesh/config',{cache:'no-store'}).then(r=>r.json());if(validEvmAddress(cfg.tokenAddress))cmeshToken=cfg.tokenAddress}catch{}
+ if(!validEvmAddress(cmeshToken)&&validEvmAddress(storedCmesh()))cmeshToken=storedCmesh();
+ return cmeshToken
+}
+function renderCmeshState(s){
+ const box=$('#cmeshState'),status=$('#cmeshReadStatus');if(!box)return;
+ if(!s){status.textContent='ADDRESS NEEDED';status.className='status neutral';return}
+ const cs=s.curveState,p=Math.max(0,Math.min(100,Number(cs?.progress||0)));
+ status.textContent=s.phaseLabel?.toUpperCase()||'ONCHAIN';status.className='status live';
+ box.innerHTML=`<div class="cmesh-live-head"><div><span class="status live">VERIFIED FROM PONS</span><h2>${s.name} · ${s.symbol}</h2><code>${s.token}</code></div><a href="${s.explorer}" target="_blank" rel="noopener">Explorer ↗</a></div>${cs?`<div class="curve-progress"><i style="width:${p}%"></i></div><div class="curve-row"><div><span>Graduation</span><b>${p.toFixed(2)}%</b></div><div><span>Raised</span><b>${Number(cs.raisedEth).toFixed(4)} ${s.pairSymbol}</b></div><div><span>Creator tax</span><b>${(Number(cs.creatorTaxBps)/100).toFixed(2)}%</b></div></div>`:`<div class="curve-row"><div><span>Phase</span><b>${s.phaseLabel}</b></div><div><span>Pair</span><b>${s.pairSymbol}</b></div><div><span>Buyback</span><b>${s.buybackEnabled?'ON':'OFF'}</b></div></div>`}`;
+ $('#cmeshBuyBtn').disabled=!(s.phase===0&&s.pairSymbol==='ETH');
+ $('#cmeshSellBtn').disabled=!(s.phase===0&&s.pairSymbol==='ETH');
+ $('#cmeshTradeHint').textContent=s.phase===0&&s.pairSymbol==='ETH'?'Wallet-signed trades execute through the live pons curve.':'Embedded trading is available while the token is on an ETH-paired pons curve.';
+}
+async function bindCmesh(addr){
+ const token=String(addr||'').trim();if(!validEvmAddress(token))throw new Error('full_cmesh_address_required');
+ const s=await readPonsLaunch(token);
+ if(String(s.symbol||'').toUpperCase()!=='CMESH'&&String(s.name||'').toLowerCase()!=='ciphermesh')throw new Error('address_is_not_cmesh');
+ cmeshToken=token;cmeshState=s;localStorage.setItem(CMESH_STORAGE_KEY,token);saveTracked(token);renderCmeshState(s);return s
+}
+async function loadCmesh(){
+ const status=$('#cmeshReadStatus');if(status){status.textContent='READING CHAIN';status.className='status neutral'}
+ const token=await resolveCmeshAddress();
+ if(!validEvmAddress(token)){renderCmeshState(null);return}
+ try{cmeshState=await readPonsLaunch(token);renderCmeshState(cmeshState)}catch(e){if(status){status.textContent='VERIFY ADDRESS';status.className='status neutral'};toast(String(e.message||e))}
+}
+$('#cmeshBindBtn')?.addEventListener('click',async()=>{try{const s=await bindCmesh($('#cmeshAddressInput').value);toast(`CMESH verified · ${short(s.token)}`)}catch(e){toast(String(e.message||e))}});
+$('#cmeshConnectBtn')?.addEventListener('click',async()=>{try{const x=await connectRobinhood();evmAccount=x.address;$('#cmeshConnectBtn').textContent=short(evmAccount);$('#cmeshWalletState').textContent='WALLET ON';$('#cmeshWalletState').className='status live';await loadCmesh();toast('Robinhood Chain wallet connected')}catch(e){toast(String(e.message||e))}});
+$('#cmeshExplorerBtn')?.addEventListener('click',async()=>{const t=await resolveCmeshAddress();if(!validEvmAddress(t))return toast('Bind the full CMESH address first');window.open(`${PONS_V2.explorer}/token/${t}`,'_blank','noopener')});
+$('#cmeshBuyBtn')?.addEventListener('click',async()=>{const t=await resolveCmeshAddress(),amt=Number($('#cmeshTradeAmount').value||0);if(!validEvmAddress(t)||amt<=0)return toast('Bind CMESH and enter an ETH amount');try{const r=await buyPons(t,amt);toast(`CMESH buy confirmed · ${short(r.hash)}`);await loadCmesh()}catch(e){toast(String(e.shortMessage||e.message||e))}});
+$('#cmeshSellBtn')?.addEventListener('click',async()=>{const t=await resolveCmeshAddress(),amt=Number($('#cmeshTradeAmount').value||0);if(!validEvmAddress(t)||amt<=0)return toast('Bind CMESH and enter a token amount');try{const r=await sellPons(t,amt);toast(`CMESH sell confirmed · ${short(r.hash)}`);await loadCmesh()}catch(e){toast(String(e.shortMessage||e.message||e))}});
 
 
 // ---- Stocklana Launch Exchange / Pons v2 Robinhood Chain ----
