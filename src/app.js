@@ -40,6 +40,19 @@ function setUxMode(advanced){
 const money=n=>Number(n)>=1e12?`$${(Number(n)/1e12).toFixed(2)}T`:Number(n)>=1e9?`$${(Number(n)/1e9).toFixed(1)}B`:`$${Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2})}`;
 const premium=a=>((Number(a.tokenPrice)/Number(a.markPrice))-1)*100, short=x=>x?`${x.slice(0,4)}…${x.slice(-4)}`:'guest';
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+async function actionSheet({kicker='STOCKLANA',title,copy='',confirmLabel='Continue',fields=[],summary=''}){
+ const dialog=$('#actionDialog'),form=$('#actionDialogForm'),fieldBox=$('#actionDialogFields'),summaryBox=$('#actionDialogSummary');
+ if(!dialog||!form)return null;
+ $('#actionDialogKicker').textContent=kicker;$('#actionDialogTitle').textContent=title||'Continue';$('#actionDialogCopy').textContent=copy;$('#actionDialogConfirm').textContent=confirmLabel;
+ fieldBox.innerHTML=fields.map(f=>{const opts=(f.options||[]).map(o=>`<option value="${typeof o==='string'?o:o.value}">${typeof o==='string'?o:o.label}</option>`).join('');return `<label>${f.label}${f.type==='select'?`<select name="${f.name}">${opts}</select>`:`<input name="${f.name}" type="${f.type||'text'}" value="${f.value??''}" placeholder="${f.placeholder||''}" ${f.min!=null?`min="${f.min}"`:''} ${f.max!=null?`max="${f.max}"`:''} ${f.step!=null?`step="${f.step}"`:''} />`}${f.help?`<small>${f.help}</small>`:''}</label>`}).join('');
+ if(summary){summaryBox.hidden=false;summaryBox.innerHTML=summary}else{summaryBox.hidden=true;summaryBox.innerHTML=''}
+ dialog.showModal();
+ return await new Promise(resolve=>{
+   const done=()=>{const ok=dialog.returnValue==='confirm';const values=ok?Object.fromEntries(new FormData(form).entries()):null;resolve(values)};
+   dialog.addEventListener('close',done,{once:true});
+ });
+}
+
 function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play')loadGames();if(v==='cmesh')loadCmesh();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
 $$('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));
 const globalActions=[
