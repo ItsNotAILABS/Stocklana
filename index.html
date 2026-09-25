@@ -524,8 +524,41 @@
       </section>
 
       <section class="view" id="view-portfolio">
-        <div class="section-head"><div><span class="kicker">MY DESK</span><h2>Markets & positions</h2></div></div>
-        <div class="empty-card" id="portfolioState"><span>◎</span><h3>Your market desk is empty</h3><p>Create a market or connect a Solana wallet to start trading.</p><button class="ghost" data-nav="lab">Build first market</button></div>
+        <div class="section-head"><div><span class="kicker">PORTFOLIO</span><h2>Everything you own. Everything it can do next.</h2></div><button class="mini" id="portfolioRefreshBtn">↻ Refresh</button></div>
+        <p class="section-copy">Wallet assets, Stocklana cash, PreStocks, payoff positions and verified receipts stay connected in one balance sheet.</p>
+        <section class="portfolio-overview">
+          <div class="portfolio-total">
+            <span>Visible portfolio value</span>
+            <b id="portfolioTotalValue">$0.00</b>
+            <small id="portfolioConnectionState">Connect Phantom for live wallet value.</small>
+            <div class="portfolio-allocation" id="portfolioAllocation"><i style="--w:48%"></i><i style="--w:28%"></i><i style="--w:24%"></i></div>
+            <div class="portfolio-legend"><span><i class="sol"></i>Wallet</span><span><i class="pre"></i>PreStocks</span><span><i class="cash"></i>Stocklana</span></div>
+          </div>
+          <div class="portfolio-curve-card">
+            <div class="portfolio-curve-head"><div><span>UTILITY INDEX</span><b id="portfolioUtilityScore">0 / 6</b></div><small>How many ways your assets can work</small></div>
+            <div class="portfolio-curve" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><em></em></div>
+            <div class="portfolio-utility-actions"><button data-nav="markets">BUY</button><button data-nav="play">PLAY</button><button data-nav="credit">BORROW</button><button data-nav="commerce">SHOP</button><button data-nav="agents">AI</button><button data-nav="vault">SEND</button></div>
+          </div>
+          <div class="portfolio-proof-card">
+            <span>PROOF HEAD</span><b id="portfolioProofHead">No receipts yet</b>
+            <small>Last verified Stocklana financial event</small>
+            <button class="ghost" data-nav="infrastructure">Inspect accounting →</button>
+          </div>
+        </section>
+        <div class="portfolio-grid">
+          <section class="portfolio-assets-card">
+            <div class="panel-head"><div><span class="kicker">ASSETS</span><h2>Money & PreStocks</h2></div><button class="text-btn" data-nav="wallet">Manage →</button></div>
+            <div id="portfolioAssets" class="portfolio-assets-list"><div class="skeleton-card"></div></div>
+          </section>
+          <section class="portfolio-positions-card">
+            <div class="panel-head"><div><span class="kicker">PAYOFFS</span><h2>Open positions</h2></div><button class="text-btn" data-nav="play">Play →</button></div>
+            <div id="portfolioState" class="portfolio-market-list"><div class="skeleton-card"></div></div>
+          </section>
+          <section class="portfolio-receipts-card">
+            <div class="panel-head"><div><span class="kicker">ACTIVITY</span><h2>Verified receipts</h2></div><button class="text-btn" data-nav="coverage">Proof →</button></div>
+            <div id="portfolioReceipts" class="portfolio-receipts-list"><div class="skeleton-card"></div></div>
+          </section>
+        </div>
       </section>
 
 
