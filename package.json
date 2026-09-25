@@ -11,6 +11,13 @@
     "verify:track": "python3 scripts/test_track_fit.py",
     "verify:acceptance": "python3 scripts/test_acceptance.py",
     "verify:accounting": "python3 scripts/test_accounting_tokens.py",
-    "verify:accounting-http": "python3 scripts/test_accounting_http.py"
+    "verify:accounting-http": "python3 scripts/test_accounting_http.py",
+    "build:static": "node scripts/build_static_release.mjs",
+    "deploy:frontend:solana": "node scripts/deploy_permaweb_solana.mjs",
+    "deploy:program:solana": "bash scripts/deploy_solana_mainnet.sh"
+  },
+  "dependencies": {
+    "@ardrive/turbo-sdk": "^1.43.0",
+    "bs58": "^6.0.0"
   }
 }
