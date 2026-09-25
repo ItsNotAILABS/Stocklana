@@ -287,3 +287,11 @@
 .action-dialog-summary{display:grid;gap:4px;margin:14px 0 0;border:1px solid rgba(216,255,79,.18);border-radius:14px;padding:13px;background:rgba(216,255,79,.035)}.action-dialog-summary b{font-size:24px;color:var(--neo-lime)}.action-dialog-summary span,.action-dialog-summary small{color:#8d99a8}
 .action-dialog-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:18px}.action-dialog-actions button{min-height:44px}
 @media(max-width:600px){.action-dialog-fields{grid-template-columns:1fr}.action-dialog-actions{grid-template-columns:1fr 1fr}}
+
+
+.surface-statusbar{display:grid;grid-template-columns:auto auto auto 1fr;gap:8px;align-items:center;margin:-8px 0 18px;padding:8px 10px;border:1px solid rgba(111,144,180,.12);border-radius:13px;background:rgba(7,11,17,.72);backdrop-filter:blur(14px)}
+.surface-statusbar>span{display:flex;align-items:center;gap:6px;padding:6px 8px;border-right:1px solid rgba(255,255,255,.05);white-space:nowrap}.surface-statusbar>span:last-child{border-right:0}
+.surface-statusbar b{font-size:7px;letter-spacing:.11em;color:#69778a}.surface-statusbar em{font-style:normal;font-size:8px;color:#b8c4d3}.surface-statusbar .dot{width:5px;height:5px;border-radius:50%;background:#5c6878}.surface-statusbar .dot.live{background:var(--neo-lime);box-shadow:0 0 9px rgba(216,255,79,.7)}
+.surface-status-proof{justify-self:end}.surface-status-proof em{color:#8391a4}
+@media(max-width:900px){.surface-statusbar{grid-template-columns:1fr 1fr}.surface-statusbar>span{border-right:0}.surface-status-proof{justify-self:start;grid-column:1/-1}}
+@media(max-width:600px){.surface-statusbar{display:flex;overflow:auto;scrollbar-width:none}.surface-statusbar::-webkit-scrollbar{display:none}.surface-status-proof{display:none!important}}
