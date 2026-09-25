@@ -19,6 +19,9 @@ function addHero(id,cfg){
  const hero=document.createElement('section');hero.className=`surface-intro surface-${cfg.scene}`;hero.dataset.world=id;
  hero.innerHTML=`<div class="surface-copy"><span class="surface-eyebrow">${cfg.eyebrow}</span><h1>${cfg.title}</h1><p>${cfg.copy}</p><div class="surface-tags">${cfg.tags.map(x=>`<span>${x}</span>`).join('')}</div></div><div class="surface-visual" style="--sa:${cfg.a};--sb:${cfg.b}"><canvas aria-hidden="true"></canvas><div class="surface-glass-label"><span>STOCKLANA</span><b>${cfg.eyebrow}</b><small>LIVE PRODUCT SURFACE</small></div><div class="surface-orbit o1"></div><div class="surface-orbit o2"></div><div class="surface-orbit o3"></div></div>`;
  view.prepend(hero);
+ const status=document.createElement('div');status.className='surface-statusbar';
+ status.innerHTML='<span><i class="dot live"></i><b>PRESTOCKS</b><em data-surface-wallet-cluster>MAINNET</em></span><span><i class="dot"></i><b>STOCKLANA PROGRAM</b><em data-surface-program-cluster>DEVNET</em></span><span><i class="dot live"></i><b>API</b><em data-surface-api>LIVE</em></span><span class="surface-status-proof"><b>RECEIPT RULE</b><em>NO EXTERNAL CLAIM WITHOUT PROOF</em></span>';
+ hero.after(status);
  const old=view.querySelector(':scope > .section-head');if(old)old.classList.add('surface-original-head');
 }
 Object.entries(surfaces).forEach(([id,cfg])=>addHero(id,cfg));
@@ -61,3 +64,19 @@ function drawScene(cv,t){
 
 function frame(t){const active=document.querySelector('.view.active .surface-intro canvas');if(active)drawScene(active,t);requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
+
+
+async function hydrateSurfaceStatus(){
+ try{
+   const [cfg,health]=await Promise.all([
+     fetch('/api/config',{cache:'no-store'}).then(r=>r.json()),
+     fetch('/api/health',{cache:'no-store'}).then(r=>r.json())
+   ]);
+   document.querySelectorAll('[data-surface-wallet-cluster]').forEach(x=>x.textContent=String(cfg.walletCluster||cfg.cluster||'mainnet-beta').toUpperCase());
+   document.querySelectorAll('[data-surface-program-cluster]').forEach(x=>x.textContent=(cfg.programDeployed?'DEPLOYED · ':'')+String(cfg.programCluster||'devnet').toUpperCase());
+   document.querySelectorAll('[data-surface-api]').forEach(x=>x.textContent=health.ok?'LIVE':'CHECK');
+ }catch{
+   document.querySelectorAll('[data-surface-api]').forEach(x=>x.textContent='OFFLINE');
+ }
+}
+hydrateSurfaceStatus();
