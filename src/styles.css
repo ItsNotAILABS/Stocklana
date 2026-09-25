@@ -269,3 +269,21 @@
  .surface-intro{padding:14px;min-height:0}.surface-copy h1{font-size:34px;letter-spacing:-1.7px}.surface-visual{min-height:180px}
  #view-infrastructure .route-stack,#view-coverage .asset-grid{grid-template-columns:1fr}
 }
+
+
+/* ===== STOCKLANA ACTION DIALOG ===== */
+.action-dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none}
+.action-dialog::backdrop{background:rgba(2,5,9,.74);backdrop-filter:blur(10px)}
+.action-dialog-sheet{position:relative;width:min(520px,calc(100vw - 28px));border:1px solid rgba(132,165,202,.22);border-radius:24px;padding:22px;background:
+ radial-gradient(circle at 85% 0,rgba(216,255,79,.08),transparent 30%),
+ linear-gradient(150deg,#0e151d,#080c12 72%);color:#fff;box-shadow:0 35px 120px rgba(0,0,0,.58)}
+.action-dialog-sheet>.close{position:absolute;right:14px;top:14px;border:1px solid #283547;background:#0b1118;color:#8e9aa9;width:34px;height:34px;border-radius:10px;font-size:18px}
+.action-dialog-kicker{font-size:8px;letter-spacing:.14em;color:var(--neo-lime)}
+.action-dialog-sheet h2{font-size:30px;letter-spacing:-1.2px;margin:8px 42px 6px 0}.action-dialog-sheet>p{color:#8b97a8;line-height:1.5;margin:0 0 16px}
+.action-dialog-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action-dialog-fields label{display:grid;gap:6px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#8491a3}.action-dialog-fields label:only-child{grid-column:1/-1}
+.action-dialog-fields input,.action-dialog-fields select{width:100%;border:1px solid #29384c;background:#090e15;color:#fff;border-radius:13px;padding:12px;outline:none}.action-dialog-fields input:focus,.action-dialog-fields select:focus{border-color:var(--neo-lime);box-shadow:0 0 0 3px rgba(216,255,79,.08)}
+.action-dialog-fields small{color:#69778a;text-transform:none;letter-spacing:0}
+.action-dialog-summary{display:grid;gap:4px;margin:14px 0 0;border:1px solid rgba(216,255,79,.18);border-radius:14px;padding:13px;background:rgba(216,255,79,.035)}.action-dialog-summary b{font-size:24px;color:var(--neo-lime)}.action-dialog-summary span,.action-dialog-summary small{color:#8d99a8}
+.action-dialog-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:18px}.action-dialog-actions button{min-height:44px}
+@media(max-width:600px){.action-dialog-fields{grid-template-columns:1fr}.action-dialog-actions{grid-template-columns:1fr 1fr}}
