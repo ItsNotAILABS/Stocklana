@@ -145,14 +145,21 @@ const globalActions=[
  {label:'Convert money',sub:'SOL · USDC · PreStocks',nav:'wallet'},
  {label:'Play a payoff game',sub:'YES / NO games',nav:'play'},
  {label:'Shop online',sub:'Use wallet or portfolio',nav:'commerce'},
+ {label:'Send money',sub:'Stocklana + Solana payments',nav:'vault'},
  {label:'Give an AI a budget',sub:'Controlled agent spending',nav:'agents'},
- {label:'CMESH',sub:'Pons platform token · not a PreStock',nav:'cmesh'}
+ {label:'Portfolio',sub:'Positions · balances · activity',nav:'portfolio'},
+ {label:'CMESH',sub:'Pons platform token · not a PreStock',nav:'cmesh'},
+ {label:'Credit',sub:'Supported collateral routes',nav:'credit'},
+ {label:'Launch',sub:'Pons · Token-2022 · Meteora',nav:'launch'},
+ {label:'Market Lab',sub:'Build programmable payoff markets',nav:'lab'},
+ {label:'System',sub:'Settlement · accounting · infrastructure',nav:'infrastructure'},
+ {label:'Proof',sub:'Receipts · certification · track fit',nav:'coverage'}
 ];
 function buildGlobalSearchResults(q=''){
  const box=$('#globalSearchResults');if(!box)return;
  const term=String(q||'').trim().toLowerCase();
  const assetRows=assets.filter(a=>!term||a.symbol.toLowerCase().includes(term)||a.name.toLowerCase().includes(term)).slice(0,5).map(a=>({label:a.name.replace(' PreStocks',''),sub:a.symbol+' · PreStock',asset:a.symbol}));
- const actionRows=globalActions.filter(x=>!term||x.label.toLowerCase().includes(term)||x.sub.toLowerCase().includes(term)).slice(0,6);
+ const actionRows=globalActions.filter(x=>!term||x.label.toLowerCase().includes(term)||x.sub.toLowerCase().includes(term)).slice(0,8);
  const rows=[...assetRows,...actionRows].slice(0,8);
  box.innerHTML=rows.map((x,i)=>`<button data-search-index="${i}"><b>${x.label}</b><small>${x.sub}</small></button>`).join('');
  box.hidden=!rows.length;
