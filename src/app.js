@@ -138,7 +138,7 @@ async function judgeRedeem(){
  }catch(e){toast(String(e.message||e))}
 }
 
-function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play'){loadGames();renderJudgeLoop()}if(v==='cmesh')loadCmesh();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
+function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play'){loadGames();renderJudgeLoop()}if(v==='cmesh')loadCmesh();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();if(v==='portfolio')loadPortfolioPro();if(v==='agents'){loadAgents();loadMyAgents()}if(v==='coverage')loadCoverage();window.scrollTo({top:0,behavior:'smooth'})}
 $$('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));
 const globalActions=[
  {label:'Buy a company',sub:'PreStocks',nav:'markets'},
@@ -276,7 +276,62 @@ $('#judgeRedeemBtn')?.addEventListener('click',judgeRedeem);
 $('#challengeJoinBtn')?.addEventListener('click',()=>openChallengeInvite($('#challengeJoinInput')?.value));
 $('#challengeJoinInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')openChallengeInvite(e.currentTarget.value)});
 async function loadMarkets(){try{const r=await fetch('/api/markets',{cache:'no-store'});markets=await r.json();renderMarketFeed();renderDesk()}catch(e){console.warn(e)}}
-function renderDesk(){const el=$('#portfolioState');if(!markets.length){el.className='empty-card';el.innerHTML='<span>◎</span><h3>No markets yet</h3>';return}const mine=markets.filter(m=>m.creator===trader()||m.trades?.some(t=>t.trader===trader()));el.className='market-board';el.innerHTML=(mine.length?mine:markets.slice(0,8)).map(m=>{const y=Math.round((m.yesProbability??.5)*100);return `<article class="market-card" data-mid="${m.id}"><span class="status-pill">${m.status}</span><h3>${m.question}</h3><div class="prob-row"><div class="prob yes"><small>YES</small><b>${y}¢</b></div><div class="prob no"><small>NO</small><b>${100-y}¢</b></div></div><small>${m.symbol} · ${money(m.volume||0)} volume · ${m.trades?.length||0} trades</small>${m.status==='OPEN'?`<div class="trade-row"><input type="number" min="1" value="10" class="shares"/><button class="primary buy" data-side="YES">Buy YES</button><button class="ghost buy" data-side="NO">Buy NO</button></div>`:`<div class="market-actions"><b>Resolved ${m.outcome}</b><button class="primary redeem">Redeem</button></div>`}</article>`}).join('');el.querySelectorAll('.market-card').forEach(card=>{const mid=card.dataset.mid;card.querySelectorAll('.buy').forEach(b=>b.onclick=()=>trade(mid,b.dataset.side,Number(card.querySelector('.shares').value)));card.querySelector('.redeem')?.addEventListener('click',()=>redeem(mid))})}
+function renderDesk(){
+ const el=$('#portfolioState');if(!el)return;
+ const mine=markets.filter(m=>m.creator===trader()||m.trades?.some(t=>t.trader===trader()));
+ const rows=mine.length?mine:markets.slice(0,6);
+ el.className='portfolio-market-list';
+ if(!rows.length){
+   el.innerHTML='<div class="portfolio-empty"><span>◇</span><div><b>No payoff positions yet</b><small>Play a live market or build one in Market Lab. Your positions appear here with real settlement state.</small></div><button class="ghost" data-nav="play">Open Play</button></div>';
+   el.querySelector('[data-nav="play"]')?.addEventListener('click',()=>navigate('play'));
+   return
+ }
+ el.innerHTML=rows.map(m=>{const y=Math.round((m.yesProbability??.5)*100),isMine=m.creator===trader()||m.trades?.some(t=>t.trader===trader());return `<article class="portfolio-market-row" data-mid="${m.id}"><div class="pm-symbol"><span>${String(m.symbol||'M').slice(0,2)}</span><i class="${m.status==='OPEN'?'live':''}"></i></div><div class="pm-copy"><span>${isMine?'YOUR POSITION':'MARKET'} · ${String(m.status||'').replaceAll('_',' ')}</span><b>${m.question}</b><small>${money(m.volume||0)} volume · ${m.trades?.length||0} plays</small></div><div class="pm-prob"><small>YES</small><b>${y}%</b><i style="--p:${y}%"><em></em></i></div><button class="pm-open">Open →</button></article>`}).join('');
+ el.querySelectorAll('.pm-open').forEach(b=>b.onclick=()=>{navigate('play')})
+}
+async function loadPortfolioPro(){
+ const total=$('#portfolioTotalValue'),state=$('#portfolioConnectionState'),assetsBox=$('#portfolioAssets'),receiptsBox=$('#portfolioReceipts'),proof=$('#portfolioProofHead'),score=$('#portfolioUtilityScore');
+ if(!total)return;
+ renderDesk();
+ let walletValue=0,preValue=0,cashValue=Number(vault?.balances?.USDC||0);
+ if(wallet?.publicKey){
+   try{
+     await loadWalletCenter();
+     walletValue=Number(lastWalletPortfolio?.usdc||0);
+     preValue=(lastWalletPortfolio?.prestocks||[]).reduce((s,x)=>s+Number(x.estimatedValueUSDC||0),0);
+     if(sessionToken){await loadVault();cashValue=Number(vault?.balances?.USDC||0)}
+   }catch{}
+ }
+ total.textContent=money(walletValue+preValue+cashValue);
+ state.textContent=wallet?.publicKey?'Live wallet + Stocklana value':'Connect Phantom for live balances. PreStocks universe remains available below.';
+ const utility=[wallet?.publicKey,preValue>0,markets.length>0,cashValue>0,!!sessionToken,(positions||[]).length>0].filter(Boolean).length;
+ if(score)score.textContent=`${utility} / 6`;
+ const alloc=$('#portfolioAllocation');
+ if(alloc){
+   const sum=Math.max(.000001,walletValue+preValue+cashValue),a=Math.max(6,Math.round(walletValue/sum*100)),b=Math.max(6,Math.round(preValue/sum*100)),d=Math.max(6,100-a-b);
+   alloc.innerHTML=`<i class="wallet" style="--w:${a}%"></i><i class="pre" style="--w:${b}%"></i><i class="cash" style="--w:${d}%"></i>`;
+ }
+ if(assetsBox){
+   const walletRows=wallet?.publicKey?[{symbol:'SOL',name:'Solana',value:Number(lastWalletPortfolio?.sol||0),unit:'SOL',cash:null},{symbol:'USDC',name:'USD Coin',value:Number(lastWalletPortfolio?.usdc||0),unit:'USDC',cash:Number(lastWalletPortfolio?.usdc||0)}]:[];
+   const prestockRows=wallet?.publicKey?(lastWalletPortfolio?.prestocks||[]).map(x=>({symbol:x.symbol,name:x.name.replace(' PreStocks',''),value:Number(x.amount||0),unit:'tokens',cash:Number(x.estimatedValueUSDC||0),image:x.image})):assets.slice(0,4).map(x=>({symbol:x.symbol,name:x.name.replace(' PreStocks',''),value:null,unit:'PreStock',cash:Number(x.tokenPrice||0),image:x.image,preview:true}));
+   const rows=[...walletRows,...prestockRows,{symbol:'SL',name:'Stocklana cash',value:cashValue,unit:'USDC',cash:cashValue}].slice(0,8);
+   assetsBox.innerHTML=rows.map(x=>`<button class="portfolio-asset-row" ${x.symbol==='SOL'||x.symbol==='USDC'||x.symbol==='SL'?'data-nav="wallet"':`data-portfolio-asset="${x.symbol}"`}><span class="pa-icon">${x.image?`<img src="${x.image}" alt="">`:x.symbol.slice(0,2)}</span><span><b>${x.name}</b><small>${x.preview?'Market reference':x.value==null?'':Number(x.value).toLocaleString(undefined,{maximumFractionDigits:4})+' '+x.unit}</small></span><strong>${x.cash==null?'—':money(x.cash)}</strong><i>→</i></button>`).join('');
+   assetsBox.querySelectorAll('[data-nav="wallet"]').forEach(b=>b.onclick=()=>navigate('wallet'));
+   assetsBox.querySelectorAll('[data-portfolio-asset]').forEach(b=>b.onclick=()=>openAsset(b.dataset.portfolioAsset));
+ }
+ if(receiptsBox){
+   if(!sessionToken){
+     receiptsBox.innerHTML='<div class="portfolio-proof-empty"><span>✓</span><div><b>Receipt chain ready</b><small>Connect Phantom to load your verified financial events.</small></div></div><div class="portfolio-proof-empty"><span>◎</span><div><b>Hash-linked accounting</b><small>Every funded action maps to a balanced Stocklana event.</small></div></div>';
+     if(proof)proof.textContent='Connect to reveal';
+   }else{
+     try{
+       const rr=await fetch('/api/receipts?limit=8',{cache:'no-store'}).then(r=>r.json()),rows=rr.receipts||rr||[];
+       receiptsBox.innerHTML=rows.slice(0,6).map(x=>`<div class="portfolio-receipt-row"><span>✓</span><div><b>${String(x.kind||x.type||'Stocklana action').replaceAll('_',' ')}</b><small>${x.at?new Date(x.at).toLocaleString():x.status||'verified'}</small></div><code>${x.commitment?x.commitment.slice(0,10)+'…':'verified'}</code></div>`).join('')||'<div class="portfolio-proof-empty"><span>✓</span><div><b>No receipts yet</b><small>Your first funded action will appear here.</small></div></div>';
+       const last=rows[0];if(proof)proof.textContent=last?.commitment?last.commitment.slice(0,14)+'…':'No receipts yet';
+     }catch{receiptsBox.innerHTML='<div class="portfolio-proof-empty"><span>!</span><div><b>Receipt service unavailable</b><small>Your wallet remains unaffected.</small></div></div>'}
+   }
+ }
+}
 async function redeem(mid){const r=await fetch(`/api/markets/${mid}/redeem`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({trader:trader()})}),j=await r.json();if(!r.ok)return toast(j.error||'Redeem failed');toast(`Redeemed ${money(j.payout)} to vault`);await loadVault()}
 async function loadVault(){if(trader()==='guest'){$('#vaultBalance').textContent='$0.00';$('#vaultIdentity').textContent='Connect a wallet to activate your vault';return}try{const [a,p,r]=await Promise.all([fetch(`/api/vault?trader=${encodeURIComponent(trader())}`).then(x=>x.json()),fetch(`/api/positions?trader=${encodeURIComponent(trader())}`).then(x=>x.json()),fetch('/api/receipts?limit=20').then(x=>x.json())]);vault=a;positions=p;$('#vaultBalance').textContent=money(a.balances?.USDC||0);$('#vaultIdentity').textContent=short(trader());$('#cashPocket').textContent=money(a.subaccounts?.CASH?.USDC||0);$('#tradingPocket').textContent=money(a.subaccounts?.TRADING?.USDC||0);$('#reservePocket').textContent=money(a.subaccounts?.RESERVE?.USDC||0);$('#vaultPositions').innerHTML=p.length?p.map(x=>`<div class="position-row" data-mid="${x.marketId}"><h4>${x.symbol||''} · ${x.status||''}</h4><small>${x.question||x.marketId}</small><div>YES <b>${Number(x.yes||0).toFixed(2)}</b> · NO <b>${Number(x.no||0).toFixed(2)}</b></div><button class="mini send-pos">Send position</button></div>`).join(''):'<div class="position-row"><small>No positions yet.</small></div>';$$('.send-pos').forEach(b=>b.onclick=()=>sendPosition(b.closest('[data-mid]').dataset.mid));$('#receiptList').innerHTML=(r.receipts||[]).slice(0,12).map(x=>`<div class="receipt-row"><b>${x.kind.replaceAll('_',' ')}</b><small>${new Date(x.at).toLocaleString()}</small><code>${x.commitment?`${x.commitment.slice(0,12)}…`:''}</code></div>`).join('')||'<div class="receipt-row"><small>No receipts yet.</small></div>'}catch(e){toast('Vault unavailable')}}
 async function sendPosition(mid){const p=positions.find(x=>x.marketId===mid);if(!p)return;const max=Math.max(Number(p.yes||0),Number(p.no||0));const v=await actionSheet({kicker:'SEND POSITION',title:'Send a game position',copy:'Choose a side, amount, and recipient. Position ownership changes without moving the underlying collateral.',confirmLabel:'Send position',fields:[{name:'side',label:'Side',type:'select',options:['YES','NO']},{name:'shares',label:'Shares',type:'number',value:String(Math.min(1,max||1)),min:.000001,step:.000001},{name:'recipient',label:'Recipient',placeholder:'Stocklana identity or Solana address'}]});const side=String(v?.side||'').toUpperCase(),shares=Number(v?.shares||0),recipient=String(v?.recipient||'').trim();if(!recipient||shares<=0||!['YES','NO'].includes(side))return;const sideMax=side==='YES'?Number(p.yes||0):Number(p.no||0);if(shares>sideMax)return toast(`You only have ${sideMax} ${side} shares`);const r=await fetch(`/api/markets/${mid}/transfer-position`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({trader:trader(),recipient,side,shares})}),j=await r.json();if(!r.ok)return toast(j.error||'Transfer failed');toast('Position transferred');loadVault()}
@@ -673,6 +728,7 @@ $$('[data-action]').forEach(b=>b.addEventListener('click',()=>{
 }));
 $('[data-home-wallet]')?.addEventListener('click',async()=>{if(wallet?.publicKey){navigate('wallet');return}try{await connectPrimaryWallet();navigate('wallet')}catch{}});
 $('#homeShopGo')?.addEventListener('click',()=>{const u=$('#homeShopLink')?.value?.trim();navigate('commerce');setTimeout(()=>{if(u&&$('#commerceUrl'))$('#commerceUrl').value=u;$('#commerceUrl')?.dispatchEvent(new Event('input'));$('#commerceAmount')?.focus()},80)});
+$('#portfolioRefreshBtn')?.addEventListener('click',loadPortfolioPro);
 $('#creditStartBtn')?.addEventListener('click',()=>requireWalletAction(loadCredit));
 $('#internalBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAction())return;const v=await actionSheet({kicker:'CREDIT',title:'Use supported value as collateral',copy:'See the 30-day quote before opening funded credit.',confirmLabel:'Get quote',fields:[{name:'collateral',label:'Collateral value (USDC)',type:'number',value:'250',min:1,step:.01},{name:'borrow',label:'Borrow amount (USDC)',type:'number',value:'100',min:1,step:.01}]});const collateral=Number(v?.collateral||0),borrow=Number(v?.borrow||0);if(collateral<=0||borrow<=0)return;try{const q=await fetch('/api/lending/quote',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({collateral,borrow,days:30})}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'quote_failed');return j});const ok=await actionSheet({kicker:'CREDIT QUOTE',title:`Borrow ${money(borrow)}`,copy:`30-day quote against ${money(collateral)} collateral.`,confirmLabel:'Open funded credit',fields:[],summary:`<b>${money(borrow)}</b><span>borrowed against ${money(collateral)}</span><small>${q.aprPct!=null?`${q.aprPct}% APR · `:''}Stocklana-funded route</small>`});if(ok){const r=await fetch('/api/lending/open',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({collateral,borrow,days:30})}),j=await r.json();toast(r.ok?`Credit opened · ${j.loanId||'funded'}`:(j.error||'Credit route unavailable'));await loadCredit()}}catch(e){toast(String(e.message||e))}});
 $('#kaminoBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAction())return;const v=await actionSheet({kicker:'KAMINO',title:'Build a Solana DeFi transaction',copy:'Use only a Kamino market and reserve that support the collateral you intend to deposit.',confirmLabel:'Build transaction',fields:[{name:'market',label:'Kamino market address'},{name:'reserve',label:'Collateral reserve address'},{name:'amount',label:'Atomic deposit amount',type:'number',min:1,step:1}]});const market=String(v?.market||'').trim(),reserve=String(v?.reserve||'').trim(),amount=String(v?.amount||'').trim();if(!market||!reserve||!amount)return;try{const r=await fetch('/api/kamino/deposit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:wallet.publicKey,market,reserve,amount})}),j=await r.json();if(!r.ok)throw new Error(j.error||'kamino_builder_failed');toast('Kamino transaction built — sign locally in wallet')}catch(e){toast(String(e.message||e))}});
