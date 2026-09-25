@@ -109,3 +109,19 @@
 
 .commerce-row{display:flex;justify-content:space-between;gap:12px;align-items:center}.commerce-row-main{min-width:0}.commerce-row-actions{display:flex;gap:6px;flex:0 0 auto}.commerce-row-actions button{border:1px solid #29384c;background:#0b121a;color:#fff;border-radius:10px;padding:7px 9px;font-size:9px;cursor:pointer}.commerce-row-actions button:last-child{color:#ffc2c8;border-color:#4b2930}.commerce-result button,.commerce-result a{display:inline-flex;align-items:center;justify-content:center;margin-top:8px;margin-right:6px;text-decoration:none}
 @media(max-width:650px){.commerce-row{align-items:flex-start;flex-direction:column}.commerce-row-actions{width:100%}.commerce-row-actions button{flex:1}}
+
+
+/* Simple-first product mode */
+.ux-mode{border:1px solid #263449;background:#0c1118;color:#cbd5df;border-radius:12px;padding:10px 12px;font-size:10px;font-weight:800;cursor:pointer}
+.ux-mode[aria-pressed="true"]{border-color:#d8ff5a;color:#d8ff5a;background:rgba(216,255,90,.08)}
+.simple-mode .advanced-only{display:none!important}
+.rail-divider{padding:16px 10px 6px;color:#5f6b7a;font-size:9px;letter-spacing:.14em}
+.simple-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+.how-it-works{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;margin:0 0 24px;border:1px solid rgba(255,255,255,.08);background:#0b1017;border-radius:20px;padding:15px}
+.how-step{display:flex;align-items:center;gap:11px}.how-step>span{display:grid;place-items:center;width:32px;height:32px;border-radius:11px;background:#172131;color:#d8ff5a;font-weight:900}.how-step b,.how-step small{display:block}.how-step small{color:var(--muted);margin-top:2px}.how-it-works>i{font-style:normal;color:#566170}
+.simple-mode .rail-proof{display:none}
+.simple-mode .home-panel.use-cases{margin-top:8px}
+.simple-mode .route-stack .route .status{background:#192332;color:#aab8ca}
+.simple-mode .route-stack .route:nth-child(n+3){opacity:.88}
+@media(max-width:1050px){.simple-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.how-it-works{grid-template-columns:1fr;}.how-it-works>i{display:none}}
+@media(max-width:650px){.simple-actions{grid-template-columns:1fr}.ux-mode{display:none}}
