@@ -8,95 +8,150 @@
   <title>Stocklana — Programmable Tokenized Equities</title>
   <link rel="stylesheet" href="./src/styles.css" />
 </head>
-<body class="simple-mode">
+<body class="simple-mode stocklana-neo">
   <canvas id="ambient" aria-hidden="true"></canvas>
   <div class="shell">
-    <aside class="desktop-rail" aria-label="Stocklana V2 navigation">
-      <div class="rail-brand"><div class="brand-mark">S</div><div><b>Stocklana</b><small>V2</small></div></div>
-      <button class="active" data-nav="home">⌂ Home</button>
-      <button data-nav="markets">↗ Buy</button>
-      <button data-nav="play">◇ Play</button>
-      <button data-nav="wallet">◉ Money</button>
-      <button data-nav="commerce">▱ Shop</button>
-      <button data-nav="agents">◈ AI</button>
-      <div class="rail-divider advanced-only"><span>ADVANCED</span></div>
-      <button class="advanced-only" data-nav="vault">▣ Stocklana balance</button>
-      <button class="advanced-only" data-nav="credit">↯ Credit</button>
-      <button class="advanced-only" data-nav="launch">↗ Launch</button>
-      <button class="advanced-only" data-nav="lab">＋ Build a market</button>
-      <button class="advanced-only" data-nav="infrastructure">⌘ System</button>
+    <aside class="desktop-rail neo-rail" aria-label="Stocklana navigation">
+      <button class="rail-brand neo-brand" data-nav="home" aria-label="Stocklana home">
+        <span class="neo-logo-mark"><i></i><i></i></span>
+        <span><b>Stocklana</b><small>PRESTOCKS ON SOLANA</small></span>
+      </button>
+      <div class="neo-nav-group">
+        <button class="active" data-nav="home"><span>⌂</span>Home</button>
+        <button data-nav="markets"><span>▱</span>PreStocks</button>
+        <button data-nav="wallet"><span>⇄</span>Convert</button>
+        <button data-nav="play"><span>◇</span>Play</button>
+        <button data-nav="commerce"><span>▰</span>Shop</button>
+        <button data-nav="agents"><span>◈</span>AI Agent</button>
+        <button data-nav="vault"><span>↗</span>Send</button>
+        <button data-nav="portfolio"><span>◎</span>Portfolio</button>
+        <button class="cmesh-nav" data-nav="cmesh"><span class="cmesh-dot"></span>CMESH <em>PONS</em></button>
+      </div>
       <div class="rail-spacer"></div>
-      <button class="subtle-rail" data-nav="portfolio">◎ Activity</button>
-      <button class="subtle-rail advanced-only" data-nav="coverage">✓ Proof</button>
-      <div class="rail-proof"><b>V2 ACCOUNT FABRIC</b><br/>Token-2022 · Phantasma PQ<br/><br/><b>SETTLEMENT</b><br/>Solana · PreStocks · Pyth<br/><br/><b>CLEARING</b><br/>PARRALAX · ISO 20022</div>
+      <button class="neo-advanced-toggle" id="uxModeBtn" aria-pressed="false"><span>⚙</span>Advanced</button>
+      <div class="advanced-only neo-nav-group neo-nav-secondary">
+        <button data-nav="credit"><span>↯</span>Credit</button>
+        <button data-nav="launch"><span>✦</span>Launch</button>
+        <button data-nav="lab"><span>＋</span>Market Lab</button>
+        <button data-nav="infrastructure"><span>⌘</span>System</button>
+        <button data-nav="coverage"><span>✓</span>Proof</button>
+      </div>
+      <div class="neo-rail-promo">
+        <span>Your money</span><b>works harder<br>onchain.</b>
+        <div class="rail-wave"><i></i></div>
+      </div>
     </aside>
 
-    <header class="topbar">
-      <div class="brand" aria-label="Stocklana home">
-        <div class="brand-mark">S</div>
-        <div><strong>Stocklana</strong><span>PRESTOCKS ON SOLANA</span></div>
+    <header class="topbar neo-topbar">
+      <button class="mobile-brand" data-nav="home"><span class="neo-logo-mark"><i></i><i></i></span><b>Stocklana</b></button>
+      <div class="neo-search">
+        <span>⌕</span>
+        <input id="globalSearch" autocomplete="off" placeholder="Search companies, actions, or anything…" />
+        <kbd>⌘ K</kbd>
+        <div id="globalSearchResults" class="neo-search-results" hidden></div>
       </div>
-      <div class="desktop-status"><span class="live">● READY</span><span>BUY · CONVERT · PLAY · SHOP</span></div><button class="ux-mode" id="uxModeBtn" aria-pressed="false">Advanced</button><button class="wallet" id="walletBtn">Connect Phantom</button>
+      <div class="neo-top-actions">
+        <button class="neo-bell" id="activityBell" aria-label="Recent activity">♧<i></i></button>
+        <button class="wallet neo-wallet-connect" id="walletBtn"><span class="phantom-mark">◖</span>Connect Phantom <i>⌄</i></button>
+      </div>
     </header>
 
     <main>
 
 
-      <section class="view active" id="view-home">
-        <div class="v2-home-head">
-          <div><span class="v2-pill">PRESTOCKS ON SOLANA</span><h1>Buy it. Use it.<br/><em>Play with it.</em></h1><p>Stocklana makes PreStocks feel simple: buy a company, convert your money, play a payoff game, shop online, send money, or let an AI buy within rules you set.</p></div>
-          <div class="home-account-card">
-            <div class="home-account-top"><span>Stocklana account</span><span id="homeAccountState" class="status neutral">NOT CONNECTED</span></div>
-            <b id="homeNetValue">$0.00</b><small>Available + positions</small>
-            <div class="home-account-actions"><button class="primary" data-action="money">Open my money</button><button class="ghost" data-action="send">Send</button></div>
+      <section class="view active neo-home" id="view-home">
+        <div class="neo-hero">
+          <div class="neo-hero-copy">
+            <span class="neo-eyebrow">PRESTOCKS · SOLANA · PROGRAMMABLE MONEY</span>
+            <h1>Your money shouldn’t <em>stop working</em> after you invest it.</h1>
+            <p>Buy it. Automate it. Play it. Borrow against it. Send it. Spend it. Give it to an AI. Use it for real games with payoffs.</p>
+            <div class="neo-hero-actions">
+              <button class="primary hero-primary" data-action="buy">Get Started <span>→</span></button>
+              <button class="hero-watch" id="heroWatchBtn"><span>▶</span> Watch the platform</button>
+            </div>
+            <div class="neo-hero-proof">
+              <span><i></i> Phantom stays the signer</span>
+              <span><i></i> Exact PreStocks mints</span>
+              <span><i></i> Real receipts</span>
+            </div>
+          </div>
+
+          <div class="neo-hero-media" id="heroMedia">
+            <canvas id="heroOrbitCanvas" aria-hidden="true"></canvas>
+            <div class="hero-orb-glass" aria-hidden="true"></div>
+            <div class="hero-float hf-chart" aria-hidden="true">↗</div>
+            <div class="hero-float hf-game" aria-hidden="true">♟</div>
+            <div class="hero-float hf-shop" aria-hidden="true">▰</div>
+            <div class="hero-float hf-ai" aria-hidden="true">◈</div>
+            <div class="hero-float hf-send" aria-hidden="true">➤</div>
+            <div class="hero-float hf-bank" aria-hidden="true">▥</div>
+            <button class="hero-media-play" id="heroMediaToggle" aria-label="Pause or play hero motion"><span>Ⅱ</span></button>
+            <div class="hero-media-copy"><b>Turn investments into a living economy</b><small id="heroMediaTime">LIVE · programmable ownership</small></div>
+            <div class="hero-media-mantra">SAME<br>MONEY.<br><strong>MORE</strong><br>POSSIBILITIES.</div>
+            <div class="hero-media-line"><i></i></div>
           </div>
         </div>
 
-        <div class="section-head compact"><div><span class="kicker">START HERE</span><h2>What do you want to do?</h2></div><span class="helper">Every action uses the same V2 account underneath.</span></div>
-        <div class="action-grid simple-actions" id="v2ActionGrid">
-          <button class="action-card featured" data-action="buy"><span class="action-icon">↗</span><div><b>Buy a company</b><small>Choose a PreStock and pay with USDC or SOL.</small></div><i>Buy</i></button>
-          <button class="action-card" data-action="money"><span class="action-icon">⇄</span><div><b>Convert money</b><small>SOL, USDC and your PreStocks in one place.</small></div><i>Convert</i></button>
-          <button class="action-card" data-action="play"><span class="action-icon">◇</span><div><b>Play</b><small>Pick YES or NO. See your stake, payoff and max loss first.</small></div><i>Play</i></button>
-          <button class="action-card" data-action="spend"><span class="action-icon">▰</span><div><b>Buy something online</b><small>Use Phantom, Stocklana money or a PreStock you choose.</small></div><i>Shop</i></button>
-          <button class="action-card" data-action="send"><span class="action-icon">→</span><div><b>Send money</b><small>Send to a person, QR code or wallet.</small></div><i>Send</i></button>
-          <button class="action-card" data-action="agent"><span class="action-icon">◈</span><div><b>Give an AI a budget</b><small>Choose where it can shop, how much it can spend, and when it must ask you.</small></div><i>Set rules</i></button>
-          <button class="action-card advanced-only" data-action="auto"><span class="action-icon">⟳</span><div><b>Automate investing</b><small>Recurring buys, baskets and rebalancing.</small></div><i>Automate</i></button>
-          <button class="action-card advanced-only" data-action="borrow"><span class="action-icon">↯</span><div><b>Use credit</b><small>Explore supported collateral routes.</small></div><i>Explore</i></button>
-          <button class="action-card advanced-only" data-action="launch"><span class="action-icon">✦</span><div><b>Launch an asset</b><small>Advanced ETH + Solana launch tools.</small></div><i>Build</i></button>
+        <div class="neo-action-ribbon" id="v2ActionGrid">
+          <button class="neo-action buy" data-action="buy"><span>↗</span><div><b>Buy a company</b><small>Own tokenized private companies</small></div></button>
+          <button class="neo-action convert" data-action="money"><span>⇄</span><div><b>Convert money</b><small>SOL · USDC · PreStocks</small></div></button>
+          <button class="neo-action play" data-action="play"><span>◇</span><div><b>Play</b><small>Real payoff games</small></div></button>
+          <button class="neo-action shop" data-action="spend"><span>▰</span><div><b>Shop</b><small>Spend with your portfolio</small></div></button>
+          <button class="neo-action send" data-action="send"><span>➤</span><div><b>Send</b><small>Move money instantly</small></div></button>
+          <button class="neo-action ai" data-action="agent"><span>◈</span><div><b>Give an AI a budget</b><small>Rules before autonomy</small></div></button>
         </div>
 
-        <section class="how-it-works" aria-label="How Stocklana works">
-          <div class="how-step"><span>1</span><div><b>Connect Phantom</b><small>Your keys stay in your wallet.</small></div></div>
-          <i>→</i>
-          <div class="how-step"><span>2</span><div><b>Choose what you want</b><small>Buy, convert, play, shop, send or use AI.</small></div></div>
-          <i>→</i>
-          <div class="how-step"><span>3</span><div><b>Approve money moves</b><small>You see the amount before anything is signed.</small></div></div>
-        </section>
-
-        <div class="home-grid">
-          <section class="home-panel home-discover">
-            <div class="panel-head"><div><span class="kicker">DISCOVER</span><h2>Equities you can use</h2></div><button class="text-btn" data-nav="markets">See all →</button></div>
-            <div id="homeAssets" class="home-assets"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+        <div class="neo-dashboard">
+          <section class="neo-card neo-wallet-card">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">▣</span><b>Your Wallet</b></div><button class="neo-inline-wallet" data-home-wallet><span class="phantom-mark">◖</span><span id="homeWalletLabel">Connect Phantom</span> →</button></div>
+            <div class="neo-big-balance" id="homeNetValue">$0.00</div>
+            <div class="neo-balance-sub"><span id="homeAccountState" class="status neutral">NOT CONNECTED</span><span>usable across Stocklana</span></div>
+            <div class="neo-wallet-rows">
+              <button data-nav="wallet"><span class="asset-coin sol-coin">S</span><div><b>SOL</b><small>Phantom</small></div><strong id="homeSolBalance">—</strong></button>
+              <button data-nav="wallet"><span class="asset-coin usdc-coin">$</span><div><b>USDC</b><small>spendable</small></div><strong id="homeCash">$0.00</strong></button>
+              <button data-nav="markets"><span class="asset-coin pre-coin">S</span><div><b>PreStocks</b><small>companies you own</small></div><strong id="homePositions">0</strong></button>
+            </div>
           </section>
-          <section class="home-panel">
-            <div class="panel-head"><div><span class="kicker">YOUR MONEY</span><h2>Everything you can use.</h2></div></div>
-            <div class="money-map">
-              <button data-nav="vault"><span>Available now</span><b id="homeCash">$0.00</b><small>Send · shop · play</small></button>
-              <button data-nav="portfolio"><span>Things you own</span><b id="homePositions">0</b><small>PreStocks + games + baskets</small></button>
-              <button data-nav="credit"><span>Credit</span><b>Optional</b><small>Advanced collateral tools</small></button>
-              <button data-nav="agents"><span>AI</span><b>Controlled</b><small>You set the rules and limits</small></button>
+
+          <section class="neo-card neo-prestocks-card">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">↗</span><b>Featured PreStocks</b></div><button class="text-btn" data-nav="markets">View all →</button></div>
+            <div id="homeFeaturedPrestock" class="featured-prestock"><div class="skeleton-card"></div></div>
+            <div id="homeAssets" class="neo-mini-assets"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+          </section>
+
+          <section class="neo-card neo-game-spotlight">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">◇</span><b>Play</b></div><button class="text-btn" data-nav="play">More games →</button></div>
+            <div id="homeGameSpotlight"><div class="skeleton-card"></div></div>
+          </section>
+
+          <section class="neo-card neo-shop-spotlight">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">▰</span><b>Shop with your money</b></div><span class="status live">SAFE MODE</span></div>
+            <p>Paste a product link. Choose Phantom, Stocklana money, or a PreStock you explicitly approve selling.</p>
+            <div class="neo-shop-art" aria-hidden="true"><span>◉</span><span>◆</span><span>⌁</span></div>
+            <div class="neo-shop-input"><input id="homeShopLink" placeholder="Paste a product or checkout link…" /><button id="homeShopGo">→</button></div>
+          </section>
+
+          <section class="neo-card neo-agent-budget">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">◈</span><b>AI Agent Budget</b></div><button class="text-btn" data-nav="agents">Set rules</button></div>
+            <p>Give an AI a budget to shop or act while you keep the keys and the approval thresholds.</p>
+            <div class="neo-budget-box"><span>Example monthly budget</span><b>$500 USDC</b><i><em></em></i></div>
+            <ul><li>Approved merchants only</li><li>Subscriptions blocked by default</li><li>Ask above your threshold</li></ul>
+          </section>
+
+          <section class="neo-card neo-activity-card">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">◎</span><b>Recent Activity</b></div><button class="text-btn" data-nav="portfolio">View all →</button></div>
+            <div id="homeActivity" class="neo-activity-list">
+              <div><span>⇄</span><p><b>Wallet ready</b><small>Connect Phantom to populate activity</small></p></div>
             </div>
           </section>
         </div>
 
-        <section class="home-panel use-cases">
-          <div class="panel-head"><div><span class="kicker">WHAT MAKES IT DIFFERENT</span><h2>Your PreStock stays useful after you buy it.</h2></div><span class="helper">The equity stays useful after you buy it.</span></div>
-          <div class="use-strip">
-            <div><span>01</span><b>Own</b><small>Buy the real tokenized asset.</small></div>
-            <div><span>02</span><b>Program</b><small>Automate, basket, or build a payoff.</small></div>
-            <div><span>03</span><b>Use</b><small>Collateralize, send, spend, delegate.</small></div>
-            <div><span>04</span><b>Prove</b><small>On-chain + PQ receipts + accounting.</small></div>
-          </div>
+        <section class="neo-platform-strip">
+          <button data-nav="cmesh">
+            <span class="cmesh-mini-orb"></span>
+            <div><small>PLATFORM TOKEN · PONS / ROBINHOOD CHAIN</small><b>CMESH supports Stocklana — and stays completely separate from PreStocks.</b></div>
+            <i>Open CMESH →</i>
+          </button>
         </section>
       </section>
 
@@ -182,6 +237,54 @@
           <div id="builderFields" class="builder-fields"></div>
           <div class="preview" id="marketPreview"></div>
           <div class="field"><label>Protocol fee</label><input id="feeBps" type="number" value="100" min="0" max="1000" step="5"/><small>Basis points. The default pari-mutuel engine is fully collateralized by participants; Stocklana does not take a side.</small></div><button class="primary wide" id="createMarketBtn">Create live Stocklana market</button>
+        </div>
+      </section>
+
+      <section class="view cmesh-view" id="view-cmesh">
+        <div class="cmesh-hero">
+          <div class="cmesh-visual" aria-hidden="true">
+            <div class="cmesh-mesh-orb"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="cmesh-ring r1"></div><div class="cmesh-ring r2"></div>
+          </div>
+          <div class="cmesh-copy">
+            <div class="cmesh-badges"><span>PLATFORM TOKEN</span><span>PONS</span><span>ROBINHOOD CHAIN · 4663</span><span class="not-prestock">NOT A PRESTOCK</span></div>
+            <h1>CipherMesh <em>CMESH</em></h1>
+            <p>CMESH is Stocklana’s separate platform-token lane. It was launched through pons on Robinhood Chain and supports the platform ecosystem without entering the PreStocks universe.</p>
+            <div class="cmesh-actions"><button class="primary" id="cmeshConnectBtn">Connect Robinhood wallet</button><button class="ghost" id="cmeshExplorerBtn">Open chain proof</button></div>
+          </div>
+        </div>
+
+        <div class="cmesh-grid">
+          <section class="neo-card cmesh-state-card">
+            <div class="neo-card-head"><div><span class="neo-mini-icon cmesh-icon">◎</span><b>CMESH onchain state</b></div><span id="cmeshReadStatus" class="status neutral">ADDRESS NEEDED</span></div>
+            <div id="cmeshState" class="cmesh-state">
+              <div class="cmesh-address-bind">
+                <span>Public listing matches</span>
+                <b>0xbd7a…0977</b>
+                <small>Paste the full token address once. Stocklana will verify the symbol from pons before saving it locally.</small>
+                <div><input id="cmeshAddressInput" placeholder="0x… full CMESH token address" /><button class="primary" id="cmeshBindBtn">Bind CMESH</button></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="neo-card cmesh-role-card">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">⌁</span><b>What CMESH is for</b></div><span class="status">PLATFORM LANE</span></div>
+            <div class="cmesh-role-list">
+              <div><span>01</span><p><b>Platform token</b><small>Distinct from private-company PreStocks.</small></p></div>
+              <div><span>02</span><p><b>Agent-native</b><small>A dedicated token surface for platform and agent-economy experiments.</small></p></div>
+              <div><span>03</span><p><b>Proof first</b><small>Every displayed state links back to Robinhood Chain / pons data.</small></p></div>
+            </div>
+          </section>
+
+          <section class="neo-card cmesh-trade-card">
+            <div class="neo-card-head"><div><span class="neo-mini-icon">⇄</span><b>Trade CMESH</b></div><span id="cmeshWalletState" class="status neutral">WALLET OFF</span></div>
+            <p>CMESH trades through its pons venue. Your EVM wallet signs every transaction.</p>
+            <div class="cmesh-trade-controls">
+              <label>Amount<input id="cmeshTradeAmount" type="number" min="0" step="any" value="0.01"></label>
+              <div><button class="primary" id="cmeshBuyBtn" disabled>Buy with ETH</button><button class="ghost" id="cmeshSellBtn" disabled>Sell CMESH</button></div>
+            </div>
+            <small id="cmeshTradeHint">Bind the exact token address to activate trading.</small>
+          </section>
         </div>
       </section>
 
@@ -455,12 +558,12 @@
       </section>
     </main>
 
-    <nav class="bottom-nav" aria-label="Primary">
+    <nav class="bottom-nav neo-bottom-nav" aria-label="Primary">
       <button class="active" data-nav="home"><span>⌂</span>Home</button>
-      <button data-nav="markets"><span>◫</span>Buy</button>
+      <button data-nav="markets"><span>▱</span>PreStocks</button>
       <button data-nav="play"><span>◇</span>Play</button>
+      <button data-nav="commerce"><span>▰</span>Shop</button>
       <button data-nav="wallet"><span>◉</span>Money</button>
-      <button data-nav="commerce"><span>▱</span>Shop</button>
     </nav>
   </div>
 
@@ -486,6 +589,6 @@
   </dialog>
 
   <div class="toast" id="toast"></div>
-  <script type="module" src="./src/app.js"></script>
+  <script type="module" src="./src/stocklana-hero.js"></script>\n  <script type="module" src="./src/app.js"></script>
 </body>
 </html>
