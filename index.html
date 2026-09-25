@@ -652,6 +652,19 @@
       <section class="view" id="view-infrastructure">
         <div class="section-head"><div><span class="kicker">FINANCIAL INFRASTRUCTURE</span><h2>One account fabric. Multiple real rails.</h2></div></div>
         <p class="section-copy">Stocklana uses a canonical payment object and translates it into clearing, chain settlement, reconciliation and external payment rails.</p>
+        <section class="system-topology-stage" aria-hidden="true">
+          <div class="sts-copy"><span>EXECUTION TOPOLOGY</span><b>One object. Multiple rails. One receipt chain.</b><small>Stocklana translates human actions into wallet signatures, accounting events, chain settlement and provider receipts.</small></div>
+          <div class="sts-map">
+            <span class="sts-core">STOCKLANA<small>financial object</small></span>
+            <span class="sts-node n1">SOLANA<small>trust + transfer</small></span>
+            <span class="sts-node n2">JUPITER<small>routing</small></span>
+            <span class="sts-node n3">MAQUE<small>payments</small></span>
+            <span class="sts-node n4">AGENTS<small>policy</small></span>
+            <span class="sts-node n5">ISO<small>messages</small></span>
+            <span class="sts-node n6">PQ<small>receipts</small></span>
+            <i class="sts-ring r1"></i><i class="sts-ring r2"></i>
+          </div>
+        </section>
         <div class="route-stack">
           <article class="route"><div class="route-top"><span class="status">LIVE CORE</span><b>ISO 20022</b></div><h3>Bank-language bridge</h3><p><b>pain.001</b> initiation → <b>pacs.008</b> settlement → <b>camt.053</b> account reporting → <b>remt.001</b> remittance. Same MAQUE payment, bank-readable semantics.</p></article>
           <article class="route"><div class="route-top"><span class="status">CHAIN</span><b>Solana</b></div><h3>Onchain settlement</h3><p>USDC deposit verification, replay protection, position issuance, automatic resolution, redemption, and reconstructible transaction receipts.</p></article>
@@ -668,6 +681,12 @@
 
       <section class="view" id="view-coverage">
         <div class="section-head"><div><span class="kicker">TOKENIZED EQUITIES TRACK</span><h2>Every source requirement mapped to an executable product surface.</h2></div><button class="mini" id="coverageRefresh">Verify track fit</button></div>
+        <section class="proof-scoreboard">
+          <div><span>PRODUCT WEDGE</span><b>Programmable PreStock ownership</b><small>Buy → automate → play → borrow → spend → delegate.</small></div>
+          <div><span>PROOF RULE</span><b>No receipt, no claim.</b><small>External execution is only shown as complete after provider or chain confirmation.</small></div>
+          <div><span>JUDGING LOOP</span><b>Live end-to-end</b><small>Wallet → asset → utility → settlement → receipt.</small></div>
+          <div><span>CMESH</span><b>Separate platform token</b><small>Pons / Robinhood Chain. Never mixed into PreStocks eligibility.</small></div>
+        </section>
         <div class="asset-grid" id="coverageGrid"></div>
       </section>
     </main>
