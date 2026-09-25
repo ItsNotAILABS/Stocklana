@@ -364,3 +364,41 @@ body.stocklana-neo:after{
 .stocklana-neo .preview-game{opacity:.92!important}
 @media(max-width:1180px){.stocklana-neo #view-play .game-deck{grid-template-columns:1fr 1fr!important}}
 @media(max-width:700px){.stocklana-neo #view-play .game-deck{grid-template-columns:1fr!important}}
+
+
+/* universal six-action ribbons */
+.stocklana-neo .competition-action-ribbon{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:7px!important;
+  margin:0 0 9px!important;
+}
+.stocklana-neo .competition-action-ribbon button{
+  min-height:62px!important;
+  display:grid!important;
+  grid-template-columns:26px 1fr auto!important;
+  gap:8px!important;
+  align-items:center!important;
+  padding:8px 9px!important;
+  border:1px solid rgba(87,123,164,.20)!important;
+  border-radius:11px!important;
+  background:linear-gradient(155deg,#0a121a,#070d13)!important;
+  color:#fff!important;
+  text-align:left!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.018),0 8px 20px rgba(0,0,0,.11)!important;
+  transition:.17s ease!important;
+}
+.stocklana-neo .competition-action-ribbon button:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(216,255,66,.30)!important;
+  box-shadow:0 13px 27px rgba(0,0,0,.20),inset 0 0 18px rgba(216,255,66,.025)!important;
+}
+.stocklana-neo .competition-action-ribbon button>span{
+  width:26px!important;height:26px!important;display:grid!important;place-items:center!important;
+  border:1px solid rgba(216,255,66,.18)!important;border-radius:8px!important;
+  background:rgba(216,255,66,.035)!important;color:var(--sl-lime)!important;font-size:5.5px!important;font-weight:900!important
+}
+.stocklana-neo .competition-action-ribbon button b{display:block!important;font-size:7.5px!important}.stocklana-neo .competition-action-ribbon button small{display:block!important;margin-top:2px!important;color:#68778a!important;font-size:5.5px!important;line-height:1.2!important}.stocklana-neo .competition-action-ribbon button>i{font-style:normal!important;color:#617084!important;font-size:8px!important}
+.stocklana-neo #view-wallet .competition-action-ribbon button:nth-child(1){border-color:rgba(141,100,255,.26)!important}.stocklana-neo #view-play .competition-action-ribbon button:nth-child(-n+2){border-color:rgba(67,233,255,.23)!important}.stocklana-neo #view-commerce .competition-action-ribbon button:nth-child(1){border-color:rgba(255,211,90,.25)!important}.stocklana-neo #view-agents .competition-action-ribbon button:nth-child(1){border-color:rgba(196,119,255,.24)!important}.stocklana-neo #view-credit .competition-action-ribbon button:nth-child(1){border-color:rgba(255,211,90,.22)!important}
+@media(max-width:1180px){.stocklana-neo .competition-action-ribbon{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:650px){.stocklana-neo .competition-action-ribbon{grid-template-columns:1fr 1fr!important}}
