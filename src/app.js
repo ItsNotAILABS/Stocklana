@@ -1,5 +1,6 @@
-import { connectSolanaWallet, walletState, sendSplToken, executeChainBackedTrade, signSerializedTransaction, detectSolanaWalletProvider, readWalletPortfolio, onWalletAccountChanged } from './solana-client.js';
+import { connectSolanaWallet, walletState, sendSplToken, executeChainBackedTrade, signSerializedTransaction, detectSolanaWalletProvider, readWalletPortfolio, onWalletAccountChanged, getSolanaConnection, sendSolanaInstructions } from './solana-client.js';
 import { connectRobinhood, getPonsConfig, launchPonsV2, readPonsLaunch, buyPons, sellPons, PONS_V2 } from './pons-v2.js';
+import { buildInitializeMarket, buildBuy, buildResolve, buildRedeem } from './stocklana-program-client.js';
 let sessionToken=null;
 const nativeFetch=window.fetch.bind(window);
 const API_ORIGIN=String(window.STOCKLANA_RUNTIME?.apiOrigin||'').replace(/\/$/,'');
@@ -53,7 +54,91 @@ async function actionSheet({kicker='STOCKLANA',title,copy='',confirmLabel='Conti
  });
 }
 
-function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play')loadGames();if(v==='cmesh')loadCmesh();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
+const JUDGE_STATE_KEY='stocklana:judge-loop:v1';
+const judgeState=()=>{try{return JSON.parse(localStorage.getItem(JUDGE_STATE_KEY)||'{}')}catch{return {}}};
+const saveJudgeState=s=>{localStorage.setItem(JUDGE_STATE_KEY,JSON.stringify(s));return s};
+const explorerUrl=(kind,value,cluster='devnet')=>`https://explorer.solana.com/${kind}/${value}?cluster=${encodeURIComponent(cluster)}`;
+async function sha256Hex(value){
+ const bytes=new TextEncoder().encode(String(value));const hash=await crypto.subtle.digest('SHA-256',bytes);
+ return [...new Uint8Array(hash)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function renderJudgeLoop(){
+ const cluster=String(config.programCluster||'devnet'),programId=config.programId||'',usdc=config.programUsdcMint||'';
+ const s=judgeState(),sameProgram=!s.programId||s.programId===programId;
+ if($('#judgeProgramCluster'))$('#judgeProgramCluster').textContent=cluster.toUpperCase();
+ if($('#judgeProgramId'))$('#judgeProgramId').textContent=programId?short(programId):'Deployment pending';
+ if($('#judgeProgramUsdc'))$('#judgeProgramUsdc').textContent=usdc?short(usdc):'Circle Devnet USDC';
+ if($('#judgeMarketAddress'))$('#judgeMarketAddress').textContent=s.market&&sameProgram?short(s.market):'Create one below';
+ const connected=!!wallet?.publicKey,ready=connected&&!!programId&&!!config.programRpcUrl&&!!usdc;
+ const create=$('#judgeCreateMarketBtn'),stake=$('#judgeStakeYesBtn'),resolve=$('#judgeResolveBtn'),redeem=$('#judgeRedeemBtn'),status=$('#judgeLoopStatus');
+ if(create)create.disabled=!ready;
+ if(stake)stake.disabled=!(ready&&s.market&&sameProgram&&!s.staked);
+ const now=Math.floor(Date.now()/1000),canResolve=ready&&s.market&&sameProgram&&s.staked&&!s.resolved&&now>=Number(s.resolveAt||0);
+ if(resolve)resolve.disabled=!canResolve;
+ if(redeem)redeem.disabled=!(ready&&s.market&&sameProgram&&s.resolved&&!s.redeemed);
+ if(status){
+   if(!programId)status.textContent='Stocklana program deployment is the final Devnet activation step.';
+   else if(!connected)status.textContent='Connect Phantom to begin the live Devnet loop.';
+   else if(!s.market||!sameProgram)status.textContent='Ready: create a 1-minute OPENAI market on Solana Devnet.';
+   else if(!s.staked)status.textContent='Market created. Fund Phantom with Devnet USDC, then stake 1 USDC.';
+   else if(!s.resolved){const left=Math.max(0,Number(s.resolveAt||0)-now);status.textContent=left?`Stake confirmed. Resolve becomes available in ${left}s.`:'Stake confirmed. Resolve the market with an onchain proof commitment.'}
+   else if(!s.redeemed)status.textContent='Resolved onchain. Redeem the winning position.';
+   else status.textContent='Complete: create → stake → resolve → redeem all confirmed on Solana.';
+ }
+ const link=$('#judgeExplorerLink');
+ if(link){if(s.lastSignature){link.href=explorerUrl('tx',s.lastSignature,cluster);link.textContent='Open latest Solana proof ↗'}else if(programId){link.href=explorerUrl('address',programId,cluster);link.textContent='Open program on Solana ↗'}}
+ document.querySelector('[data-judge-step="connect"]')?.classList.toggle('done',connected);
+ create?.classList.toggle('done',!!s.market&&sameProgram);
+ stake?.classList.toggle('done',!!s.staked&&sameProgram);
+ resolve?.classList.toggle('done',!!s.resolved&&sameProgram);
+ redeem?.classList.toggle('done',!!s.redeemed&&sameProgram);
+}
+async function judgeEnsureWallet(){
+ if(wallet?.provider&&sessionToken){renderJudgeLoop();return wallet}
+ return await connectPrimaryWallet();
+}
+async function judgeCreateMarket(){
+ try{
+   await judgeEnsureWallet();
+   if(!config.programId)throw new Error('stocklana_devnet_program_not_deployed');
+   const a=assets.find(x=>x.symbol==='OPENAI')||assets[0],connection=await getSolanaConnection(config.programRpcUrl),seed=Date.now(),resolveAt=Math.floor(Date.now()/1000)+75;
+   toast('Building the Devnet market transaction');
+   const built=await buildInitializeMarket({programId:config.programId,authority:wallet.publicKey,underlyingMint:a.contract_address,collateralMint:config.programUsdcMint,marketSeed:seed,resolveAt,feeBps:100,connection});
+   toast('Approve market creation in Phantom');
+   const sig=await sendSolanaInstructions({provider:wallet.provider,instructions:built.instructions,rpc:config.programRpcUrl});
+   saveJudgeState({programId:config.programId,cluster:config.programCluster||'devnet',market:built.market.toString(),marketSeed:seed,resolveAt,underlyingMint:a.contract_address,collateralMint:config.programUsdcMint,createSignature:sig,lastSignature:sig,staked:false,resolved:false,redeemed:false});
+   toast('Solana market created');renderJudgeLoop();
+ }catch(e){toast(String(e.message||e))}
+}
+async function judgeStakeYes(){
+ try{
+   await judgeEnsureWallet();const s=judgeState();if(!s.market)throw new Error('create_market_first');
+   const ix=await buildBuy({programId:config.programId,market:s.market,trader:wallet.publicKey,collateralMint:config.programUsdcMint,stake:1_000_000,side:'YES'});
+   toast('Approve 1 Devnet USDC stake in Phantom');
+   const sig=await sendSolanaInstructions({provider:wallet.provider,instructions:[ix],rpc:config.programRpcUrl});
+   saveJudgeState({...s,staked:true,stakeSignature:sig,lastSignature:sig});toast('YES stake confirmed on Solana');renderJudgeLoop();
+ }catch(e){toast(String(e.message||e))}
+}
+async function judgeResolve(){
+ try{
+   await judgeEnsureWallet();const s=judgeState();if(Math.floor(Date.now()/1000)<Number(s.resolveAt||0))throw new Error('demo_market_timer_not_finished');
+   const proof=await sha256Hex(JSON.stringify({market:s.market,outcome:'YES',source:'Stocklana judge demo',at:Date.now()}));
+   const ix=await buildResolve({programId:config.programId,market:s.market,authority:wallet.publicKey,outcome:'YES',proofCommitmentHex:proof});
+   toast('Approve proof-backed resolution in Phantom');
+   const sig=await sendSolanaInstructions({provider:wallet.provider,instructions:[ix],rpc:config.programRpcUrl});
+   saveJudgeState({...s,resolved:true,resolutionProof:proof,resolveSignature:sig,lastSignature:sig});toast('Market resolved on Solana');renderJudgeLoop();
+ }catch(e){toast(String(e.message||e))}
+}
+async function judgeRedeem(){
+ try{
+   await judgeEnsureWallet();const s=judgeState();const ix=await buildRedeem({programId:config.programId,market:s.market,owner:wallet.publicKey,collateralMint:config.programUsdcMint});
+   toast('Approve redemption in Phantom');
+   const sig=await sendSolanaInstructions({provider:wallet.provider,instructions:[ix],rpc:config.programRpcUrl});
+   saveJudgeState({...s,redeemed:true,redeemSignature:sig,lastSignature:sig});toast('Winning payout redeemed on Solana');renderJudgeLoop();
+ }catch(e){toast(String(e.message||e))}
+}
+
+function navigate(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===v));if(v==='wallet')loadWalletCenter();if(v==='commerce'){loadCommerce();loadFundingPlan()}if(v==='play'){loadGames();renderJudgeLoop()}if(v==='cmesh')loadCmesh();if(v==='vault')loadVault();if(v==='home')loadV2Home();if(v==='credit')loadCredit();window.scrollTo({top:0,behavior:'smooth'})}
 $$('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));
 const globalActions=[
  {label:'Buy a company',sub:'PreStocks',nav:'markets'},
@@ -176,6 +261,11 @@ async function loadGames(){
 }
 document.querySelectorAll('[data-game-stake]').forEach(b=>b.addEventListener('click',()=>{gameStake=Number(b.dataset.gameStake||10);document.querySelectorAll('[data-game-stake]').forEach(x=>x.classList.toggle('active',x===b));loadGames()}));
 document.querySelectorAll('[data-game-filter]').forEach(b=>b.addEventListener('click',()=>{gameFilter=b.dataset.gameFilter||'all';document.querySelectorAll('[data-game-filter]').forEach(x=>x.classList.toggle('active',x===b));renderGameDeck()}));
+document.querySelector('[data-judge-step="connect"]')?.addEventListener('click',async()=>{try{await judgeEnsureWallet();renderJudgeLoop()}catch{}});
+$('#judgeCreateMarketBtn')?.addEventListener('click',judgeCreateMarket);
+$('#judgeStakeYesBtn')?.addEventListener('click',judgeStakeYes);
+$('#judgeResolveBtn')?.addEventListener('click',judgeResolve);
+$('#judgeRedeemBtn')?.addEventListener('click',judgeRedeem);
 $('#challengeJoinBtn')?.addEventListener('click',()=>openChallengeInvite($('#challengeJoinInput')?.value));
 $('#challengeJoinInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')openChallengeInvite(e.currentTarget.value)});
 async function loadMarkets(){try{const r=await fetch('/api/markets',{cache:'no-store'});markets=await r.json();renderMarketFeed();renderDesk()}catch(e){console.warn(e)}}
@@ -191,7 +281,7 @@ $('#fundCardBtn').onclick=async()=>{if(trader()==='guest')return toast('Connect 
 $('#fundWalletBtn').onclick=async()=>{if(!wallet?.provider)return toast('Connect wallet first');if(!config.vaultAddress)return toast('Stocklana Solana vault is not configured yet');const v=await actionSheet({kicker:'PHANTOM → STOCKLANA',title:'Move USDC into Stocklana',copy:'Phantom will show the exact token transfer before you sign.',confirmLabel:'Open Phantom',fields:[{name:'amount',label:'USDC amount',type:'number',value:'25',min:.01,step:.01}]});const amount=Number(v?.amount||0);if(amount<=0)return;try{toast('Approve USDC transfer in wallet');const signature=await sendSplToken({provider:wallet.provider,to:config.vaultAddress,mint:config.usdcMint,amount});const r=await fetch('/api/vault/confirm-deposit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({trader:trader(),wallet:trader(),amount,signature})}),j=await r.json();if(!r.ok)throw new Error(j.error||'verification_failed');toast(`Verified ${money(j.chainProof.verifiedAmount)} deposit`);loadVault()}catch(e){toast(String(e.message||e))}};
 $$('[data-launch]').forEach(b=>b.onclick=()=>{const kind=b.dataset.launch;$('#launchDialogContent').innerHTML=kind==='sponsored'?'<span class="kicker">SPONSORED ROUTER</span><h2>Search free rails first</h2><p>Sponsored venues are checked before user-paid launch routes.</p>':kind==='native'?'<span class="kicker">STOCKLANA NATIVE</span><h2>Native launch path</h2><p>Service fee: <b>0.005 ETH</b>. Network and pool costs remain separate.</p>':'<span class="kicker">OPTIONAL ADAPTER</span><h2>Clawpump compatibility</h2><p>Kept outside the core market and vault architecture.</p>';$('#launchDialog').showModal()});
 $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
-async function connectPrimaryWallet(){try{wallet=await connectSolanaWallet();await authenticateWallet(wallet);$('#walletBtn').textContent='My money';$('#walletBtn').classList.add('connected');toast('Phantom connected');await Promise.all([loadVault(),loadWalletCenter(),loadV2Home()]);return wallet}catch(e){toast(e.message==='solana_wallet_not_found'?'Install or open Phantom to connect':'Could not connect Phantom');throw e}}
+async function connectPrimaryWallet(){try{wallet=await connectSolanaWallet();await authenticateWallet(wallet);$('#walletBtn').textContent='My money';$('#walletBtn').classList.add('connected');toast('Phantom connected');await Promise.all([loadVault(),loadWalletCenter(),loadV2Home()]);renderJudgeLoop();return wallet}catch(e){toast(e.message==='solana_wallet_not_found'?'Install or open Phantom to connect':'Could not connect Phantom');throw e}}
 $('#walletBtn').onclick=async()=>{if(wallet?.publicKey){navigate('wallet');return}try{await connectPrimaryWallet();navigate('wallet')}catch{}};
 $('#refreshBtn').onclick=loadLive;async function loadLive(){try{const r=await fetch('/api/prestocks',{cache:'no-store'}),j=await r.json();if(Array.isArray(j)&&j.length){assets=j.map((x,i)=>({...fallback.find(f=>f.symbol===x.symbol),...x}));renderAssets();toast('Live PreStocks refreshed')}}catch{toast('Using PreStocks snapshot')}}
 async function scheduleRecurring(a){if(!sessionToken)return toast('Connect Phantom first');const v=await actionSheet({kicker:'AUTOMATE',title:`Auto-buy ${a.symbol}`,copy:'Choose how much USDC Stocklana should allocate and how often.',confirmLabel:'Create plan',fields:[{name:'amount',label:'USDC each buy',type:'number',value:'25',min:.01,step:.01},{name:'cadence',label:'Cadence',type:'select',options:[{value:'DAILY',label:'Daily'},{value:'WEEKLY',label:'Weekly'},{value:'MONTHLY',label:'Monthly'}]}]});const amount=Number(v?.amount||0),cadence=String(v?.cadence||'WEEKLY').toUpperCase();if(amount<=0)return;const r=await fetch('/api/equity/recurring',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({symbol:a.symbol,usdcAmount:amount,cadence})}),j=await r.json();toast(r.ok?`${cadence} ${a.symbol} plan created`:(j.error||'Plan failed'))}
@@ -553,7 +643,7 @@ $('#internalBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAct
 $('#kaminoBorrowBtn')?.addEventListener('click',async()=>{if(!requireWalletAction())return;const v=await actionSheet({kicker:'KAMINO',title:'Build a Solana DeFi transaction',copy:'Use only a Kamino market and reserve that support the collateral you intend to deposit.',confirmLabel:'Build transaction',fields:[{name:'market',label:'Kamino market address'},{name:'reserve',label:'Collateral reserve address'},{name:'amount',label:'Atomic deposit amount',type:'number',min:1,step:1}]});const market=String(v?.market||'').trim(),reserve=String(v?.reserve||'').trim(),amount=String(v?.amount||'').trim();if(!market||!reserve||!amount)return;try{const r=await fetch('/api/kamino/deposit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:wallet.publicKey,market,reserve,amount})}),j=await r.json();if(!r.ok)throw new Error(j.error||'kamino_builder_failed');toast('Kamino transaction built — sign locally in wallet')}catch(e){toast(String(e.message||e))}});
 
 function ambient(){const c=$('#ambient'),x=c.getContext('2d');let w,h,d=1;function size(){d=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*d;c.height=h*d;c.style.width=w+'px';c.style.height=h+'px';x.setTransform(d,0,0,d,0,0)}function draw(t){x.clearRect(0,0,w,h);x.strokeStyle='rgba(110,180,230,.055)';x.lineWidth=1;const s=44;for(let i=-s;i<w+s;i+=s){x.beginPath();x.moveTo(i+(t*.003)%s,0);x.lineTo(i-140+(t*.003)%s,h);x.stroke()}for(let y=40;y<h;y+=s){x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke()}requestAnimationFrame(draw)}addEventListener('resize',size);size();requestAnimationFrame(draw)}
-(async()=>{ambient();renderAssets();buildFields();loadV2Home();config=await fetch('/api/config').then(r=>r.json()).catch(()=>({}));refreshSwapTargets();await loadLive();await loadMarkets();const s=await walletState();if(s.publicKey){wallet=await connectSolanaWallet().catch(()=>null);if(wallet){await authenticateWallet(wallet).catch(()=>{});$('#walletBtn').textContent='My money';$('#walletBtn').classList.add('connected');if(sessionToken)await loadVault();await loadWalletCenter()}}const invite=new URLSearchParams(location.search).get('challenge');if(invite){navigate('play');openChallengeInvite(invite)}})();
+(async()=>{ambient();renderAssets();buildFields();loadV2Home();config=await fetch('/api/config').then(r=>r.json()).catch(()=>({}));refreshSwapTargets();renderJudgeLoop();await loadLive();await loadMarkets();const s=await walletState();if(s.publicKey){wallet=await connectSolanaWallet().catch(()=>null);if(wallet){await authenticateWallet(wallet).catch(()=>{});$('#walletBtn').textContent='My money';$('#walletBtn').classList.add('connected');if(sessionToken)await loadVault();await loadWalletCenter()}}const invite=new URLSearchParams(location.search).get('challenge');if(invite){navigate('play');openChallengeInvite(invite)}})();
 
 async function loadCoverage(){
   const grid=document.querySelector('#coverageGrid'); if(!grid)return;
