@@ -1574,3 +1574,7 @@
   .stocklana-neo #view-markets .route-stack,
   .stocklana-neo #view-markets .asset-grid{grid-template-columns:1fr!important}
 }
+
+
+/* Promo remains pixel-locked but is also the CMESH entry point. */
+.stocklana-neo .neo-rail-promo{width:100%!important;text-align:left!important;color:#fff!important;font:inherit!important;cursor:pointer!important}
