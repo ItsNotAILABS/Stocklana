@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import csv, json, pathlib
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-finance=json.loads((ROOT/'data'/'finance.json').read_text()) if (ROOT/'data'/'finance.json').exists() else {}
-markets=json.loads((ROOT/'data'/'markets.json').read_text()) if (ROOT/'data'/'markets.json').exists() else {}
+finance=json.loads((ROOT/'data'/'finance.json').read_text(encoding='utf-8')) if (ROOT/'data'/'finance.json').exists() else {}
+markets=json.loads((ROOT/'data'/'markets.json').read_text(encoding='utf-8')) if (ROOT/'data'/'markets.json').exists() else {}
 rows=[]
 for r in finance.get('receipts',[]):
     rows.append({'time':r.get('at'),'class':'receipt','id':r.get('id'),'marketId':'','actor':r.get('actor'),'kind':r.get('kind'),'amount':'','asset':'','chainSignature':'','commitment':r.get('commitment'),'prevCommitment':r.get('prevCommitment')})

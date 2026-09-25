@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root=path.resolve(new URL('..', import.meta.url).pathname);
+const root=path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const out=path.join(root,'dist');
 const apiOrigin=(process.env.STOCKLANA_PUBLIC_API_ORIGIN||'').replace(/\/$/,'');
-const files=['index.html','runtime-config.js'];
+const files=['index.html','runtime-config.js','README.md','SUBMISSION.md','TRACK-FIT.md','REQUIREMENTS-AUDIT.md','CERTIFICATION-V10.md','WEEK-100-REPORT.md','SECURITY.md','DEPLOY-SOLANA.md','OPERATOR_BOUNDARY.md','docs/V2-FINANCIAL-SUBSTRATE.md'];
 const assetFiles=['assets/hero-reference.webp','assets/shop-products-clean.webp'];
 const browserFiles=['src/app-three.js','src/app.js','src/demo-reel.js','src/competition.css','src/competition-ui.js','src/market-engine.js','src/meteora-dbc.js','src/oracle-policy.js','src/pons-v2.js','src/prestocks-registry.js','src/solana-client.js','src/stocklana-hero.js','src/stocklana-program-client.js','src/styles.css','src/surface-motion.js','src/systems.js','src/token2022-accounting.js'];
 
 fs.rmSync(out,{recursive:true,force:true});
 fs.mkdirSync(out,{recursive:true});
 
-for(const f of files) fs.copyFileSync(path.join(root,f),path.join(out,f));
+for(const f of files){ const to=path.join(out,f); fs.mkdirSync(path.dirname(to),{recursive:true}); fs.copyFileSync(path.join(root,f),to); }
 fs.mkdirSync(path.join(out,'src'),{recursive:true});
 for(const f of assetFiles){
   const from=path.join(root,f),to=path.join(out,f);

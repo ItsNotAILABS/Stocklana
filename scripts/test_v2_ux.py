@@ -2,11 +2,11 @@
 from pathlib import Path
 import json,re
 ROOT=Path(__file__).resolve().parents[1]
-html=(ROOT/'index.html').read_text()
-js=(ROOT/'src'/'app.js').read_text()
-css=(ROOT/'src'/'styles.css').read_text()
-server=(ROOT/'server.py').read_text()
-product=json.loads((ROOT/'data'/'v2-product.json').read_text())
+html=(ROOT/'index.html').read_text(encoding='utf-8')
+js=(ROOT/'src'/'app.js').read_text(encoding='utf-8')
+css=(ROOT/'src'/'styles.css').read_text(encoding='utf-8')
+server=(ROOT/'server.py').read_text(encoding='utf-8')
+product=json.loads((ROOT/'data'/'v2-product.json').read_text(encoding='utf-8'))
 checks=[]
 def ok(cond,label):
     checks.append((bool(cond),label))

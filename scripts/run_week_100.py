@@ -10,7 +10,7 @@ agent=load('week_agent','agent_vault.py'); pay=load('week_pay','payment_fabric.p
 market=load('week_market','market-store.py'); mex=load('week_mex','market_execution.py'); catalog=load('week_catalog','market-catalog.py')
 iso=load('week_iso','iso20022_bridge.py'); card=load('week_card','card_rail.py'); lending=load('week_lend','lending.py')
 sim=load('week_sim','simulations.py'); growth=load('week_growth','growth.py'); pq=load('week_pq','pq_crypto.py'); sol=load('week_sol','solana_finance.py')
-assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
+assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text(encoding='utf-8'))
 random.seed(260922)
 roles=['active_trader','long_term_holder','social_sender','agent_operator','market_creator','risk_averse','power_user','merchant_user','yield_seeker','newcomer']
 risk=['conservative','balanced','aggressive']

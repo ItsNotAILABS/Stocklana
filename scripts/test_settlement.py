@@ -5,7 +5,7 @@ sys.path.insert(0,str(ROOT/'src'))
 def load(name,file):
  s=importlib.util.spec_from_file_location(name,ROOT/'src'/file); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); return m
 se=load('se_test','settlement-engine.py')
-assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
+assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text(encoding='utf-8'))
 by={a['symbol']:a for a in assets}
 cases=[]
 # one case per supported rule family

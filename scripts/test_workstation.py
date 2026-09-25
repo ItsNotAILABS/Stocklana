@@ -1,6 +1,6 @@
 import re, pathlib, importlib.util
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-h=(ROOT/'index.html').read_text()
+h=(ROOT/'index.html').read_text(encoding='utf-8')
 nav=set(re.findall(r'data-nav="([^"]+)"',h)); views=set(re.findall(r'id="view-([^"]+)"',h))
 missing=nav-views
 assert not missing, f'missing views: {missing}'

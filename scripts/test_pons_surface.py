@@ -1,6 +1,6 @@
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
-js=(root/'src/pons-v2.js').read_text(); app=(root/'src/app.js').read_text(); html=(root/'index.html').read_text(); css=(root/'src/styles.css').read_text()
+js=(root/'src/pons-v2.js').read_text(encoding='utf-8'); app=(root/'src/app.js').read_text(encoding='utf-8'); html=(root/'index.html').read_text(encoding='utf-8'); css=(root/'src/styles.css').read_text(encoding='utf-8')
 checks={
  'factory': '0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e' in js,
  'chain': 'CHAIN_ID=4663' in js,

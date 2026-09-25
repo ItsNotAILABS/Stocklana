@@ -9,7 +9,7 @@ money=load('money_router_test','src/money_router.py')
 catalog=load('market_catalog_test','src/market-catalog.py')
 sim=load('sim_test','src/simulations.py')
 agent=load('agent_vault_test','src/agent_vault.py')
-assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
+assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text(encoding='utf-8'))
 checks=0
 
 def ok(v,msg):

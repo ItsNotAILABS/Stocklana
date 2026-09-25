@@ -10,7 +10,7 @@ fdb=ROOT/'data'/'finance.json'; mdb=ROOT/'data'/'markets.json'; backups={}
 for p in (fdb,mdb):
     if p.exists(): backups[p]=p.read_bytes(); p.unlink()
 try:
-    assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text())
+    assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text(encoding='utf-8'))
     ts=catalog.templates(assets)
     assert len(ts)==360
     assert len({x['question'] for x in ts})==len(ts)

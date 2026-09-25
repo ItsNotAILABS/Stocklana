@@ -2,7 +2,7 @@
 import base64, hashlib, json, subprocess, tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-manifest=json.loads((ROOT/'release-manifest.json').read_text())
+manifest=json.loads((ROOT/'release-manifest.json').read_text(encoding='utf-8'))
 sig=manifest.pop('hybridSignature')
 msg=json.dumps(manifest,sort_keys=True,separators=(',',':'),default=str).encode()
 commit=hashlib.blake2b(msg,digest_size=64,person=b'STKLNA-PQ-COMMIT').hexdigest()

@@ -7,7 +7,7 @@ ROOT=pathlib.Path(__file__).resolve().parents[1];SRC=ROOT/'src';sys.path.insert(
 def load(n,f):
  s=importlib.util.spec_from_file_location(n,SRC/f);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 agent=load('wr_agent','agent_vault.py');pay=load('wr_pay','payment_fabric.py');fin=load('wr_fin','finance-store.py');mkt=load('wr_mkt','market-store.py');mex=load('wr_mex','market_execution.py');cat=load('wr_cat','market-catalog.py');iso=load('wr_iso','iso20022_bridge.py');sim=load('wr_sim','simulations.py');growth=load('wr_growth','growth.py');sol=load('wr_sol','solana_finance.py');card=load('wr_card','card_rail.py');lend=load('wr_lend','lending.py')
-assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text());vaults=agent.list_agent_vaults()
+assets=json.loads((ROOT/'data'/'prestocks-snapshot.json').read_text(encoding='utf-8'));vaults=agent.list_agent_vaults()
 if len(vaults)<100:vaults=agent.seed_agent_vaults(100)
 vaults=sorted(vaults,key=lambda x:x['agentId'])[:100]
 roles=['active_trader','holder','social_payer','agent_operator','market_researcher','risk_averse','merchant','yield_seeker','creator','newcomer']

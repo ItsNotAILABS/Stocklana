@@ -262,3 +262,33 @@ body.stocklana-neo:after{
 .stocklana-neo .competition-divider i{height:1px!important;background:linear-gradient(90deg,transparent,#1d3246)!important}.stocklana-neo .competition-divider i:last-child{background:linear-gradient(90deg,#1d3246,transparent)!important}
 .stocklana-neo .competition-divider span{font-size:5px!important;letter-spacing:.18em!important;color:#4d5d70!important}
 @media(max-width:760px){.stocklana-neo .competition-command-bar{grid-template-columns:1fr!important}.stocklana-neo .ccb-title{display:none!important}.stocklana-neo .ccb-stats{grid-template-columns:1fr 1fr!important}}
+
+/* Final usability polish: preserve the visual system while making controls feel intentional. */
+.stocklana-neo button:focus-visible,.stocklana-neo input:focus-visible,.stocklana-neo select:focus-visible,.stocklana-neo textarea:focus-visible{
+  outline:2px solid var(--sl-cyan)!important;outline-offset:3px!important;
+}
+.stocklana-neo button{transition:transform .16s ease,background-color .16s ease,border-color .16s ease,box-shadow .16s ease!important}
+.stocklana-neo .neo-action:hover{transform:translateY(-2px)!important;border-color:rgba(223,255,66,.58)!important;box-shadow:0 12px 28px rgba(0,0,0,.24)!important}
+.stocklana-neo .neo-wallet-rows button:hover,.stocklana-neo .neo-mini-assets button:hover{background:rgba(67,233,255,.055)!important;border-radius:9px!important}
+.stocklana-neo ::selection{background:rgba(223,255,66,.28);color:#fff}
+@media(max-width:650px){
+  .stocklana-neo .neo-action{min-height:68px!important;padding:9px!important;grid-template-columns:34px 1fr!important;gap:8px!important}
+  .stocklana-neo .neo-action>span{width:34px!important;height:34px!important;font-size:15px!important}
+  .stocklana-neo .neo-action b{font-size:10px!important}
+  .stocklana-neo .neo-action small{font-size:7px!important}
+  .stocklana-neo .neo-hero p{font-size:13px!important;line-height:1.5!important}
+  .stocklana-neo .neo-card-head b{font-size:12px!important}
+  .stocklana-neo .text-btn{font-size:9px!important}
+}
+/* Documentation surface */
+.stocklana-neo .docs-view{padding-top:20px!important}
+.stocklana-neo .docs-hero{display:grid!important;grid-template-columns:minmax(0,1.4fr) minmax(280px,.6fr)!important;gap:18px!important;align-items:stretch!important;margin-bottom:12px!important}
+.stocklana-neo .docs-hero>div:first-child,.stocklana-neo .docs-proof,.stocklana-neo .docs-card{border:1px solid rgba(84,119,158,.28)!important;border-radius:16px!important;background:linear-gradient(155deg,rgba(12,19,28,.99),rgba(6,10,15,.995))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.02),0 11px 29px rgba(0,0,0,.15)!important}
+.stocklana-neo .docs-hero>div:first-child{padding:28px!important;background:radial-gradient(circle at 88% 0,rgba(216,255,66,.08),transparent 30%),linear-gradient(155deg,#0c171b,#070d13)!important}
+.stocklana-neo .docs-hero h1{margin:8px 0 10px!important;font-size:clamp(36px,4vw,58px)!important;line-height:.95!important;letter-spacing:-3px!important;color:#f6f7fa!important}
+.stocklana-neo .docs-hero p{max-width:680px!important;color:#9eacbb!important;font-size:14px!important}
+.stocklana-neo .docs-hero-actions{display:flex!important;gap:8px!important;margin-top:18px!important;align-items:center!important}.stocklana-neo .docs-hero-actions .ghost{display:inline-flex!important;align-items:center!important;text-decoration:none!important}
+.stocklana-neo .docs-proof{padding:22px!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;background:radial-gradient(circle at 80% 10%,rgba(67,233,255,.09),transparent 35%),linear-gradient(155deg,#08141b,#070d13)!important}.stocklana-neo .docs-proof b{font-size:22px!important;line-height:1.05!important;margin:12px 0 7px!important}.stocklana-neo .docs-proof small{color:#8c9aaa!important;line-height:1.5!important}
+.stocklana-neo .docs-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}.stocklana-neo .docs-card{padding:18px!important;min-height:190px!important}.stocklana-neo .docs-card-wide{grid-column:span 2!important}.stocklana-neo .docs-card h2{margin:8px 0 8px!important;font-size:21px!important;letter-spacing:-.7px!important}.stocklana-neo .docs-card p,.stocklana-neo .docs-card li{color:#93a0af!important;font-size:12px!important;line-height:1.55!important}.stocklana-neo .docs-card ol{margin:10px 0 0;padding-left:18px!important}.stocklana-neo .docs-card a{color:var(--sl-lime)!important;font-size:11px!important;font-weight:800!important;text-decoration:none!important}.stocklana-neo .docs-card a:hover{text-decoration:underline!important}.stocklana-neo .docs-pills,.stocklana-neo .docs-links{display:flex!important;gap:6px!important;flex-wrap:wrap!important;margin-top:14px!important}.stocklana-neo .docs-pills span,.stocklana-neo .docs-links a{padding:7px 9px!important;border:1px solid rgba(84,119,158,.28)!important;border-radius:999px!important;background:#08111a!important;color:#a7b5c4!important;font-size:9px!important}.stocklana-neo .docs-links a{color:var(--sl-lime)!important}.stocklana-neo .docs-receipts{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:7px!important;margin-top:14px!important}.stocklana-neo .docs-receipts div{padding:10px!important;border:1px solid rgba(255,255,255,.06)!important;border-radius:10px!important;background:#080e15!important}.stocklana-neo .docs-receipts b{display:block!important;font-size:11px!important}.stocklana-neo .docs-receipts small{display:block!important;color:#7d8b9b!important;font-size:9px!important;line-height:1.35!important;margin-top:4px!important}
+@media(max-width:900px){.stocklana-neo .docs-hero{grid-template-columns:1fr!important}.stocklana-neo .docs-grid{grid-template-columns:1fr 1fr!important}.stocklana-neo .docs-card-wide{grid-column:span 2!important}}
+@media(max-width:650px){.stocklana-neo .docs-grid{grid-template-columns:1fr!important}.stocklana-neo .docs-card-wide{grid-column:auto!important}.stocklana-neo .docs-hero>div:first-child{padding:20px!important}.stocklana-neo .docs-hero h1{font-size:38px!important}.stocklana-neo .docs-receipts{grid-template-columns:1fr 1fr!important}}

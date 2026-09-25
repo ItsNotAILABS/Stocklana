@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def load(name,path):
  s=importlib.util.spec_from_file_location(name,ROOT/'src'/path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 osmod=load('equity_os','equity_os.py');kamino=load('kamino','kamino_adapter.py');acct=load('accounting_tokens','accounting_tokens.py')
-fit=json.loads((ROOT/'data'/'track-fit.json').read_text())
+fit=json.loads((ROOT/'data'/'track-fit.json').read_text(encoding='utf-8'))
 checks=0
 assert 'tokenized-equity' in fit['wedge'];checks+=1
 for k in ['trading','investing','credit_and_yield','infrastructure','consumer','why_solana']:

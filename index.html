@@ -27,6 +27,7 @@
         <button data-nav="vault"><span>↗</span>Send</button>
         <button data-nav="portfolio"><span>◎</span>Portfolio</button>
         <button class="cmesh-nav" data-nav="cmesh"><span class="cmesh-dot"></span>CMESH <em>PONS</em></button>
+        <button data-nav="docs"><span>?</span>Documentation</button>
       </div>
       <div class="rail-spacer"></div>
       <button class="neo-advanced-toggle" id="uxModeBtn" aria-pressed="false"><span>⚙</span>Advanced</button>
@@ -173,7 +174,7 @@
         <div class="section-head compact"><div><span class="kicker">AFTER YOU BUY</span><h2>Your PreStock can keep working.</h2></div></div>
         <div class="route-stack">
           <article class="route"><div class="route-top"><span class="status">TRADE</span><b>24/7</b></div><h3>Buy or sell</h3><p>Trade the PreStock from your connected wallet.</p></article>
-          <article class="route"><div class="route-top"><span class="status">INVEST</span><b>AUTO</b></div><h3>Buy automatically</h3><p>Choose how much and how often.</p></article>
+          <article class="route" data-action="auto" role="button" tabindex="0"><div class="route-top"><span class="status">INVEST</span><b>AUTO</b></div><h3>Buy automatically</h3><p>Choose how much and how often.</p></article>
           <article class="route"><div class="route-top"><span class="status">CREDIT</span><b>DeFi</b></div><h3>Explore credit</h3><p>See supported ways to borrow without hiding the risks.</p></article>
           <article class="route"><div class="route-top"><span class="status">SPEND</span><b>MAQUE</b></div><h3>Spend from what you own</h3><p>Choose a PreStock, convert only what you approve, then shop.</p></article>
         </div>
@@ -359,7 +360,7 @@
             </div>
             <label class="toggle-line"><input id="ponsBuyback" type="checkbox" checked> Enable Pons buyback vault</label>
             <div class="launch-cost"><span>Protocol launch fee</span><b id="ponsLaunchFee">Read from factory</b><small id="ponsLaunchEligibility">Connect wallet to verify launch eligibility.</small></div>
-            <button class="primary wide" id="ponsLaunchBtn">Launch on Robinhood Chain</button>
+            <button class="primary wide" id="ponsLaunchBtn" data-action="launch">Launch on Robinhood Chain</button>
             <p class="warn">No private key enters Stocklana. The connected EVM wallet signs the factory transaction. Stocklana records the returned token address and transaction receipt only after chain confirmation.</p>
           </div>
 
@@ -567,7 +568,7 @@
         <p class="section-copy">Choose a route. Stocklana keeps the position and credit state visible in the same account; external DeFi transactions remain wallet-signed.</p>
         <div class="credit-hero">
           <div><span>Borrowing power</span><b id="creditPower">Connect to calculate</b><small>Based only on eligible, supported collateral and live provider rules.</small></div>
-          <button class="primary" id="creditStartBtn">Check my options</button>
+          <button class="primary" id="creditStartBtn" data-action="borrow">Check my options</button>
         </div>
         <div class="route-stack">
           <article class="route"><div class="route-top"><span class="status live">STOCKLANA</span><b>Funded pool</b></div><h3>Simple internal credit</h3><p>Lock supported value, draw from an actually funded lending pool, and keep the receivable visible in your V2 accounting digest.</p><button class="primary wide" id="internalBorrowBtn">Get a quote</button></article>
@@ -617,6 +618,24 @@
           <article class="route"><div class="route-top"><span class="status neutral">ISSUING</span><b>JIT cards</b></div><h3>Virtual-card connector</h3><p>Provider adapter boundary for zero-balance virtual cards, single-purpose spend controls and JIT authorization against Stocklana value. Production issuance requires issuer/processor credentials.</p></article>
           <article class="route"><div class="route-top"><span class="status">AGENTS</span><b>100 proved</b></div><h3>Agent Vault fabric</h3><p>Each agent has scoped accounts, policy, approvals, billing, reconciliation, positions, connectors and independently verifiable PQ provisioning.</p></article>
           <article class="route"><div class="route-top"><span class="status">PHYSICAL</span><b>MAQUE</b></div><h3>Human payment surface</h3><p>@handles, QR/NFC intents, offline signatures, friend payments and cash-out routing keep blockchain plumbing underneath the human interaction.</p></article>
+        </div>
+      </section>
+
+      <section class="view docs-view" id="view-docs">
+        <div class="docs-hero">
+          <div><span class="kicker">STOCKLANA KNOWLEDGE BASE</span><h1>Understand the whole loop.</h1><p>Stocklana turns eligible tokenized equities into programmable, wallet-owned financial objects. This guide is the judge path, architecture map, and operating manual in one place.</p><div class="docs-hero-actions"><button class="primary" data-nav="home">Open the product</button><a class="ghost" href="./README.md" target="_blank" rel="noopener">Read full README</a></div></div>
+          <div class="docs-proof"><span class="status live">SOURCE OF TRUTH</span><b>One app. One account fabric.</b><small>Phantom signs. Solana settles. Stocklana coordinates. Every external action requires a real receipt.</small></div>
+        </div>
+        <div class="docs-grid">
+          <article class="docs-card docs-card-wide"><span class="kicker">01 / WHAT IT IS</span><h2>Programmable PreStocks on Solana</h2><p>Stocklana is a desktop-first financial workstation for eligible PreStocks. A connected Phantom wallet can buy and sell exact SPL mints, convert SOL and USDC, create fully collateralized payoff markets, move value through a governed vault, spend through one-time commerce policies, and give an AI a bounded budget. The asset does not stop being useful after the buy.</p><div class="docs-pills"><span>Tokenized equities</span><span>Wallet-native</span><span>Fully collateralized</span><span>Receipt-first</span></div></article>
+          <article class="docs-card"><span class="kicker">02 / 90-SECOND DEMO</span><h2>Judge path</h2><ol><li>Connect Phantom.</li><li>Open PreStocks and choose an exact asset.</li><li>Build a Jupiter Swap V2 order.</li><li>Open Play and create a collateralized market.</li><li>Move value through Vault or MAQUE.</li><li>Inspect Agent Vault policy controls.</li><li>Open System / Proof for solvency and receipts.</li></ol></article>
+          <article class="docs-card"><span class="kicker">03 / SOLANA</span><h2>Why Solana</h2><p>The same SPL or Token-2022 asset can move through wallet execution, program escrow, payments, credit, and agent policy. Low-cost settlement lets investing, DeFi, commerce, and programmable ownership share one account model.</p><a href="./DEPLOY-SOLANA.md" target="_blank" rel="noopener">Deployment runbook →</a></article>
+          <article class="docs-card"><span class="kicker">04 / MONEY SAFETY</span><h2>Collateral, not promises</h2><p>YES/NO stakes enter segregated per-market escrow. Fees move separately. Winning payouts come only from existing collateral, and paid-out liability is tracked. Stocklana never takes a directional house position.</p><a href="./SECURITY.md" target="_blank" rel="noopener">Security architecture →</a></article>
+          <article class="docs-card"><span class="kicker">05 / ACCOUNTING</span><h2>V2 financial substrate</h2><p>Internal claims are typed as SL-CASH, SL-ESCROW, SL-COLL, SL-FEE, SL-CREDIT, SL-AGENT, SL-POS, and SL-BASKET. Internal accounting is the source of truth; Token-2022 carries selected programmable receipts without pretending to be an unbacked stablecoin.</p><a href="./docs/V2-FINANCIAL-SUBSTRATE.md" target="_blank" rel="noopener">Read the substrate spec →</a></article>
+          <article class="docs-card"><span class="kicker">06 / AGENTS</span><h2>Bounded autonomy</h2><p>Agent Vaults use scoped capability tokens, budgets, approval thresholds, merchant controls, reconciliation, and replay / velocity checks. Private keys stay outside Stocklana.</p><a href="./OPERATOR_BOUNDARY.md" target="_blank" rel="noopener">Operator boundary →</a></article>
+          <article class="docs-card"><span class="kicker">07 / DEPLOYMENT</span><h2>Two production layers</h2><p>The Solana program owns executable market state. The browser is a static permanent-web release whose API origin is runtime-configurable. Devnet is the judging default; mainnet is explicit. A configured route is never called a completed action without a chain or provider receipt.</p><a href="./SUBMISSION.md" target="_blank" rel="noopener">Submission notes →</a></article>
+          <article class="docs-card docs-card-wide"><span class="kicker">08 / RECEIPT RULE</span><h2>What counts as real</h2><div class="docs-receipts"><div><b>Swap</b><small>Jupiter response + wallet-signed Solana signature</small></div><div><b>Market</b><small>Program deployment, initialize, resolve, redeem receipts</small></div><div><b>Frontend</b><small>Arweave manifest transaction and permanent gateway</small></div><div><b>CMESH</b><small>Verified Robinhood Chain token address and Pons state</small></div></div></article>
+          <article class="docs-card docs-card-wide"><span class="kicker">09 / REFERENCE MAP</span><h2>Repository guide</h2><div class="docs-links"><a href="./README.md" target="_blank" rel="noopener">README / product overview</a><a href="./SUBMISSION.md" target="_blank" rel="noopener">SUBMISSION / judge narrative</a><a href="./TRACK-FIT.md" target="_blank" rel="noopener">TRACK-FIT / category mapping</a><a href="./REQUIREMENTS-AUDIT.md" target="_blank" rel="noopener">REQUIREMENTS-AUDIT / evidence ledger</a><a href="./CERTIFICATION-V10.md" target="_blank" rel="noopener">CERTIFICATION / release checks</a><a href="./WEEK-100-REPORT.md" target="_blank" rel="noopener">WEEK-100 / agent proof</a></div></article>
         </div>
       </section>
 
