@@ -1,5 +1,5 @@
 window.STOCKLANA_RUNTIME = Object.freeze({
   apiOrigin: "",
-  network: "solana-mainnet",
+  network: "solana-hybrid",
   release: "canonical"
 });
