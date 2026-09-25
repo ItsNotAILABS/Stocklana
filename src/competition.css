@@ -557,3 +557,18 @@ body.stocklana-neo:after{
 .stocklana-neo #view-lab #marketPreview{min-height:58px!important;padding:10px!important;border:1px solid rgba(255,255,255,.05)!important;border-radius:10px!important;background:#080e15!important}
 @media(max-width:1150px){.stocklana-neo #view-lab .type-grid{grid-template-columns:repeat(4,1fr)!important}.stocklana-neo #view-lab .builder-fields{grid-template-columns:1fr 1fr!important}}
 @media(max-width:650px){.stocklana-neo #view-lab .type-grid{grid-template-columns:1fr 1fr!important}.stocklana-neo #view-lab .builder-fields{grid-template-columns:1fr!important}.stocklana-neo .lss-flow{flex-wrap:wrap!important}}
+
+
+/* ===== SEND MONEY STAGE ===== */
+.stocklana-neo .send-visual-stage{
+  display:grid!important;grid-template-columns:.72fr 1.28fr!important;gap:12px!important;align-items:center!important;
+  min-height:138px!important;margin:8px 0!important;padding:12px!important;
+  border:1px solid rgba(77,229,232,.16)!important;border-radius:13px!important;
+  background:radial-gradient(circle at 72% 45%,rgba(77,229,232,.08),transparent 30%),linear-gradient(155deg,#081516,#070d13)!important;overflow:hidden!important
+}
+.stocklana-neo .svs-copy{padding:5px!important}.stocklana-neo .svs-copy span{font-size:5.5px!important;letter-spacing:.13em!important;color:#5b8688!important}.stocklana-neo .svs-copy b{display:block!important;margin:6px 0 4px!important;font-size:15px!important}.stocklana-neo .svs-copy small{display:block!important;max-width:360px!important;color:#748294!important;font-size:6.4px!important;line-height:1.45!important}
+.stocklana-neo .svs-flow{display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important}.stocklana-neo .svs-flow>span{width:78px!important;height:62px!important;display:grid!important;place-items:center!important;align-content:center!important;border:1px solid rgba(77,229,232,.16)!important;border-radius:13px!important;background:#080f16!important;color:#e5edf3!important;font-size:8px!important;font-weight:900!important;box-shadow:0 14px 28px rgba(0,0,0,.24)!important}.stocklana-neo .svs-flow>span small{display:block!important;margin-top:2px!important;color:#667588!important;font-size:4.8px!important}.stocklana-neo .svs-flow>span:nth-of-type(4){color:#79f2ad!important;border-color:rgba(121,242,173,.17)!important}.stocklana-neo .svs-flow>i{width:24px!important;height:1px!important;background:linear-gradient(90deg,#4de5e8,#dfff42)!important;opacity:.55!important}
+.stocklana-neo .svs-pills{grid-column:1/-1!important;display:flex!important;justify-content:flex-end!important;gap:5px!important;flex-wrap:wrap!important}.stocklana-neo .svs-pills span{padding:3px 5px!important;border:1px solid rgba(255,255,255,.04)!important;border-radius:999px!important;background:#080e15!important;color:#657487!important;font-size:4.7px!important;letter-spacing:.08em!important}
+.stocklana-neo #view-vault .vault-balance{display:grid!important;grid-template-columns:1fr auto!important;align-items:end!important}.stocklana-neo #view-vault .vault-balance>span,.stocklana-neo #view-vault .vault-balance>small{grid-column:1!important}.stocklana-neo #view-vault .vault-balance>b{grid-row:1/3!important;grid-column:2!important;align-self:center!important}
+.stocklana-neo #view-vault .vault-actions{margin:7px 0!important}
+@media(max-width:850px){.stocklana-neo .send-visual-stage{grid-template-columns:1fr!important}.stocklana-neo .svs-pills{justify-content:flex-start!important}.stocklana-neo .svs-flow{flex-wrap:wrap!important}}
