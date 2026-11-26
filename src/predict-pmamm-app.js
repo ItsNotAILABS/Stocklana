@@ -342,12 +342,9 @@ async function exactSwapQuote(c, market, direction, amountInRaw) {
     }
   }
 
-  // Production fallback: use the protocol's own pm-AMM math against reserves
-  // accrued forward to the current timestamp. This covers the buy directions
-  // used by this Stocklana surface when RPC simulation is temporarily unavailable.
-  if (direction !== "usdcToYes" && direction !== "usdcToNo") {
-    throw new Error("swap_quote_simulation_failed_for_sell_direction");
-  }
+  // Production fallback: use PREDICT's exported pm-AMM math against reserves
+  // accrued forward to the current timestamp. Buy fees are skimmed from input;
+  // sell fees are skimmed from output, matching the reference app.
   const now = Math.floor(Date.now() / 1000);
   const lZero = i80f48ToNumber(marketAccount.lZero);
   const endTs = bnNumber(marketAccount.endTs);
@@ -357,10 +354,19 @@ async function exactSwapQuote(c, market, direction, amountInRaw) {
   const scale = lLast > 0 ? lEff / lLast : 1;
   const reserveYes = i80f48ToNumber(marketAccount.reserveYes) * scale;
   const reserveNo = i80f48ToNumber(marketAccount.reserveNo) * scale;
-  const netIn = Math.floor(amountInRaw * (10_000 - Number(SWAP_FEE_BPS)) / 10_000);
-  const side = direction === "usdcToYes" ? "yes" : "no";
-  const est = estimateSwapOutput(reserveYes, reserveNo, lEff, netIn, side);
-  const out = Math.max(0, Math.floor(est.output));
+  const netNum = 10_000 - Number(SWAP_FEE_BPS);
+  const isSell = direction === "yesToUsdc" || direction === "noToUsdc";
+  let out = 0;
+  if (isSell) {
+    const sellSide = direction === "yesToUsdc" ? "no" : "yes";
+    const est = estimateSwapOutput(reserveYes, reserveNo, lEff, amountInRaw, sellSide);
+    out = Math.max(0, Math.floor(est.output * netNum / 10_000));
+  } else {
+    const netIn = Math.floor(amountInRaw * netNum / 10_000);
+    const side = direction === "usdcToYes" ? "yes" : "no";
+    const est = estimateSwapOutput(reserveYes, reserveNo, lEff, netIn, side);
+    out = Math.max(0, Math.floor(est.output));
+  }
   if (!out) throw new Error("swap_quote_zero_output");
   return { out, source: "protocol-math", feeBps: SWAP_FEE_BPS };
 }
@@ -564,7 +570,7 @@ function render() {
 
   renderMarketSelector();
   const hasMarket = Boolean(state.marketPda);
-  for (const id of ["predictBuyYesBtn", "predictBuyNoBtn", "predictResolveYesBtn", "predictResolveNoBtn", "predictClaimBtn", "predictRefreshBtn", "predictLpBtn"]) {
+  for (const id of ["predictBuyYesBtn", "predictBuyNoBtn", "predictSellYesBtn", "predictSellNoBtn", "predictResolveYesBtn", "predictResolveNoBtn", "predictClaimBtn", "predictRefreshBtn", "predictLpBtn"]) {
     const b = el(id); if (b) b.disabled = !wallet || !hasMarket;
   }
 
