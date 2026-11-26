@@ -8,6 +8,7 @@
   <title>Stocklana — Programmable Tokenized Equities</title>
   <link rel="stylesheet" href="./src/styles.css?v=20260925-hd-final6" />
   <link rel="stylesheet" href="./src/competition.css?v=20260925-hd-final6" />
+  <link rel="stylesheet" href="./src/predict-pmamm.css?v=20261126-1" />
 </head>
 <body class="simple-mode stocklana-neo">
   <canvas id="ambient" aria-hidden="true"></canvas>
@@ -201,6 +202,95 @@
             <small>Changing stake recalculates the payoff preview from the current collateral pools.</small>
           </div>
         </div>
+
+        <section class="predict-rail" id="predictPmAmmRail" data-busy="false">
+          <div class="predict-rail-head">
+            <div>
+              <span class="kicker">PREDICT PM-AMM · PRODUCTION EXECUTION</span>
+              <h3>Create liquidity. Trade YES / NO. Keep the receipt.</h3>
+              <p>Direct Solana execution through PREDICT's pm-AMM. Phantom signs every transaction; Stocklana quotes against live chain state and never invents fills.</p>
+            </div>
+            <div class="predict-badges">
+              <select id="predictNetwork" aria-label="Prediction market network">
+                <option value="mainnet-beta">Mainnet</option>
+                <option value="devnet">Devnet</option>
+              </select>
+              <span class="status live" id="predictCluster">MAINNET</span>
+              <span class="status neutral">PM-AMM</span>
+            </div>
+          </div>
+          <div class="predict-network-notice" id="predictNetworkNotice">MAINNET · real SOL + Circle USDC.</div>
+
+          <div class="predict-proof-grid">
+            <div><small>PROGRAM</small><b id="predictProgramId">Loading...</b></div>
+            <div><small>COLLATERAL</small><b id="predictCollateralMint">Loading...</b></div>
+            <div><small>WALLET</small><b id="predictWallet">Not connected</b></div>
+            <div><small>MARKET</small><b id="predictMarketPda">Create or select a market</b></div>
+            <div><small>STATE</small><b id="predictMarketState">NO MARKET</b></div>
+            <div><small>LATEST PROOF</small><b id="predictLastProof">No receipt yet</b></div>
+          </div>
+
+          <div class="predict-flow">
+            <article>
+              <span>01</span><h4>Connect + fund</h4>
+              <p>Use Phantom. Mainnet uses real Circle USDC; Devnet exposes the official faucet.</p>
+              <div class="predict-actions">
+                <button class="primary" id="predictConnectBtn">Connect Phantom</button>
+                <button class="ghost" id="predictFaucetBtn" hidden disabled>Get devnet mUSDC</button>
+              </div>
+              <label>Live PREDICT market
+                <select id="predictMarketSelect"><option value="">Select live market...</option></select>
+              </label>
+              <button class="ghost wide" id="predictDiscoverBtn">Discover live markets</button>
+            </article>
+
+            <article>
+              <span>02</span><h4>Create market</h4>
+              <label>Question / market name<input id="predictMarketName" maxlength="64" value="Will OPENAI PreStocks finish above today's mark?" /></label>
+              <div class="predict-inline">
+                <label>Duration sec<input id="predictDuration" type="number" min="300" value="86400" /></label>
+                <label>YES bps<input id="predictInitialPrice" type="number" min="100" max="9900" value="5000" /></label>
+                <label>Liquidity USDC<input id="predictLiquidity" type="number" min="1" step="1" value="50" /></label>
+              </div>
+              <button class="primary wide" id="predictCreateBtn" disabled>Create MAINNET market</button>
+            </article>
+
+            <article>
+              <span>03</span><h4>Trade outcome</h4>
+              <label>Trade size USDC<input id="predictTradeAmount" type="number" min=".01" step=".01" value="5" /></label>
+              <label>Max slippage bps<input id="predictSlippageBps" type="number" min="1" max="5000" step="5" value="100" /></label>
+              <div class="predict-quote" id="predictQuote">Live quote appears before signing.</div>
+              <div class="predict-actions split">
+                <button class="predict-yes" id="predictBuyYesBtn" disabled>Buy YES</button>
+                <button class="predict-no" id="predictBuyNoBtn" disabled>Buy NO</button>
+              </div>
+              <label>Sell size outcome tokens<input id="predictSellAmount" type="number" min=".000001" step=".000001" value="1" /></label>
+              <div class="predict-actions split">
+                <button class="ghost" id="predictSellYesBtn" disabled>Sell YES → USDC</button>
+                <button class="ghost" id="predictSellNoBtn" disabled>Sell NO → USDC</button>
+              </div>
+              <button class="ghost wide" id="predictRefreshBtn" disabled>Refresh on-chain state</button>
+            </article>
+
+            <article>
+              <span>04</span><h4>Liquidity + settle</h4>
+              <label>LP deposit USDC<input id="predictLpAmount" type="number" min="1" step="1" value="25" /></label>
+              <button class="ghost wide" id="predictLpBtn" disabled>Add liquidity</button>
+              <p>Only the market authority can resolve after expiry. Claims use the same wallet.</p>
+              <div class="predict-actions split">
+                <button class="ghost" id="predictResolveYesBtn" disabled>Resolve YES</button>
+                <button class="ghost" id="predictResolveNoBtn" disabled>Resolve NO</button>
+              </div>
+              <button class="primary wide" id="predictClaimBtn" disabled>Claim winnings</button>
+            </article>
+          </div>
+
+          <div class="predict-status-row">
+            <span id="predictStatus">Connect Phantom to activate production trading.</span>
+            <a id="predictProofLink" href="https://solscan.io/account/GV1FMGHRYBjQLaghE5fnGuYCuCcpdt3GD5xEX3TwN16y" target="_blank" rel="noopener">Open PREDICT program</a>
+          </div>
+        </section>
+
         <section class="solana-judge-loop" id="solanaJudgeLoop">
           <div class="judge-loop-copy">
             <div class="judge-loop-head">
@@ -797,6 +887,7 @@
   <script type="module" src="./src/demo-reel.js?v=20260925-hd-final6"></script>
   <script type="module" src="./src/surface-motion.js?v=20260925-hd-final6"></script>
   <script type="module" src="./src/competition-ui.js?v=20260925-hd-final6"></script>
+  <script type="module" src="./src/predict-pmamm.js?v=20261126-1"></script>
   <script type="module" src="./src/app.js?v=20260925-hd-final6"></script>
 </body>
 </html>

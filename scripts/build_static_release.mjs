@@ -6,9 +6,11 @@ import { fileURLToPath } from 'node:url';
 const root=path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const out=path.join(root,'dist');
 const apiOrigin=(process.env.STOCKLANA_PUBLIC_API_ORIGIN||'').replace(/\/$/,'');
+const predictMainnetRpcUrl=process.env.STOCKLANA_PREDICT_MAINNET_RPC_URL||process.env.STOCKLANA_PREDICT_RPC_URL||'https://api.mainnet-beta.solana.com';
+const predictDevnetRpcUrl=process.env.STOCKLANA_PREDICT_DEVNET_RPC_URL||'https://api.devnet.solana.com';
 const files=['index.html','runtime-config.js','README.md','SUBMISSION.md','TRACK-FIT.md','REQUIREMENTS-AUDIT.md','CERTIFICATION-V10.md','WEEK-100-REPORT.md','SECURITY.md','DEPLOY-SOLANA.md','OPERATOR_BOUNDARY.md','docs/V2-FINANCIAL-SUBSTRATE.md'];
 const assetFiles=['assets/hero-reference.webp','assets/shop-products-clean.webp'];
-const browserFiles=['src/app-three.js','src/app.js','src/demo-reel.js','src/competition.css','src/competition-ui.js','src/market-engine.js','src/meteora-dbc.js','src/oracle-policy.js','src/pons-v2.js','src/prestocks-registry.js','src/solana-client.js','src/stocklana-hero.js','src/stocklana-program-client.js','src/styles.css','src/surface-motion.js','src/systems.js','src/token2022-accounting.js'];
+const browserFiles=['src/app-three.js','src/app.js','src/demo-reel.js','src/competition.css','src/predict-pmamm.css','src/competition-ui.js','src/market-engine.js','src/meteora-dbc.js','src/oracle-policy.js','src/pons-v2.js','src/prestocks-registry.js','src/predict-pmamm.js','src/predict-pmamm-app.js','src/solana-client.js','src/stocklana-hero.js','src/stocklana-program-client.js','src/styles.css','src/surface-motion.js','src/systems.js','src/token2022-accounting.js'];
 
 fs.rmSync(out,{recursive:true,force:true});
 fs.mkdirSync(out,{recursive:true});
@@ -29,7 +31,13 @@ for(const f of browserFiles){
 const runtime=`window.STOCKLANA_RUNTIME = Object.freeze({
   apiOrigin: ${JSON.stringify(apiOrigin)},
   network: "solana-hybrid",
-  release: "permanent-web"
+  release: "permanent-web",
+  predictCluster: "mainnet-beta",
+  predictMainnetRpcUrl: ${JSON.stringify(predictMainnetRpcUrl)},
+  predictDevnetRpcUrl: ${JSON.stringify(predictDevnetRpcUrl)},
+  predictProgramId: "GV1FMGHRYBjQLaghE5fnGuYCuCcpdt3GD5xEX3TwN16y",
+  predictMainnetCollateralMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  predictDevnetCollateralMint: "3WQ8hCqTNwjrh8WzE2XyoZoUrd1miPcwWfMkmFPUMEWZ"
 });
 `;
 fs.writeFileSync(path.join(out,'runtime-config.js'),runtime);
@@ -38,6 +46,8 @@ fs.writeFileSync(path.join(out,'404.html'),fs.readFileSync(path.join(out,'index.
 const meta={
   builtAt:new Date().toISOString(),
   apiOrigin,
+  predictMainnetRpcUrl,
+  predictDevnetRpcUrl,
   network:'solana-hybrid',
   frontendModel:'static-permanent-web',
   publicFiles:[...files,...assetFiles,...browserFiles],
