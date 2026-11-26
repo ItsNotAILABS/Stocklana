@@ -97,10 +97,17 @@ A code path being production-capable is not the same as claiming that the user's
 
 PREDICT's own mainnet documentation states that its current deployment has centralized resolution, a single-key upgrade authority, and no third-party security audit. Stocklana exposes the rail without hiding those facts. This is an upstream protocol/governance property, not a reason to disable the product.
 
-## Next production gates
+## Current production surface
 
-- Add market discovery across existing PREDICT mainnet markets, not only locally-created market PDAs.
-- Add sell YES / NO execution with the same simulation-first quote path.
+- Discover existing PREDICT mainnet and devnet markets directly from Solana.
+- Select an existing market or create a new binary pm-AMM market.
+- Buy YES / NO with simulation-first, slippage-protected quotes.
+- Sell YES / NO back to USDC with the same production quote path.
+- Deposit liquidity into the selected market.
+- Read live market state, resolve when authorized, claim winnings, and surface transaction receipts.
+
+## Next production expansion
+
 - Add Pyth / PreStocks evidence-based resolution policy.
 - Add indexed analytics for unique traders, trades, volume, fees and LP depth.
 - Add burner-wallet / frictionless onboarding.
