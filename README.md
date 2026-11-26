@@ -1,10 +1,12 @@
-# Stocklana — Programmable PreStocks on Solana
+# Stocklana — Money That Does More
 
-**Your money shouldn’t stop working after you invest it.**
+**One money app to send, pay, grow, borrow, play, and give AI a budget.**
 
-Stocklana is a desktop-first web app where eligible PreStocks become programmable financial objects. A user can connect Phantom, buy a PreStock, convert SOL/USDC, enter fully collateralized payoff games, spend through governed commerce rails, send money, or give an AI a bounded budget — all from one interface.
+Stocklana is a wallet-native money app. The user sees one coherent financial experience; Solana programs, swaps, prediction-market mechanics, collateral systems, receipts, and settlement remain underneath as execution infrastructure.
 
-The public experience is intentionally simple: **PreStocks · Convert · Play · Shop · AI · Send**. The deeper market factory, credit, launch, accounting, settlement, proof, and deployment systems remain underneath the same application.
+The primary experience is intentionally simple: **Money · Grow · Send · Pay · Play · AI · Activity**. PreStocks remain an important growth asset class, but Stocklana is not presented as a trading terminal. The deeper market factory, credit, launch, accounting, settlement, proof, and deployment systems remain available under advanced surfaces.
+
+See `docs/MONEY-APP-NORTH-STAR.md` for the product contract that governs new UX work.
 
 > **CMESH is not a PreStock.** CipherMesh (CMESH) is Stocklana’s separate Pons / Robinhood Chain platform-token lane and has its own dedicated tab. It is never added to the PreStocks eligibility registry.
 
