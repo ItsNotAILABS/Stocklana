@@ -238,6 +238,10 @@
                 <button class="primary" id="predictConnectBtn">Connect Phantom</button>
                 <button class="ghost" id="predictFaucetBtn" hidden disabled>Get devnet mUSDC</button>
               </div>
+              <label>Live PREDICT market
+                <select id="predictMarketSelect"><option value="">Select live market...</option></select>
+              </label>
+              <button class="ghost wide" id="predictDiscoverBtn">Discover live markets</button>
             </article>
 
             <article>
@@ -259,6 +263,11 @@
               <div class="predict-actions split">
                 <button class="predict-yes" id="predictBuyYesBtn" disabled>Buy YES</button>
                 <button class="predict-no" id="predictBuyNoBtn" disabled>Buy NO</button>
+              </div>
+              <label>Sell size outcome tokens<input id="predictSellAmount" type="number" min=".000001" step=".000001" value="1" /></label>
+              <div class="predict-actions split">
+                <button class="ghost" id="predictSellYesBtn" disabled>Sell YES → USDC</button>
+                <button class="ghost" id="predictSellNoBtn" disabled>Sell NO → USDC</button>
               </div>
               <button class="ghost wide" id="predictRefreshBtn" disabled>Refresh on-chain state</button>
             </article>
