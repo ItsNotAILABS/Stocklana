@@ -1,50 +1,108 @@
-# Stocklana - Perps & Prediction Markets 2026
+# Stocklana — Perps & Prediction Markets 2026
 
-Status: **ACTIVE BUILD / DEVNET-FIRST**
+Status: **PRODUCTION-CAPABLE CODE PATH / MAINNET DEFAULT**
 
-This branch is for the Solana Perps and Prediction Markets hackathon launching December 1, 2026.
+This branch is the canonical Stocklana competition build for Solana Perps & Prediction Markets 2026.
 
 ## Product wedge
 
-Stocklana already has a PreStocks market catalog, wallet signing, accounting, receipts, and a custom fully collateralized market program. The new competition rail adds the open-source Predict pm-AMM as the actual outcome-token execution venue instead of pretending the existing pari-mutuel engine is a pm-AMM.
+Stocklana already has a PreStocks market catalog, wallet signing, accounting, receipts, and its own fully collateralized market program. This build adds PREDICT's open-source pm-AMM as a real outcome-token execution venue inside the existing Play / Market Lab experience.
 
-The first shipped slice is deliberately narrow:
+This is not a mock prediction surface. The production path supports:
 
-1. Connect Phantom on Solana Devnet.
-2. Claim official Predict faucet mUSDC/SOL.
-3. Create a real binary pm-AMM market with real on-chain liquidity.
-4. Buy YES or NO through the Predict SDK.
-5. Read market state from Solana.
-6. Resolve through the market authority after expiry.
-7. Claim winnings.
-8. Surface every transaction signature as a receipt.
+1. Phantom connection.
+2. Mainnet-beta by default with real Circle USDC.
+3. Devnet as an optional test network.
+4. Real pm-AMM market creation.
+5. Live-chain swap quoting using transaction simulation first.
+6. Protocol-math fallback using PREDICT's own pm-AMM formulas.
+7. Slippage-protected YES / NO purchases.
+8. LP deposits.
+9. Market state reads.
+10. Authority resolution after expiry.
+11. Winner claims.
+12. Solana transaction receipts surfaced to the user.
+
+## Network configuration
+
+PREDICT uses the same deployed program id across clusters:
+
+`GV1FMGHRYBjQLaghE5fnGuYCuCcpdt3GD5xEX3TwN16y`
+
+Mainnet collateral:
+
+`EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v` — Circle USDC
+
+Devnet collateral:
+
+`3WQ8hCqTNwjrh8WzE2XyoZoUrd1miPcwWfMkmFPUMEWZ` — PREDICT mock USDC
+
+Production RPC is runtime-configurable:
+
+- `STOCKLANA_PREDICT_MAINNET_RPC_URL`
+- `STOCKLANA_PREDICT_DEVNET_RPC_URL`
+
+Use a dedicated production RPC for real traffic. Public Solana RPC is only the fallback default.
+
+## Production quote path
+
+Stocklana does not use a fixed or invented `minOutput`.
+
+For every buy:
+
+1. Fetch the current market account.
+2. Derive user YES / NO / collateral token accounts.
+3. Include missing ATA creations.
+4. Include the actual market creator fee ATA.
+5. Include the current PREDICT protocol DAO fee ATA.
+6. Build the real PREDICT swap instruction with `minOutput=0`.
+7. Simulate the transaction against current chain state and measure the output-token balance delta.
+8. Apply the user's configured slippage tolerance to that simulated output.
+9. Submit the real swap with the resulting protected minimum.
+
+If simulation is temporarily unavailable, the buy path falls back to PREDICT's exported pm-AMM math using current reserves, time-decayed effective liquidity, and the protocol swap fee.
+
+## Mainnet behavior
+
+Mainnet is **not blocked**.
+
+Real-money actions show an explicit human-readable confirmation before Phantom signing:
+
+- market creation + initial liquidity;
+- YES / NO purchase;
+- LP deposit;
+- authority resolution.
+
+Phantom remains the cryptographic signing boundary. Stocklana never takes or stores a wallet private key.
 
 ## Reality ledger
 
-| Capability | Current state | Evidence required before promotion |
+| Capability | State in code | Required evidence to call executed |
 |---|---|---|
-| Predict program | LIVE upstream | Official program ID |
-| Stocklana Predict rail | CODED / WALLET VERIFICATION REQUIRED | Browser transaction signatures |
-| Devnet market creation | CODED | createMarket signature + market PDA |
-| Devnet swaps | CODED | swap signature |
-| Resolution | CODED / authority path | resolve signature after endTs |
-| Claims | CODED | claim signature |
-| Mainnet trading | BLOCKED | exact quote/minOutput helper + mainnet QA + user approval |
-| Pyth/PreStocks auto-resolution | NOT YET WIRED | deterministic observation + dispute/authority policy |
-| Burner-wallet onboarding | NOT YET WIRED | one-tap visitor flow + faucet receipts |
-| OrbitFlare RPC | CONFIGURABLE NEXT | hackathon credentials + measured RPC/WebSocket path |
+| PREDICT mainnet program | LIVE UPSTREAM | on-chain program account |
+| Mainnet Circle USDC configuration | WIRED | mint + account reads |
+| Mainnet market creation | PRODUCTION PATH | confirmed create signature + market PDA |
+| Mainnet YES / NO buys | PRODUCTION PATH | confirmed swap signature |
+| Mainnet LP deposits | PRODUCTION PATH | confirmed LP signature |
+| Mainnet resolution | PRODUCTION PATH / AUTHORITY-BOUND | confirmed resolution signature |
+| Mainnet claims | PRODUCTION PATH | confirmed claim signature |
+| Devnet faucet | LIVE EXTERNAL PATH | faucet response/signature |
+| Pyth / PreStocks automatic resolution | NEXT | deterministic observation + governance policy |
+| User / volume / fee analytics | NEXT | indexed on-chain metrics |
+| OrbitFlare RPC/WebSocket | CONFIGURABLE | production credentials + runtime setting |
 
-## Why mainnet is blocked in the first slice
+A code path being production-capable is not the same as claiming that the user's wallet has already executed it. Stocklana records and displays actual signatures when execution occurs.
 
-The Predict builder kit explicitly warns against hand-rolled quotes because reserves are time-adjusted before each swap. The first Stocklana rail therefore permits proof trades only on Devnet and refuses mainnet execution until Predict's exact quoteSwap/minOutput helper is vendored and tested. This is an intentional production-safety gate, not a missing-success state.
+## Known upstream trust model
 
-## Next build gates
+PREDICT's own mainnet documentation states that its current deployment has centralized resolution, a single-key upgrade authority, and no third-party security audit. Stocklana exposes the rail without hiding those facts. This is an upstream protocol/governance property, not a reason to disable the product.
 
-- Vendor exact pm-AMM quote/minOutput helper.
-- Add market-list batching and 15-second visibility-aware polling.
-- Add Stocklana template -> Predict market mapping.
-- Add PreStocks/Pyth resolution adapter with evidence commitment.
-- Add burner-wallet path for judge/user traction without requiring Phantom.
-- Add per-market analytics for users, trades, volume, fees, and LP depth.
-- Add OrbitFlare RPC/WebSocket runtime configuration.
-- Add an end-to-end acceptance script that rejects a release without real signatures.
+## Next production gates
+
+- Add market discovery across existing PREDICT mainnet markets, not only locally-created market PDAs.
+- Add sell YES / NO execution with the same simulation-first quote path.
+- Add Pyth / PreStocks evidence-based resolution policy.
+- Add indexed analytics for unique traders, trades, volume, fees and LP depth.
+- Add burner-wallet / frictionless onboarding.
+- Configure OrbitFlare mainnet RPC/WebSocket during the event.
+- Add automated receipt-gated browser acceptance tests.
