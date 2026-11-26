@@ -130,11 +130,60 @@ async function connectWallet() {
     setStatus("Connecting Phantom to " + cfg().label + "...", true);
     await ensureClient();
     setStatus("Phantom connected. " + (cfg().realMoney ? "Mainnet uses real SOL and Circle USDC." : "Devnet uses test funds."));
+    await loadMarkets();
   } catch (error) {
     setStatus(String(error?.message || error));
   } finally {
     render();
   }
+}
+
+async function loadMarkets() {
+  try {
+    const c = await ensureClient();
+    setStatus("Loading live PREDICT markets from " + cfg().label + "...", true);
+    const rows = await c.fetchAllMarkets();
+    const wantedMint = cfg().collateralMint;
+    const markets = rows
+      .map((row) => ({ publicKey: row.publicKey.toString(), account: row.account }))
+      .filter((row) => row.account?.collateralMint?.toString?.() === wantedMint)
+      .sort((a, b) => bnNumber(b.account.startTs) - bnNumber(a.account.startTs))
+      .slice(0, 100)
+      .map((row) => ({
+        publicKey: row.publicKey,
+        name: decodeName(row.account.name) || short(row.publicKey),
+        endTs: bnNumber(row.account.endTs),
+        resolved: Boolean(row.account.resolved),
+        winningSide: Number(row.account.winningSide || 0),
+      }));
+    writeState({ discoveredMarkets: markets, marketDiscoveryAt: new Date().toISOString() });
+    renderMarketSelector();
+    setStatus("Loaded " + markets.length + " live PREDICT markets from " + cfg().label + ".");
+  } catch (error) {
+    setStatus("Market discovery failed: " + String(error?.message || error));
+  } finally {
+    render();
+  }
+}
+
+function renderMarketSelector() {
+  const select = el("predictMarketSelect");
+  if (!select) return;
+  const state = readState();
+  const markets = state.discoveredMarkets || [];
+  const current = state.marketPda || "";
+  select.innerHTML = '<option value="">Select live market...</option>' + markets.map((m) => {
+    const status = m.resolved ? "RESOLVED" : "OPEN";
+    return '<option value="' + m.publicKey + '">' + status + ' · ' + m.name + '</option>';
+  }).join("");
+  if (current && markets.some((m) => m.publicKey === current)) select.value = current;
+}
+
+async function selectMarket(publicKey) {
+  if (!publicKey) return;
+  writeState({ marketPda: publicKey, marketId: null, marketName: null });
+  setStatus("Selected live market " + short(publicKey) + ". Reading on-chain state...", true);
+  await refreshMarket();
 }
 
 async function changeCluster(value) {
@@ -148,6 +197,7 @@ async function changeCluster(value) {
     ? "Mainnet ready. Transactions use real SOL and real Circle USDC."
     : "Devnet ready. Use the Predict faucet for test SOL and mUSDC.");
   render();
+  if (walletProvider?.publicKey) await loadMarkets();
   if (readState().marketPda && walletProvider?.publicKey) refreshMarket();
 }
 
@@ -315,12 +365,12 @@ async function exactSwapQuote(c, market, direction, amountInRaw) {
   return { out, source: "protocol-math", feeBps: SWAP_FEE_BPS };
 }
 
-async function previewTrade(direction) {
+async function previewTrade(direction, amountInputId = "predictTradeAmount") {
   try {
     const c = await ensureClient();
     const state = readState();
     if (!state.marketPda) throw new Error("create_or_select_a_market_first");
-    const amount = Math.max(0.01, Number(el("predictTradeAmount")?.value || 5));
+    const amount = Math.max(0.000001, Number(el(amountInputId)?.value || 0));
     const amountMicro = Math.round(amount * MICRO_USDC);
     setStatus("Quoting against live " + cfg().label + " state...", true);
     const quote = await exactSwapQuote(c, new PublicKey(state.marketPda), direction, amountMicro);
@@ -337,7 +387,8 @@ async function previewTrade(direction) {
         at: new Date().toISOString(),
       },
     });
-    text("predictQuote", (quote.out / MICRO_USDC).toFixed(6) + " outcome tokens · min " + (minimum / MICRO_USDC).toFixed(6) + " · " + quote.source);
+    const outputUnit = direction === "yesToUsdc" || direction === "noToUsdc" ? "USDC" : "outcome tokens";
+    text("predictQuote", (quote.out / MICRO_USDC).toFixed(6) + " " + outputUnit + " · min " + (minimum / MICRO_USDC).toFixed(6) + " · " + quote.source);
     setStatus("Quote ready from " + quote.source + ". Review and sign in Phantom.");
     return { quote, minimum, amount, amountMicro };
   } catch (error) {
@@ -348,26 +399,30 @@ async function previewTrade(direction) {
   }
 }
 
-async function trade(direction) {
+async function trade(direction, amountInputId = "predictTradeAmount") {
   try {
     const c = await ensureClient();
     const state = readState();
     if (!state.marketPda) throw new Error("create_or_select_a_market_first");
-    const quoted = await previewTrade(direction);
+    const quoted = await previewTrade(direction, amountInputId);
     if (!quoted) return;
 
     const network = cfg();
-    const side = direction === "usdcToYes" ? "YES" : "NO";
+    const isSell = direction === "yesToUsdc" || direction === "noToUsdc";
+    const side = direction === "usdcToYes" || direction === "yesToUsdc" ? "YES" : "NO";
+    const inputUnit = isSell ? side + " tokens" : "USDC";
+    const outputUnit = isSell ? "USDC" : "outcome tokens";
     if (network.realMoney) {
       const ok = confirm(
-        "MAINNET: spend " + quoted.amount + " real USDC to buy " + side +
-        "? Minimum output is " + (quoted.minimum / MICRO_USDC).toFixed(6) +
-        " outcome tokens. Phantom will show the final transaction."
+        "MAINNET: " + (isSell ? "sell " : "spend ") + quoted.amount + " " + inputUnit + " " +
+        (isSell ? "from " : "to buy ") + side +
+        "? Minimum output is " + (quoted.minimum / MICRO_USDC).toFixed(6) + " " + outputUnit +
+        ". Phantom will show the final transaction."
       );
       if (!ok) return;
     }
 
-    setStatus("Sending " + quoted.amount + " USDC " + side + " swap on " + network.label + "...", true);
+    setStatus("Sending " + quoted.amount + " " + inputUnit + " " + direction + " swap on " + network.label + "...", true);
     const signature = await c.send.swap(
       new PublicKey(state.marketPda),
       direction,
@@ -464,6 +519,7 @@ async function refreshMarket() {
   } catch (error) {
     setStatus("Read failed: " + String(error?.message || error));
   }
+  renderMarketSelector();
   render();
 }
 
@@ -506,6 +562,7 @@ function render() {
     create.textContent = network.realMoney ? "Create MAINNET market" : "Create devnet market";
   }
 
+  renderMarketSelector();
   const hasMarket = Boolean(state.marketPda);
   for (const id of ["predictBuyYesBtn", "predictBuyNoBtn", "predictResolveYesBtn", "predictResolveNoBtn", "predictClaimBtn", "predictRefreshBtn", "predictLpBtn"]) {
     const b = el(id); if (b) b.disabled = !wallet || !hasMarket;
@@ -519,16 +576,21 @@ function render() {
 
 el("predictNetwork")?.addEventListener("change", (e) => changeCluster(e.target.value));
 el("predictConnectBtn")?.addEventListener("click", connectWallet);
+el("predictDiscoverBtn")?.addEventListener("click", loadMarkets);
+el("predictMarketSelect")?.addEventListener("change", (e) => selectMarket(e.target.value));
 el("predictFaucetBtn")?.addEventListener("click", claimFaucet);
 el("predictCreateBtn")?.addEventListener("click", createMarket);
 el("predictBuyYesBtn")?.addEventListener("click", () => trade("usdcToYes"));
 el("predictBuyNoBtn")?.addEventListener("click", () => trade("usdcToNo"));
+el("predictSellYesBtn")?.addEventListener("click", () => trade("yesToUsdc", "predictSellAmount"));
+el("predictSellNoBtn")?.addEventListener("click", () => trade("noToUsdc", "predictSellAmount"));
 el("predictLpBtn")?.addEventListener("click", depositLiquidity);
 el("predictResolveYesBtn")?.addEventListener("click", () => resolve("yes"));
 el("predictResolveNoBtn")?.addEventListener("click", () => resolve("no"));
 el("predictClaimBtn")?.addEventListener("click", claimWinnings);
 el("predictRefreshBtn")?.addEventListener("click", refreshMarket);
 el("predictTradeAmount")?.addEventListener("change", () => { text("predictQuote", "Quote refreshes when you trade."); });
+el("predictSellAmount")?.addEventListener("change", () => { text("predictQuote", "Quote refreshes when you sell."); });
 
 const phantom = window.phantom?.solana || window.solana;
 phantom?.on?.("accountChanged", () => {
