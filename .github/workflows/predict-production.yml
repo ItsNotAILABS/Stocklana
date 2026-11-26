@@ -1,0 +1,51 @@
+name: Predict Production Gate
+
+on:
+  push:
+    branches:
+      - hackathon/perps-prediction-2026
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify Predict production invariants
+        run: python3 scripts/test_predict_rail.py
+
+      - name: Check browser module syntax
+        run: |
+          node --check src/predict-pmamm.js
+          node --check src/predict-pmamm-app.js
+          node --check scripts/build_static_release.mjs
+
+      - name: Build permanent frontend
+        env:
+          STOCKLANA_PREDICT_MAINNET_RPC_URL: https://api.mainnet-beta.solana.com
+          STOCKLANA_PREDICT_DEVNET_RPC_URL: https://api.devnet.solana.com
+        run: npm run build:static
+
+      - name: Verify full app
+        run: npm run verify:full-app
+
+      - name: Acceptance suite
+        run: npm run verify:acceptance
