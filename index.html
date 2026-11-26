@@ -8,6 +8,7 @@
   <title>Stocklana — Programmable Tokenized Equities</title>
   <link rel="stylesheet" href="./src/styles.css?v=20260925-hd-final6" />
   <link rel="stylesheet" href="./src/competition.css?v=20260925-hd-final6" />
+  <link rel="stylesheet" href="./src/predict-pmamm.css?v=20261126-1" />
 </head>
 <body class="simple-mode stocklana-neo">
   <canvas id="ambient" aria-hidden="true"></canvas>
@@ -201,6 +202,77 @@
             <small>Changing stake recalculates the payoff preview from the current collateral pools.</small>
           </div>
         </div>
+
+        <section class="predict-rail" id="predictPmAmmRail" data-busy="false">
+          <div class="predict-rail-head">
+            <div>
+              <span class="kicker">PREDICT PM-AMM · REAL DEVNET EXECUTION</span>
+              <h3>Create liquidity. Trade YES / NO. Keep the receipt.</h3>
+              <p>This lane talks directly to Predict's open-source Solana pm-AMM. Phantom signs every transaction; Stocklana does not invent fills.</p>
+            </div>
+            <div class="predict-badges">
+              <span class="status live" id="predictCluster">DEVNET</span>
+              <span class="status neutral">PM-AMM</span>
+            </div>
+          </div>
+
+          <div class="predict-proof-grid">
+            <div><small>PROGRAM</small><b id="predictProgramId">Loading...</b></div>
+            <div><small>COLLATERAL</small><b id="predictCollateralMint">Loading...</b></div>
+            <div><small>WALLET</small><b id="predictWallet">Not connected</b></div>
+            <div><small>MARKET</small><b id="predictMarketPda">Create a market</b></div>
+            <div><small>STATE</small><b id="predictMarketState">NO MARKET</b></div>
+            <div><small>LATEST PROOF</small><b id="predictLastProof">No receipt yet</b></div>
+          </div>
+
+          <div class="predict-flow">
+            <article>
+              <span>01</span><h4>Connect + fund</h4>
+              <p>Use Phantom and the official Predict devnet faucet.</p>
+              <div class="predict-actions">
+                <button class="primary" id="predictConnectBtn">Connect Phantom</button>
+                <button class="ghost" id="predictFaucetBtn" disabled>Get devnet mUSDC</button>
+              </div>
+            </article>
+
+            <article>
+              <span>02</span><h4>Create market</h4>
+              <label>Question / market name<input id="predictMarketName" maxlength="64" value="Will OPENAI PreStocks finish above today's mark?" /></label>
+              <div class="predict-inline">
+                <label>Duration sec<input id="predictDuration" type="number" min="300" value="900" /></label>
+                <label>YES bps<input id="predictInitialPrice" type="number" min="100" max="9900" value="5000" /></label>
+                <label>Liquidity mUSDC<input id="predictLiquidity" type="number" min="1" step="1" value="50" /></label>
+              </div>
+              <button class="primary wide" id="predictCreateBtn" disabled>Create real devnet market</button>
+            </article>
+
+            <article>
+              <span>03</span><h4>Trade outcome</h4>
+              <label>Trade size mUSDC<input id="predictTradeAmount" type="number" min=".1" step=".1" value="5" /></label>
+              <div class="predict-actions split">
+                <button class="predict-yes" id="predictBuyYesBtn" disabled>Buy YES</button>
+                <button class="predict-no" id="predictBuyNoBtn" disabled>Buy NO</button>
+              </div>
+              <button class="ghost wide" id="predictRefreshBtn" disabled>Refresh on-chain state</button>
+            </article>
+
+            <article>
+              <span>04</span><h4>Resolve + claim</h4>
+              <p>Authority resolution is available only after the market's end timestamp. Claims use the same wallet.</p>
+              <div class="predict-actions split">
+                <button class="ghost" id="predictResolveYesBtn" disabled>Resolve YES</button>
+                <button class="ghost" id="predictResolveNoBtn" disabled>Resolve NO</button>
+              </div>
+              <button class="primary wide" id="predictClaimBtn" disabled>Claim winnings</button>
+            </article>
+          </div>
+
+          <div class="predict-status-row">
+            <span id="predictStatus">Connect Phantom to activate the real Predict devnet rail.</span>
+            <a id="predictProofLink" href="https://solscan.io/account/GV1FMGHRYBjQLaghE5fnGuYCuCcpdt3GD5xEX3TwN16y?cluster=devnet" target="_blank" rel="noopener">Open Predict program</a>
+          </div>
+        </section>
+
         <section class="solana-judge-loop" id="solanaJudgeLoop">
           <div class="judge-loop-copy">
             <div class="judge-loop-head">
@@ -797,6 +869,7 @@
   <script type="module" src="./src/demo-reel.js?v=20260925-hd-final6"></script>
   <script type="module" src="./src/surface-motion.js?v=20260925-hd-final6"></script>
   <script type="module" src="./src/competition-ui.js?v=20260925-hd-final6"></script>
+  <script type="module" src="./src/predict-pmamm.js?v=20261126-1"></script>
   <script type="module" src="./src/app.js?v=20260925-hd-final6"></script>
 </body>
 </html>
