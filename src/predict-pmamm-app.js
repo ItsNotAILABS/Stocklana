@@ -1,6 +1,6 @@
-import { AnchorProvider } from "@anchor-lang/core";
-import { PmAmmClient } from "@pm-amm/sdk";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { AnchorProvider } from "https://esm.sh/@anchor-lang/core?bundle";
+import { PmAmmClient } from "https://esm.sh/@pm-amm/sdk?bundle";
+import { Connection, PublicKey } from "https://esm.sh/@solana/web3.js@1.98.4";
 
 const runtime = window.STOCKLANA_RUNTIME || {};
 const CLUSTER = String(runtime.predictCluster || "devnet");
