@@ -19,7 +19,8 @@
     "verify:full-app": "python3 scripts/verify_full_app.py",
     "deploy:program:devnet": "STOCKLANA_PROGRAM_CLUSTER=devnet bash scripts/deploy_solana_cluster.sh",
     "deploy:program:mainnet": "STOCKLANA_PROGRAM_CLUSTER=mainnet-beta bash scripts/deploy_solana_cluster.sh",
-    "verify:predict": "python3 scripts/test_predict_rail.py"
+    "verify:predict": "python3 scripts/test_predict_rail.py",
+    "verify:money-app": "python3 scripts/test_money_app_ux.py"
   },
   "dependencies": {
     "@ardrive/turbo-sdk": "^1.43.0",
